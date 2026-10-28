@@ -1,7 +1,7 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { expectAccessible, PASSWORD, signup, uniqueEmail } from "./helpers";
+import { expectAccessible, noisePng, PASSWORD, signup, uniqueEmail } from "./helpers";
 
 const fixture = (name: string) => path.join(__dirname, "fixtures", name);
 
@@ -15,29 +15,29 @@ test.describe("authentification", () => {
 
   test("valide le formulaire d'inscription", async ({ page }) => {
     await page.goto("/inscription");
-    await page.getByLabel("Mot de passe").fill("court");
-    await page.getByRole("button", { name: "Créer mon compte" }).click();
-    await expect(page.getByText("Indiquez votre prénom et nom.")).toBeVisible();
+    await page.getByLabel("Choisissez un mot de passe").fill("court");
+    await page.getByRole("button", { name: "Afficher le mot de passe" }).click();
+    await expect(page.getByLabel("Choisissez un mot de passe")).toHaveAttribute("type", "text");
+    await page.getByRole("button", { name: "Créer mon compte gratuit" }).click();
     await expect(page.getByText("Adresse e-mail invalide.")).toBeVisible();
     await expect(page.getByText(/au moins 10 caractères/).first()).toBeVisible();
-    await expect(page.getByText(/Vous devez accepter/)).toBeVisible();
   });
 
   test("inscription, déconnexion, reconnexion et mauvais mot de passe", async ({ page }) => {
     const email = await signup(page);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Sophie");
-    await expect(page.getByText("Bienvenue dans Clair")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/^(Bonjour|Bonsoir)\.$/);
+    await expect(page.getByText("Bienvenue ! Commencez par votre premier courrier")).toBeVisible();
 
     await page.goto("/reglages");
     await page.getByRole("button", { name: "Se déconnecter" }).last().click();
     await expect(page).toHaveURL(/\/connexion/);
 
     await page.getByLabel("Adresse e-mail").fill(email);
-    await page.getByLabel("Mot de passe").fill("mauvais mot de passe");
+    await page.getByLabel("Mot de passe", { exact: true }).fill("mauvais mot de passe");
     await page.getByRole("button", { name: "Se connecter" }).click();
     await expect(page.getByText("E-mail ou mot de passe incorrect.")).toBeVisible();
 
-    await page.getByLabel("Mot de passe").fill(PASSWORD);
+    await page.getByLabel("Mot de passe", { exact: true }).fill(PASSWORD);
     await page.getByRole("button", { name: "Se connecter" }).click();
     await expect(page).toHaveURL(/\/accueil/);
   });
@@ -46,11 +46,9 @@ test.describe("authentification", () => {
     const email = await signup(page);
     const other = await browser.newPage();
     await other.goto("/inscription");
-    await other.getByLabel("Prénom et nom").fill("Autre");
     await other.getByLabel("Adresse e-mail").fill(email.toUpperCase());
-    await other.getByLabel("Mot de passe").fill(PASSWORD);
-    await other.getByLabel(/J’accepte les/).check();
-    await other.getByRole("button", { name: "Créer mon compte" }).click();
+    await other.getByLabel("Choisissez un mot de passe").fill(PASSWORD);
+    await other.getByRole("button", { name: "Créer mon compte gratuit" }).click();
     await expect(other.getByText(/Un compte existe déjà/)).toBeVisible();
     await other.close();
   });
@@ -61,9 +59,8 @@ test.describe("courriers", () => {
     await signup(page);
     await page.goto("/courriers/nouveau");
     await expect(page.getByText(/5 analyses automatiques restantes/)).toBeVisible();
-    await page.locator("#file").setInputFiles(fixture("prime-2027.png"));
-    await expect(page.getByText("prime-2027.png")).toBeVisible();
-    await page.getByRole("button", { name: "Analyser ce courrier" }).click();
+    // Un seul geste : l'analyse démarre dès que le fichier est choisi.
+    await page.getByTestId("desktop-file").setInputFiles(fixture("prime-2027.png"));
 
     await expect(page).toHaveURL(/\/courriers\/c[a-z0-9]{20,}$/);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nouvelle prime d’assurance-maladie 2027");
@@ -78,22 +75,37 @@ test.describe("courriers", () => {
     expect(fileRes.headers()["content-type"]).toBe("image/png");
     expect(Buffer.from(await fileRes.body()).equals(await readFile(fixture("prime-2027.png")))).toBe(true);
 
-    // Les actions sont devenues des échéances.
-    const task = page.getByRole("checkbox", { name: /Comparer les primes 2027/ });
-    await expect(task).not.toBeChecked();
-    await task.check();
+    // La prochaine étape est mise en avant ; « C’est fait » passe à la suivante.
+    const nextStep = page.getByRole("region", { name: "Prochaine étape" });
+    await expect(nextStep).toContainText("Comparer les primes 2027");
+    await expect(nextStep).toContainText("puis 1 autre");
+    await nextStep.getByRole("button", { name: "C’est fait" }).click();
+    await expect(nextStep).toContainText("Envoyer la résiliation si vous changez de caisse");
     await expect(page.getByRole("checkbox", { name: /Rouvrir : Comparer les primes 2027/ })).toBeChecked();
 
-    // Lettre suggérée, pré-remplie à partir du courrier.
-    await page.getByRole("link", { name: /Résilier une assurance/ }).click();
+    // Lettre suggérée, pré-remplie à partir du courrier, accessible depuis la prochaine étape.
+    await nextStep.getByRole("link", { name: "Préparer la lettre" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Résilier une assurance");
     await expect(page.getByLabel("Destinataire", { exact: true })).toHaveValue("Caisse-maladie Exemple SA");
     await expect(page.getByLabel("N° d’assuré ou de police")).toHaveValue("756.1234.5678.97");
     await expect(page.getByLabel("Type d’assurance")).toHaveValue("base");
     await page.getByLabel("Adresse du destinataire").fill("Case postale 42\n1000 Lausanne");
+    // Coordonnées demandées seulement maintenant, puis gardées dans le profil.
+    await page.getByLabel("NPA", { exact: true }).fill("10");
+    await page.getByRole("button", { name: "Préparer la lettre" }).click();
+    await expect(page.getByText("NPA invalide (4 chiffres en Suisse).")).toBeVisible();
+    await page.getByLabel("Prénom et nom", { exact: true }).fill("Sophie Martin");
+    await page.getByLabel("Rue et numéro", { exact: true }).fill("Rue du Lac 12");
+    await page.getByLabel("NPA", { exact: true }).fill("1003");
+    await page.getByLabel("Localité", { exact: true }).fill("Lausanne");
     await expect(page.getByText(/nouvel assureur vous aura confirmé/)).toBeVisible();
     await page.getByRole("button", { name: "Préparer la lettre" }).click();
 
     await expect(page.getByRole("heading", { name: "Votre lettre est prête" })).toBeVisible();
+    await expect(page.getByText("Lausanne, le", { exact: false })).toBeVisible();
+    await page.goto("/reglages");
+    await expect(page.getByLabel("Localité")).toHaveValue("Lausanne");
+    await page.goBack();
     const pdfRes = await page.request.get(await page.getByRole("link", { name: "Télécharger le PDF" }).getAttribute("href") as string);
     expect(pdfRes.status()).toBe(200);
     expect(pdfRes.headers()["content-type"]).toBe("application/pdf");
@@ -103,8 +115,7 @@ test.describe("courriers", () => {
   test("signale un courrier difficile à lire et permet de le corriger", async ({ page }) => {
     await signup(page);
     await page.goto("/courriers/nouveau");
-    await page.locator("#file").setInputFiles(fixture("facture-flou.png"));
-    await page.getByRole("button", { name: "Analyser ce courrier" }).click();
+    await page.getByTestId("desktop-file").setInputFiles(fixture("facture-flou.png"));
     await expect(page.getByText("Vérifiez les informations signalées")).toBeVisible();
     await expect(page.getByText("À vérifier").first()).toBeVisible();
 
@@ -119,8 +130,7 @@ test.describe("courriers", () => {
   test("refuse un fichier qui n'est pas une image ni un PDF", async ({ page }) => {
     await signup(page);
     await page.goto("/courriers/nouveau");
-    await page.locator("#file").setInputFiles(fixture("note.txt"));
-    await page.getByRole("button", { name: "Analyser ce courrier" }).click();
+    await page.getByTestId("desktop-file").setInputFiles(fixture("note.txt"));
     await expect(page.getByText(/Format non pris en charge/)).toBeVisible();
   });
 
@@ -154,10 +164,43 @@ test.describe("courriers", () => {
 
     const intruderContext = await browser.newContext();
     const intruder = await intruderContext.newPage();
-    await signup(intruder, uniqueEmail("intrus"), "Intrus");
+    await signup(intruder, uniqueEmail("intrus"));
     await intruder.goto(url);
     await expect(intruder.getByRole("heading", { name: "Page introuvable" })).toBeVisible();
     await intruderContext.close();
+  });
+});
+
+test.describe("démonstration et facilité d’usage", () => {
+  test("un visiteur voit un vrai résultat sans compte, puis s’inscrit en deux champs", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("link", { name: "Voir un exemple, sans compte" }).click();
+    await page.getByRole("link", { name: /Un commandement de payer/ }).click();
+    await expect(page.getByText("Démonstration avec un courrier fictif")).toBeVisible();
+    const nextStep = page.getByRole("region", { name: "Prochaine étape" });
+    await expect(nextStep).toContainText("Former opposition si vous contestez la dette");
+    await expect(page.getByText(/Le délai d’opposition est de 10 jours/)).toBeVisible();
+    await page.getByRole("link", { name: "Essayer avec mon courrier" }).click();
+    await expect(page).toHaveURL(/\/inscription/);
+    await page.getByLabel("Adresse e-mail").fill(uniqueEmail("demo"));
+    await page.getByLabel("Choisissez un mot de passe").fill(PASSWORD);
+    await page.getByRole("button", { name: "Créer mon compte gratuit" }).click();
+    await expect(page.getByRole("link", { name: "Photographier un courrier" })).toBeVisible();
+  });
+
+  test("une grande photo est convertie et allégée dans le navigateur avant l’envoi", async ({ page }) => {
+    test.setTimeout(60_000);
+    await signup(page);
+    await page.goto("/courriers/nouveau");
+    // Photo lourde générée à la volée (bruit non compressible, environ 5,8 Mo).
+    const big = noisePng(1600, 1200);
+    expect(big.length).toBeGreaterThan(1.5 * 1024 * 1024);
+    await page.getByTestId("desktop-file").setInputFiles({ name: "photo-lourde.png", mimeType: "image/png", buffer: big });
+    await expect(page).toHaveURL(/\/courriers\/c[a-z0-9]{20,}$/);
+    const src = await page.getByRole("img", { name: /Courrier original/ }).getAttribute("src");
+    const res = await page.request.get(src!);
+    expect(res.headers()["content-type"]).toBe("image/jpeg");
+    expect((await res.body()).length).toBeLessThan(big.length);
   });
 });
 
@@ -207,7 +250,7 @@ test.describe("échéances, réglages et données", () => {
 
     await page.goto("/connexion");
     await page.getByLabel("Adresse e-mail").fill(email);
-    await page.getByLabel("Mot de passe").fill(PASSWORD);
+    await page.getByLabel("Mot de passe", { exact: true }).fill(PASSWORD);
     await page.getByRole("button", { name: "Se connecter" }).click();
     await expect(page.getByText("E-mail ou mot de passe incorrect.")).toBeVisible();
   });
@@ -215,7 +258,7 @@ test.describe("échéances, réglages et données", () => {
 
 test.describe("accessibilité", () => {
   test("pages publiques sans violation grave", async ({ page }) => {
-    for (const url of ["/", "/connexion", "/inscription", "/confidentialite"]) {
+    for (const url of ["/", "/exemple", "/exemple/commandement", "/connexion", "/inscription", "/confidentialite"]) {
       await page.goto(url);
       await expectAccessible(page);
     }

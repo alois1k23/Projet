@@ -13,12 +13,11 @@ test("parcours mobile : navigation du bas, ajout et lecture d'un courrier sans d
 
   await nav.getByRole("link", { name: "Ajouter un courrier" }).click();
   await expect(page.getByText("Prendre une photo")).toBeVisible();
-  await page.locator("#file").setInputFiles(path.join(__dirname, "fixtures", "prime-2027.png"));
-  await page.getByRole("button", { name: "Analyser ce courrier" }).click();
+  await page.getByLabel("Choisir une photo ou un PDF").setInputFiles(path.join(__dirname, "fixtures", "prime-2027.png"));
   await expect(page.getByRole("heading", { level: 1 })).toContainText("assurance-maladie");
   await expectNoHorizontalScroll(page);
 
-  for (const label of ["Échéances", "Courriers", "Réglages", "Accueil"]) {
+  for (const label of ["À faire", "Courriers", "Réglages", "Accueil"]) {
     await nav.getByRole("link", { name: label }).click();
     await expect(nav.getByRole("link", { name: label })).toHaveAttribute("aria-current", "page");
     await expectNoHorizontalScroll(page);

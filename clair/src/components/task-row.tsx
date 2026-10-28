@@ -26,7 +26,7 @@ export function TaskRow({ task, today, showDocument = true }: { task: TaskWithDo
     <li className="flex items-start gap-3 px-4 py-3.5 sm:px-5">
       <form action={toggleTask} className="pt-0.5">
         <input type="hidden" name="taskId" value={task.id} />
-        <AutoSubmitCheckbox name="done" defaultChecked={done} label={done ? `Rouvrir : ${task.title}` : `Marquer comme fait : ${task.title}`} />
+        <AutoSubmitCheckbox key={task.status} name="done" defaultChecked={done} label={done ? `Rouvrir : ${task.title}` : `Marquer comme fait : ${task.title}`} />
       </form>
       <div className="min-w-0 flex-1">
         <p className={cx("font-semibold leading-snug", done && "text-ink-3 line-through")}>{task.title}</p>

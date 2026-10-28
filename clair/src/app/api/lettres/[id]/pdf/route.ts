@@ -9,7 +9,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const { id } = await params;
   const letter = await db.letter.findFirst({ where: { id, userId: user.id } });
   if (!letter) return new Response("Introuvable", { status: 404 });
-  const sender = { name: user.name ?? user.email, addressLine: user.addressLine, postalCode: user.postalCode, city: user.city };
+  const sender = { name: user.name ?? "", addressLine: user.addressLine, postalCode: user.postalCode, city: user.city };
   const pdf = await renderLetterPdf({
     sender: senderBlock(sender),
     recipient: letter.recipient,

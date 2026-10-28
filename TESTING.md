@@ -30,8 +30,8 @@
 |---|---|
 | `npm run lint` | ✅ 0 erreur, 0 avertissement |
 | `npm run typecheck` | ✅ 0 erreur |
-| `npm test` | ✅ 57 tests réussis |
-| `npm run test:e2e` | ✅ 14 parcours réussis (13 ordinateur, 1 mobile) |
+| `npm test` | ✅ 60 tests réussis |
+| `npm run test:e2e` | ✅ 16 parcours réussis (15 ordinateur, 1 mobile) |
 | `npm run build` | ✅ |
 | `npm run test:live` | ⏭️ **Non exécuté** : aucune clé API Anthropic n'est disponible dans cet environnement |
 
@@ -44,8 +44,19 @@
 6. Champ caméra sans étiquette accessible sur ordinateur.
 7. Salutation « Bonsoir » à midi : l'heure `fr-CH` (« 11 h ») n'était pas lue correctement.
 
+### Facilité d'usage (version 0.4) : ce qui est vérifié automatiquement
+- Démonstration sans compte, de la page d'accueil jusqu'à l'inscription en deux champs.
+- Analyse lancée dès le choix du fichier, sans bouton intermédiaire.
+- Photo lourde (5,8 Mo) convertie en JPEG et allégée dans le navigateur avant l'envoi.
+- « Prochaine étape » : « C'est fait » passe à l'action suivante, la lettre s'ouvre depuis la carte.
+- Coordonnées demandées dans la lettre, validées, puis retrouvées dans les réglages.
+- Bouton Afficher / Masquer le mot de passe.
+- Accessibilité des pages de démonstration.
+
+Défaut trouvé et corrigé : après « C'est fait », la case de la même tâche dans la liste restait visuellement décochée.
+
 ### Ce qui n'est pas testé
 - L'analyse réelle par Claude : aucun courrier n'a été lu par le vrai modèle. C'est le risque n° 1 (hypothèse H3).
-- Safari iOS et Firefox (seul Chromium est installé) ; la prise de photo réelle depuis un téléphone.
+- Safari iOS et Firefox (seul Chromium est installé) ; la prise de photo réelle depuis un téléphone ; la conversion HEIC (Chromium ne sait pas décoder ce format) ; l'installation sur l'écran d'accueil.
 - Charge et performance sous trafic.
 - Envoi réel d'e-mails (non implémenté).

@@ -29,11 +29,12 @@ Sources et détails : MARKET_STUDY.md.
 
 ## 4. Parcours utilisateur clés
 
-1. **Découverte** : landing → inscription (e-mail, mot de passe, consentement) → accueil avec message de bienvenue → essai avec un courrier fictif, sans document personnel.
-2. **Courrier entrant** : bouton « + » → photo ou PDF → analyse (10 à 30 s, étapes affichées) → fiche du courrier : en bref, montant, échéance, IBAN et références copiables, points d'attention, actions, lettres suggérées.
+1. **Découverte sans compte** : landing → « Voir un exemple, sans compte » → résultat complet d'un courrier fictif → « Essayer avec mon courrier ».
+2. **Inscription en deux champs** (e-mail, mot de passe) → accueil en trois étapes avec un seul bouton : « Photographier un courrier ».
+3. **Courrier entrant, un seul geste** : bouton « + » → photo ou PDF → l'analyse démarre seule (10 à 30 s, étapes affichées) → fiche du courrier : en bref, **prochaine étape** avec ses boutons, points d'attention, détails copiables, lettres suggérées.
 3. **Information incertaine** : badge « À vérifier » → comparaison avec l'original affiché à côté → correction → le badge disparaît.
 4. **Échéance** : accueil groupé (en retard / cette semaine / plus tard) → case à cocher → export .ics vers l'agenda.
-5. **Répondre** : lettre suggérée → champs pré-remplis → aperçu en direct → PDF au format d'enveloppe à fenêtre suisse.
+5. **Répondre** : lettre suggérée → champs pré-remplis → coordonnées demandées seulement la première fois → aperçu en direct → PDF au format d'enveloppe à fenêtre suisse.
 6. **Contrôle des données** : export JSON complet, suppression d'un courrier ou du compte entier.
 
 ## 5. Périmètre
@@ -41,7 +42,9 @@ Sources et détails : MARKET_STUDY.md.
 ### MVP (développé, voir TESTING.md)
 | Fonction | Statut |
 |---|---|
-| Compte : inscription, connexion, déconnexion, sessions sécurisées | ✅ Fait et testé |
+| Démonstration publique sans compte | ✅ Fait et testé |
+| Compte : inscription en deux champs, connexion, déconnexion, sessions sécurisées | ✅ |
+| Installation sur l'écran d'accueil (PWA) | ✅ Manifeste et icônes ; non testé sur un vrai téléphone |
 | Ajout d'un courrier : photo (appareil photo mobile), PDF, glisser-déposer | ✅ |
 | Analyse IA (Claude, sortie structurée validée), en français, toutes langues d'origine | ✅ Code testé avec un faux client ; **non testé contre l'API réelle faute de clé** |
 | Mode sans IA : saisie manuelle | ✅ |

@@ -21,7 +21,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </Link>
           <SideNav />
           <div className="mt-auto border-t border-line pt-4">
-            <p className="truncate px-3 text-sm font-semibold">{user.name}</p>
+            {user.name ? <p className="truncate px-3 text-sm font-semibold">{user.name}</p> : null}
             <p className="truncate px-3 text-xs text-ink-3">{user.email}</p>
             <form action={logout} className="mt-2">
               <button type="submit" className="flex h-9 w-full items-center gap-2 rounded-xl px-3 text-sm font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">

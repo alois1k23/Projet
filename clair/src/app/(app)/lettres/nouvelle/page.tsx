@@ -83,7 +83,7 @@ export default async function NewLetterPage({ searchParams }: { searchParams: Pr
         templateId={template.id}
         documentId={doc?.id ?? null}
         initialValues={prefill(template.id, doc)}
-        sender={{ name: user.name ?? user.email, addressLine: user.addressLine, postalCode: user.postalCode, city: user.city }}
+        sender={{ name: user.name ?? "", addressLine: user.addressLine, postalCode: user.postalCode, city: user.city }}
       />
       <p className="mt-6 text-xs text-ink-3">
         Ce modèle est une aide à la rédaction, pas un conseil juridique. Relisez la lettre et vérifiez les délais avant de l’envoyer, de préférence en recommandé.

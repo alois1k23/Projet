@@ -7,7 +7,7 @@ import { Card, EmptyState, PageHeader, SectionTitle, buttonClass } from "@/compo
 import { TaskRow } from "@/components/task-row";
 import { NewTaskForm } from "./new-task-form";
 
-export const metadata: Metadata = { title: "Échéances" };
+export const metadata: Metadata = { title: "À faire" };
 
 export default async function DeadlinesPage() {
   const user = await requireUser();
@@ -22,7 +22,7 @@ export default async function DeadlinesPage() {
   return (
     <div className="animate-rise">
       <PageHeader
-        title="Échéances"
+        title="À faire"
         subtitle="Tout ce que vous devez faire, du plus urgent au plus lointain."
         action={
           open.some((t) => t.dueDate) ? (

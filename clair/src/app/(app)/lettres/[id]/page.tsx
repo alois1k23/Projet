@@ -16,7 +16,7 @@ export default async function LetterPage({ params }: { params: Promise<{ id: str
   const { id } = await params;
   const letter = await db.letter.findFirst({ where: { id, userId: user.id } });
   if (!letter) notFound();
-  const sender = { name: user.name ?? user.email, addressLine: user.addressLine, postalCode: user.postalCode, city: user.city };
+  const sender = { name: user.name ?? "", addressLine: user.addressLine, postalCode: user.postalCode, city: user.city };
   const lang = letter.language as LetterLanguage;
   const fullText = [senderBlock(sender), "", letter.recipient, "", placeAndDate(sender, letter.createdAt, lang), "", letter.subject, "", letter.body, "", sender.name].join("\n");
 

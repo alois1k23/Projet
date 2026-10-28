@@ -9,7 +9,7 @@ import { storage } from "@/lib/storage";
 import type { FormState } from "./types";
 
 const ProfileSchema = z.object({
-  name: z.string().trim().min(1, "Indiquez votre nom.").max(100),
+  name: z.string().trim().max(100),
   addressLine: z.string().trim().max(120),
   postalCode: z
     .string()
@@ -27,7 +27,7 @@ export async function updateProfile(_prev: FormState, formData: FormData): Promi
     return { fieldErrors, values: Object.fromEntries([...formData].map(([k, v]) => [k, String(v)])) };
   }
   const { name, addressLine, postalCode, city } = parsed.data;
-  await db.user.update({ where: { id: user.id }, data: { name, addressLine: addressLine || null, postalCode: postalCode || null, city: city || null } });
+  await db.user.update({ where: { id: user.id }, data: { name: name || null, addressLine: addressLine || null, postalCode: postalCode || null, city: city || null } });
   revalidateAppPages();
   return { success: "Profil enregistré." };
 }

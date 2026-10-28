@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: { default: "Clair — votre courrier administratif, enfin clair", template: "%s · Clair" },
   description: "Photographiez un courrier : Clair vous dit ce qu’il signifie, ce que vous devez faire et avant quand.",
   applicationName: "Clair",
+  appleWebApp: { capable: true, title: "Clair", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {

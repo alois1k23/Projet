@@ -80,7 +80,7 @@ export function ThemeToggle() {
 const NAV = [
   { href: "/accueil", label: "Accueil", icon: Home },
   { href: "/courriers", label: "Courriers", icon: Inbox },
-  { href: "/echeances", label: "Échéances", icon: CalendarClock },
+  { href: "/echeances", label: "À faire", icon: CalendarClock },
   { href: "/lettres", label: "Lettres", icon: FileText },
   { href: "/reglages", label: "Réglages", icon: Settings },
 ] as const;

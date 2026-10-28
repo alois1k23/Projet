@@ -68,3 +68,13 @@ Format : contexte → décision → conséquences. Les décisions majeures sont 
 
 ## D-016 · Développement lancé avant la validation terrain (2026-10-28)
 - À votre demande, le MVP a été développé sans les 3 semaines d'entretiens et de tests prévues. Le risque principal reste non mesuré : la disposition à payer et la précision réelle de l'IA sur de vrais courriers. Recommandation : utiliser le MVP lui-même comme outil de validation (bêta fermée de 20 à 50 personnes).
+
+## D-017 · Priorité à la facilité d’usage pour l’acquisition (2026-10-28)
+Demande du fondateur : rendre Clair facile pour attirer plus de monde. Six obstacles levés :
+1. **Essai sans compte** : pages publiques `/exemple` avec les courriers fictifs, mêmes composants que l’application. Rien n’est enregistré, aucun coût d’API.
+2. **Inscription en deux champs** (e-mail et mot de passe), avec bouton Afficher / Masquer. Le nom et l’adresse ne sont demandés qu’au moment de préparer une première lettre. L’acceptation des conditions devient une mention sous le bouton au lieu d’une case à cocher (à confirmer par le juriste).
+3. **Un seul geste pour ajouter un courrier** : l’analyse démarre dès que la photo est prise ou le fichier choisi.
+4. **Photos préparées dans le navigateur** : conversion HEIC → JPEG (iPhone) et réduction à 2 400 px. L’envoi sur mobile est plus rapide et l’analyse coûte moins cher.
+5. **« Prochaine étape » en tête de chaque courrier**, avec les boutons utiles (C’est fait, Copier l’IBAN, Préparer la lettre).
+6. **Installable sur l’écran d’accueil** (manifeste PWA, icônes, raccourci « Ajouter un courrier »).
+Vocabulaire : « Échéances » devient « À faire ».

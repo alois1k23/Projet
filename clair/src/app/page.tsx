@@ -47,12 +47,12 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
               <ButtonLink href="/inscription" size="lg">
                 Essayer gratuitement
               </ButtonLink>
-              <ButtonLink href="/connexion" size="lg" variant="secondary">
-                J’ai déjà un compte
+              <ButtonLink href="/exemple" size="lg" variant="secondary">
+                Voir un exemple, sans compte
               </ButtonLink>
             </div>
             <p className="mt-4 flex items-center gap-2 text-sm text-ink-3">
-              <Lock className="size-4" aria-hidden="true" /> Documents chiffrés · suppression à tout moment
+              <Lock className="size-4" aria-hidden="true" /> Gratuit · une adresse e-mail suffit · documents chiffrés
             </p>
           </div>
 
@@ -77,6 +77,25 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
               </div>
             </div>
           </div>
+        </section>
+
+        <section className="pb-14" aria-labelledby="comment">
+          <h2 id="comment" className="mb-6 text-2xl font-extrabold tracking-tight">Comment ça marche</h2>
+          <ol className="grid gap-4 sm:grid-cols-3">
+            {[
+              ["Photographiez", "Le courrier tel que vous l’avez reçu, en français, en allemand ou en italien."],
+              ["Lisez l’essentiel", "Ce que dit le courrier, ce qu’il faut faire et la date limite, surlignés."],
+              ["Agissez", "Un bouton pour copier l’IBAN, cocher la tâche ou préparer la lettre."],
+            ].map(([title, text], i) => (
+              <li key={title} className="flex gap-4">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-sm font-extrabold text-bg">{i + 1}</span>
+                <span>
+                  <span className="block font-bold">{title}</span>
+                  <span className="mt-1 block text-ink-2">{text}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section className="grid gap-4 pb-16 sm:grid-cols-3" aria-label="Ce que fait Clair">

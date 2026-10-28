@@ -1,34 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertTriangle, ArrowLeft, ExternalLink, FileText, PenLine, RefreshCw, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, ExternalLink, FileText, PenLine, RefreshCw, Trash2 } from "lucide-react";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { storedAnalysis } from "@/lib/documents";
 import { todayInZurich } from "@/lib/deadlines";
-import { formatDate, formatIban, formatMoney, isValidIban, toNumber } from "@/lib/format";
+import { formatDate, toNumber } from "@/lib/format";
 import { getSample } from "@/lib/samples";
 import { TEMPLATES, type TemplateId } from "@/lib/letters/templates";
+import type { TaskKind } from "@prisma/client";
 import { REVIEW_THRESHOLD } from "@/lib/ai/schema";
 import { deleteDocument, retryAnalysis } from "@/app/actions/documents";
+import { toggleTask } from "@/app/actions/tasks";
 import { Badge, ButtonLink, Card, Notice, SectionTitle, buttonClass } from "@/components/ui";
+import { KeyFacts, LetterSuggestions, NextStep, Warnings } from "@/components/analysis";
 import { ConfirmSubmit, CopyButton, SubmitButton } from "@/components/client";
-import { TaskRow, DueBadge } from "@/components/task-row";
+import { TaskRow } from "@/components/task-row";
 import { CATEGORY_LABELS, LANGUAGE_LABELS, StatusBadge } from "@/components/document-card";
 import { EditForm } from "./edit-form";
 
 export const metadata: Metadata = { title: "Courrier" };
 
-function Fact({ label, children, review }: { label: string; children: React.ReactNode; review?: boolean }) {
-  return (
-    <div className="min-w-0 rounded-xl bg-surface-2 px-4 py-3">
-      <dt className="flex items-center gap-2 text-xs font-semibold text-ink-3">
-        {label}
-        {review ? <Badge tone="warning">À vérifier</Badge> : null}
-      </dt>
-      <dd className="mt-1 min-w-0 font-bold break-words">{children}</dd>
-    </div>
-  );
+/** Modèle de lettre le plus utile pour une action donnée. */
+function letterFor(kind: TaskKind, suggested: TemplateId[]): TemplateId | null {
+  if (kind === "CANCEL") return suggested.find((t) => t.startsWith("resiliation")) ?? null;
+  if (kind === "REPLY") return suggested.find((t) => !t.startsWith("resiliation")) ?? suggested[0] ?? null;
+  return null;
 }
 
 export default async function DocumentPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saisie?: string }> }) {
@@ -50,6 +48,9 @@ export default async function DocumentPage({ params, searchParams }: { params: P
   const suggested = (analysis?.suggestedLetters ?? []).filter((t): t is TemplateId => t in TEMPLATES);
   const reviewing = doc.status === "NEEDS_REVIEW";
   const lowAmount = reviewing && analysis?.confidence.amount !== null && analysis?.confidence.amount !== undefined && analysis.confidence.amount < REVIEW_THRESHOLD;
+  const openTasks = doc.tasks.filter((t) => t.status === "OPEN");
+  const next = openTasks[0] ?? null;
+  const nextLetter = next ? letterFor(next.kind, suggested) : null;
   const lowDate = reviewing && analysis?.confidence.dueDate !== null && analysis?.confidence.dueDate !== undefined && analysis.confidence.dueDate < REVIEW_THRESHOLD;
 
   return (
@@ -97,64 +98,52 @@ export default async function DocumentPage({ params, searchParams }: { params: P
             </Card>
           ) : null}
 
-          {amount !== null || doc.dueDate || iban || (analysis?.references.length ?? 0) > 0 ? (
-            <dl className="grid gap-3 sm:grid-cols-2">
-              {amount !== null ? (
-                <Fact label="Montant" review={lowAmount}>
-                  <span className="tabular text-xl">{formatMoney(amount, doc.currency ?? "CHF")}</span>
-                </Fact>
-              ) : null}
-              {doc.dueDate ? (
-                <Fact label="Échéance" review={lowDate}>
-                  <span className="tabular text-xl">{formatDate(doc.dueDate)}</span>
-                  <span className="mt-1.5 block">
-                    <DueBadge dueDate={doc.dueDate} today={today} />
-                  </span>
-                </Fact>
-              ) : null}
-              {iban ? (
-                <Fact label={isValidIban(iban) ? "IBAN" : "IBAN (contrôle échoué, vérifiez)"} review={!isValidIban(iban)}>
-                  <span className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[15px]">{formatIban(iban)}</span>
-                    <CopyButton value={iban.replace(/\s+/g, "")} />
-                  </span>
-                </Fact>
-              ) : null}
-              {analysis?.payment?.reference ? (
-                <Fact label="Référence de paiement">
-                  <span className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[15px] break-all">{analysis.payment.reference}</span>
-                    <CopyButton value={analysis.payment.reference.replace(/\s+/g, "")} />
-                  </span>
-                </Fact>
-              ) : null}
-              {analysis?.references.map((r) => (
-                <Fact key={`${r.label}-${r.value}`} label={r.label}>
-                  <span className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[15px] break-all">{r.value}</span>
-                    <CopyButton value={r.value} />
-                  </span>
-                </Fact>
-              ))}
-            </dl>
+          {next ? (
+            <NextStep
+              step={{ title: next.title, kind: next.kind, dueDate: next.dueDate, amount: toNumber(next.amount) }}
+              today={today}
+              remaining={openTasks.length - 1}
+              actions={
+                <>
+                  <form action={toggleTask}>
+                    <input type="hidden" name="taskId" value={next.id} />
+                    <input type="hidden" name="done" value="on" />
+                    <SubmitButton pendingLabel="Enregistrement…">
+                      <Check className="size-4" aria-hidden="true" /> C’est fait
+                    </SubmitButton>
+                  </form>
+                  {next.kind === "PAY" && iban ? <CopyButton value={iban.replace(/\s+/g, "")} label="Copier l’IBAN" variant="secondary" /> : null}
+                  {nextLetter ? (
+                    <ButtonLink href={`/lettres/nouvelle?modele=${nextLetter}&courrier=${doc.id}`} variant="secondary">
+                      <PenLine className="size-4" aria-hidden="true" /> Préparer la lettre
+                    </ButtonLink>
+                  ) : null}
+                </>
+              }
+            />
+          ) : doc.tasks.length > 0 ? (
+            <Notice tone="success" title="Tout est fait pour ce courrier">Vous pouvez le garder ici pour le retrouver facilement.</Notice>
           ) : null}
 
-          {analysis && analysis.warnings.length > 0 ? (
-            <section aria-label="Points d’attention" className="rounded-[var(--radius-card)] border border-mark/60 bg-mark-soft p-5">
-              <h2 className="mb-2 flex items-center gap-2 font-bold">
-                <AlertTriangle className="size-5 text-warning" aria-hidden="true" /> Points d’attention
-              </h2>
-              <ul className="list-disc space-y-1.5 pl-5">
-                {analysis.warnings.map((w) => (
-                  <li key={w}>{w}</li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
+          <Warnings items={analysis?.warnings ?? []} />
 
-          {doc.tasks.length > 0 ? (
-            <section aria-label="À faire">
-              <SectionTitle count={doc.tasks.filter((t) => t.status === "OPEN").length}>À faire</SectionTitle>
+          <KeyFacts
+            today={today}
+            data={{
+              amount,
+              currency: doc.currency,
+              dueDate: doc.dueDate,
+              iban,
+              paymentReference: analysis?.payment?.reference ?? null,
+              references: analysis?.references ?? [],
+              reviewAmount: lowAmount,
+              reviewDate: lowDate,
+            }}
+          />
+
+          {doc.tasks.length > 1 ? (
+            <section aria-label="Toutes les actions">
+              <SectionTitle count={openTasks.length}>Toutes les actions</SectionTitle>
               <Card>
                 <ul className="divide-y divide-line">
                   {doc.tasks.map((t) => (
@@ -165,25 +154,7 @@ export default async function DocumentPage({ params, searchParams }: { params: P
             </section>
           ) : null}
 
-          {suggested.length > 0 ? (
-            <section aria-label="Répondre">
-              <SectionTitle>Répondre</SectionTitle>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {suggested.map((t) => (
-                  <Link
-                    key={t}
-                    href={`/lettres/nouvelle?modele=${t}&courrier=${doc.id}`}
-                    className="group rounded-[var(--radius-card)] border border-line bg-surface p-4 transition-colors hover:border-primary"
-                  >
-                    <span className="flex items-center gap-2 font-bold group-hover:text-primary">
-                      <PenLine className="size-4 shrink-0" aria-hidden="true" /> {TEMPLATES[t].label}
-                    </span>
-                    <span className="mt-1 block text-sm text-ink-2">{TEMPLATES[t].description}</span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ) : null}
+          <LetterSuggestions ids={suggested} hrefFor={(t) => `/lettres/nouvelle?modele=${t}&courrier=${doc.id}`} />
 
           {doc.letters.length > 0 ? (
             <section aria-label="Lettres liées">

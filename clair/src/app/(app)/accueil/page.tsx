@@ -55,7 +55,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </p>
       </header>
 
-      {bienvenue ? (
+      {bienvenue && docCount > 0 ? (
         <div className="mb-8">
           <Notice tone="mark" title="Bienvenue dans Clair">
             Photographiez votre prochain courrier administratif : Clair vous dira ce qu’il signifie et ce que vous devez faire.
@@ -65,10 +65,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
       {docCount === 0 ? (
         <Card className="p-6 sm:p-8">
-          <h2 className="text-xl font-bold">Commencez par votre premier courrier</h2>
-          <p className="mt-1.5 max-w-xl text-ink-2">Une facture, un décompte de caisse-maladie, un avis d’impôt : prenez-le en photo ou importez le PDF.</p>
-          <ButtonLink href="/courriers/nouveau" size="lg" className="mt-5">
-            <Camera className="size-5" aria-hidden="true" /> Ajouter un courrier
+          <h2 className="text-xl font-bold">{bienvenue ? "Bienvenue ! Commencez par votre premier courrier" : "Commencez par votre premier courrier"}</h2>
+          <ol className="mt-4 grid gap-3 text-ink-2 sm:grid-cols-3">
+            {["Photographiez une facture, un avis d’impôt ou un courrier de votre caisse.", "Clair l’explique et surligne ce qu’il faut faire.", "Cochez quand c’est fait. Clair garde tout le reste."].map((t, i) => (
+              <li key={t} className="flex gap-3">
+                <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary-soft text-sm font-bold text-primary">{i + 1}</span>
+                {t}
+              </li>
+            ))}
+          </ol>
+          <ButtonLink href="/courriers/nouveau" size="lg" className="mt-6 w-full sm:w-auto">
+            <Camera className="size-5" aria-hidden="true" /> Photographier un courrier
           </ButtonLink>
           <div className="mt-8 border-t border-line pt-6">
             <SamplePicker />

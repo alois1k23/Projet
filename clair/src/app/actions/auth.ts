@@ -12,13 +12,11 @@ import type { FormState } from "./types";
 const email = z.string().trim().toLowerCase().pipe(z.email("Adresse e-mail invalide."));
 
 const SignupSchema = z.object({
-  name: z.string().trim().min(1, "Indiquez votre prénom et nom.").max(100),
   email,
   password: z
     .string()
     .min(PASSWORD_MIN_LENGTH, `Le mot de passe doit contenir au moins ${PASSWORD_MIN_LENGTH} caractères.`)
     .max(128, "Le mot de passe est trop long."),
-  consent: z.literal("on", { message: "Vous devez accepter les conditions et la politique de confidentialité." }),
 });
 
 const LoginSchema = z.object({ email, password: z.string().min(1, "Saisissez votre mot de passe.").max(128) });
@@ -39,15 +37,15 @@ async function clientKey(emailValue: string) {
 }
 
 export async function signup(_prev: FormState, formData: FormData): Promise<FormState> {
-  const values = { name: String(formData.get("name") ?? ""), email: String(formData.get("email") ?? "") };
+  const values = { email: String(formData.get("email") ?? "") };
   const parsed = SignupSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { fieldErrors: fieldErrors(parsed.error), values };
-  const { name, email: address, password } = parsed.data;
+  const { email: address, password } = parsed.data;
 
   const existing = await db.user.findUnique({ where: { email: address }, select: { id: true } });
   if (existing) return { fieldErrors: { email: "Un compte existe déjà avec cette adresse. Connectez-vous." }, values };
 
-  const user = await db.user.create({ data: { name, email: address, passwordHash: await hashPassword(password) } });
+  const user = await db.user.create({ data: { email: address, passwordHash: await hashPassword(password) } });
   await createSession(user.id);
   redirect("/accueil?bienvenue=1");
 }
