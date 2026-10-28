@@ -1,0 +1,28 @@
+{
+  "fps": 30,
+  "duration": 1890,
+  "chapters": [
+    { "id": "hook", "start": 0, "len": 105 },
+    { "id": "photo", "start": 105, "len": 180 },
+    { "id": "comprendre", "start": 285, "len": 240 },
+    { "id": "essentiel", "start": 525, "len": 225 },
+    { "id": "agir", "start": 750, "len": 210 },
+    { "id": "rappels", "start": 960, "len": 180 },
+    { "id": "lettres", "start": 1140, "len": 255 },
+    { "id": "retrouver", "start": 1395, "len": 135 },
+    { "id": "securite", "start": 1530, "len": 165 },
+    { "id": "fin", "start": 1695, "len": 195 }
+  ],
+  "events": {
+    "hook": { "swap": 52 },
+    "photo": { "shutter1": 55, "page1": 64, "addPage": 95, "shutter2": 112, "page2": 120, "analyse": 150 },
+    "comprendre": { "step1": 18, "step2": 36, "step3": 54, "result": 80, "badge": 95, "typeStart": 105, "typeEnd": 185 },
+    "essentiel": { "card0": 8, "card1": 18, "card2": 28, "card3": 38, "copyTap": 88, "review": 140 },
+    "agir": { "doneTap": 50, "list": 100, "g0": 112, "g1": 124, "g2": 136 },
+    "rappels": { "notif": 20, "calTap": 95, "cal": 105, "dot0": 118, "dot1": 126, "dot2": 134 },
+    "lettres": { "pick": 60, "form": 72, "typeStart": 84, "typeEnd": 150, "langTap": 165, "letter": 190, "pdf": 222 },
+    "retrouver": { "typeStart": 30, "typeEnd": 60, "filter": 62 },
+    "securite": { "lock": 5, "row0": 30, "row1": 45, "row2": 60, "langs": 95 },
+    "fin": { "logo": 70, "soon": 115, "platforms": 125, "follow": 150 }
+  }
+}

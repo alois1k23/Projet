@@ -1,11 +1,12 @@
 {
   "name": "clair-video",
   "private": true,
-  "description": "Vidéos promotionnelles de Clair (Remotion)",
+  "description": "Vid\u00e9os promotionnelles de Clair (Remotion)",
   "scripts": {
     "studio": "remotion studio",
     "render": "node render.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "render:explainer": "node render-explainer.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "5.3.0",
