@@ -27,6 +27,7 @@ Prochaine étape recommandée : bêta fermée avec une vraie clé API pour mesur
 | Tests et résultats | [TESTING.md](TESTING.md) |
 | Historique des versions | [CHANGELOG.md](CHANGELOG.md) |
 | Vidéos TikTok (explicative en français, courte en FR/DE/EN) et guide de publication | [video/](video/README.md) |
+| Créer et lancer le compte TikTok | [video/TIKTOK.md](video/TIKTOK.md) |
 | Décisions | [DECISIONS.md](DECISIONS.md) |
 | Feuille de route et tâches | [ROADMAP.md](ROADMAP.md) · [TASKS.md](TASKS.md) |
 

@@ -2,6 +2,7 @@
 
 ## En attente du fondateur
 - [ ] Décider si le mode démo restera actif sur le site public (D-022)
+- [ ] Créer le compte TikTok (guide : video/TIKTOK.md)
 - [ ] Publier la vidéo TikTok (engage à sortir des applications iOS et Android, D-024) ; choisir la musique dans TikTok
 - [ ] Comptes développeur Apple et Google Play (payants) si les applications natives sont confirmées
 - [ ] Fournir une clé API Anthropic (ou autoriser sa création) pour tester l'analyse réelle
