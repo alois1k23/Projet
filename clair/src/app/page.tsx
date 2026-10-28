@@ -8,7 +8,10 @@ import { SiteFooter, SiteHeader } from "@/components/site/chrome";
 import { WaitlistForm } from "@/components/site/waitlist-form";
 import { getLocale } from "@/i18n/server";
 import { siteMessages } from "@/i18n/site";
-import { env } from "@/lib/env";
+import { appUrl } from "@/lib/env";
+import { demoEnabled } from "@/lib/demo";
+import { DemoButton } from "@/components/demo-button";
+import { getT } from "@/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = siteMessages[await getLocale()];
@@ -19,11 +22,13 @@ const FEATURE_ICONS = [Languages, Receipt, BellRing, PenLine, FileStack, Search]
 const PROBLEM_ICONS = [EyeOff, Clock, Globe2];
 const SECURITY_ICONS = [Lock, ShieldCheck, Trash2, Eye];
 
-export default async function LandingPage({ searchParams }: { searchParams: Promise<{ "compte-supprime"?: string }> }) {
+export default async function LandingPage({ searchParams }: { searchParams: Promise<{ "compte-supprime"?: string; demo?: string }> }) {
   if (await getCurrentUser()) redirect("/accueil");
   const params = await searchParams;
   const locale = await getLocale();
   const s = siteMessages[locale];
+  const t = await getT();
+  const demo = demoEnabled();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -31,7 +36,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
       {
         "@type": "WebApplication",
         name: "Clair",
-        url: env().CLAIR_APP_URL,
+        url: appUrl(),
         applicationCategory: "FinanceApplication",
         operatingSystem: "Web",
         inLanguage: ["fr-CH", "de-CH"],
@@ -56,6 +61,11 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             <Notice tone="success">{s.accountDeleted}</Notice>
           </div>
         ) : null}
+        {params.demo === "limite" || params.demo === "indisponible" ? (
+          <div className="mt-6">
+            <Notice tone="warning">{params.demo === "limite" ? t.demo.tooMany : t.demo.unavailable}</Notice>
+          </div>
+        ) : null}
 
         {/* Accroche */}
         <section className="grid items-center gap-10 py-12 sm:py-20 lg:grid-cols-[1.1fr_1fr]">
@@ -65,8 +75,9 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
               {s.hero.titleBefore} <span className="mark">{s.hero.titleMark}</span>.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-ink-2">{s.hero.lead}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/inscription" size="lg">{s.hero.cta}</ButtonLink>
+            <DemoButton className="mt-8" />
+            <div className={cx(demo ? "mt-5" : "mt-8", "flex flex-wrap gap-3")}>
+              <ButtonLink href="/inscription" size="lg" variant={demo ? "secondary" : "primary"}>{s.hero.cta}</ButtonLink>
               <ButtonLink href="/exemple" size="lg" variant="secondary">{s.hero.demo}</ButtonLink>
             </div>
             <p className="mt-4 flex items-center gap-2 text-sm text-ink-3">
@@ -244,7 +255,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             <p className="text-2xl font-extrabold tracking-tight text-balance">{s.finalCta.title}</p>
             <p className="mt-1 opacity-90">{s.finalCta.text}</p>
           </div>
-          <ButtonLink href="/inscription" variant="secondary" size="lg">{s.finalCta.button}</ButtonLink>
+          {demo ? <DemoButton variant="secondary" hint={false} /> : <ButtonLink href="/inscription" variant="secondary" size="lg">{s.finalCta.button}</ButtonLink>}
         </section>
       </main>
       <SiteFooter />

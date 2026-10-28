@@ -7,6 +7,7 @@ import { getAnalyzer } from "@/lib/ai/analyzer";
 import { logout } from "@/app/actions/auth";
 import { getT } from "@/i18n/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { endDemo } from "@/app/actions/demo";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
@@ -25,7 +26,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <SideNav />
           <div className="mt-auto border-t border-line pt-4">
             {user.name ? <p className="truncate px-3 text-sm font-semibold">{user.name}</p> : null}
-            <p className="truncate px-3 text-xs text-ink-3">{user.email}</p>
+            {user.demoExpiresAt ? null : <p className="truncate px-3 text-xs text-ink-3">{user.email}</p>}
             <form action={logout} className="mt-2">
               <button type="submit" className="flex h-9 w-full items-center gap-2 rounded-xl px-3 text-sm font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">
                 <LogOut className="size-4" aria-hidden="true" /> {t.common.logout}
@@ -42,7 +43,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </Link>
           <LanguageSwitcher />
         </header>
-        {analyzer?.name === "mock" ? (
+        {user.demoExpiresAt ? (
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-b border-primary/20 bg-primary-soft px-4 py-2.5 text-center text-sm font-semibold text-primary" role="status">
+            <span>{analyzer?.name === "mock" ? t.demo.bannerSimulated : t.demo.banner}</span>
+            <form action={endDemo}>
+              <button type="submit" className="rounded-lg bg-primary px-3 py-1.5 text-on-primary hover:opacity-90">{t.demo.keep}</button>
+            </form>
+          </div>
+        ) : analyzer?.name === "mock" ? (
           <div className="border-b border-warning/30 bg-warning-soft px-4 py-2 text-center text-xs font-semibold text-warning" role="status">
             {t.common.testMode}
           </div>

@@ -116,6 +116,6 @@ export class MockAnalyzer implements DocumentAnalyzer {
 export function getAnalyzer(): DocumentAnalyzer | null {
   const e = env();
   if (e.CLAIR_AI_PROVIDER === "mock") return new MockAnalyzer();
-  if (!e.ANTHROPIC_API_KEY) return null;
+  if (!e.ANTHROPIC_API_KEY) return e.CLAIR_DEMO === "1" ? new MockAnalyzer() : null;
   return new AnthropicAnalyzer(new Anthropic({ apiKey: e.ANTHROPIC_API_KEY, timeout: 120_000, maxRetries: 2 }), e.CLAIR_AI_MODEL);
 }

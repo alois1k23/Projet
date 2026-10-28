@@ -16,7 +16,8 @@
     "db:deploy": "prisma migrate deploy",
     "reminders": "tsx --tsconfig tsconfig.json scripts/send-reminders.ts",
     "check": "npm run lint && npm run typecheck && npm test",
-    "test:live": "vitest run --config vitest.live.config.ts"
+    "test:live": "vitest run --config vitest.live.config.ts",
+    "demo": "CLAIR_DEMO=1 next start"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.133.0",
@@ -27,6 +28,7 @@
     "next": "15.5.27",
     "nodemailer": "^10.1.0",
     "pdf-lib": "1.17.1",
+    "prisma": "6.19.3",
     "react": "19.1.9",
     "react-dom": "19.1.9",
     "server-only": "^0.0.1",
@@ -43,7 +45,6 @@
     "@types/react-dom": "19.1.9",
     "eslint": "9.36.0",
     "eslint-config-next": "15.5.27",
-    "prisma": "6.19.3",
     "tailwindcss": "4.1.18",
     "tsx": "4.20.5",
     "typescript": "5.9.3",

@@ -5,7 +5,7 @@ import { I18nProvider } from "@/i18n/client";
 import { getLocale } from "@/i18n/server";
 import { INTL_LOCALE } from "@/i18n/config";
 import { siteMessages } from "@/i18n/site";
-import { env } from "@/lib/env";
+import { appUrl } from "@/lib/env";
 
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
 const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const s = siteMessages[locale];
   return {
-    metadataBase: new URL(env().CLAIR_APP_URL),
+    metadataBase: new URL(appUrl()),
     title: { default: s.metaTitle, template: "%s · Clair" },
     description: s.metaDescription,
     applicationName: "Clair",

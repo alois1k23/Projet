@@ -179,7 +179,7 @@ export function UploadForm({ aiEnabled }: { aiEnabled: boolean }) {
               <ImagePlus className="size-5" aria-hidden="true" /> {u.choosePhotos}
               <input type="file" multiple accept={ACCEPT} className="sr-only" disabled={busy} onChange={(e) => add(e.currentTarget.files, true)} />
             </label>
-            <label className={buttonClass("primary", "lg", "hidden cursor-pointer sm:inline-flex")}>
+            <label className={buttonClass("primary", "lg", "cursor-pointer max-sm:hidden")}>
               <FileUp className="size-5" aria-hidden="true" /> {u.chooseFiles}
               <input data-testid="desktop-file" type="file" multiple accept={ACCEPT} className="sr-only" disabled={busy} onChange={(e) => add(e.currentTarget.files, true)} />
             </label>

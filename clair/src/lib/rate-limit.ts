@@ -33,3 +33,4 @@ export class RateLimiter {
 export const loginLimiter = new RateLimiter(10, 15 * 60 * 1000);
 export const analysisLimiter = new RateLimiter(30, 60 * 60 * 1000);
 export const mailLimiter = new RateLimiter(5, 60 * 60 * 1000);
+export const demoLimiter = new RateLimiter(10, 60 * 60 * 1000);

@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.6.0 — 2026-10-28 · Mode démo
+### Ajouté
+- **Mode démo** (`CLAIR_DEMO=1`) : bouton « Essayer la démo, sans inscription » sur l'accueil, la connexion, l'inscription et les exemples. Il ouvre un compte temporaire, sans e-mail, avec trois courriers déjà expliqués et un profil rempli (lettres prêtes sans saisie). Bandeau permanent, bouton « Créer mon vrai compte » qui efface la démo, suppression automatique après 24 heures, jamais de rappel e-mail, 10 démos par heure et par connexion au maximum.
+- Sans clé API, l'analyse est simulée **et annoncée comme telle** (bandeau, mention sous l'ajout de photo).
+- **Démo en une commande** : `docker compose -f docker-compose.demo.yml up --build` (PostgreSQL, migrations et clé de chiffrement générées automatiquement).
+- Vidéo de démonstration (`demo/clair-demo.mp4`, 40 s, enregistrée sur l'image Docker).
+### Corrigé
+- `sitemap.xml` et `robots.txt` étaient générés à la compilation : la compilation échouait sans base de données et l'adresse du site était figée. Ils sont maintenant calculés à chaque requête.
+- Sur téléphone, des boutons réservés à l'ordinateur s'affichaient (« Choisir des fichiers », « Ajouter » dans Courriers) : leur classe `hidden` était écrasée par le style du bouton.
+
 ## 0.5.0 — 2026-10-28 · Version complète (demande « Tout ! »)
 ### Ajouté
 - **Interface en allemand** : toute l'application, les e-mails, les explications de l'IA, les exemples, les guides et les pages légales existent en français et en allemand (orthographe suisse, sans « ß »). Langue choisie selon le profil, puis le choix enregistré, puis le navigateur ; sélecteur FR/DE dans l'en-tête, le pied de page et les réglages, fonctionnel sans JavaScript.

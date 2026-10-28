@@ -10,6 +10,8 @@ const EnvSchema = z.object({
   CLAIR_AI_MODEL: z.string().default("claude-opus-5-5"),
   CLAIR_AI_PROVIDER: z.enum(["anthropic", "mock", ""]).optional(),
   CLAIR_APP_URL: z.string().url().default("http://localhost:3000"),
+  /** Mode démo : comptes éphémères en un clic et, sans clé API, analyse simulée signalée comme telle. */
+  CLAIR_DEMO: z.enum(["1", "0", ""]).optional(),
 });
 
 export type Env = z.infer<typeof EnvSchema>;
@@ -26,4 +28,9 @@ export function env(): Env {
   }
   cached = parsed.data;
   return cached;
+}
+
+/** URL publique, lue à chaque requête (sans exiger le reste de la configuration, ni la figer à la compilation). */
+export function appUrl(): string {
+  return (process.env.CLAIR_APP_URL || "http://localhost:3000").replace(/\/+$/, "");
 }

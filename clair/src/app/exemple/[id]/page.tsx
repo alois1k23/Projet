@@ -9,6 +9,7 @@ import { TEMPLATES, type TemplateId } from "@/lib/letters/templates";
 import { KeyFacts, LetterSuggestions, NextStep, StaticActions, Warnings } from "@/components/analysis";
 import { Badge, ButtonLink, Card, SectionTitle } from "@/components/ui";
 import { getLocale, getT } from "@/i18n/server";
+import { DemoButton } from "@/components/demo-button";
 
 // Les dates des exemples sont relatives au jour même.
 export const dynamic = "force-dynamic";
@@ -106,6 +107,7 @@ export default async function ExamplePage({ params }: { params: Promise<{ id: st
         <ButtonLink href="/inscription" variant="secondary" size="lg" className="mt-6">
           <Camera className="size-5" aria-hidden="true" /> {t.example.ctaButton}
         </ButtonLink>
+        <DemoButton variant="secondary" hint={false} className="mt-3" />
       </section>
     </div>
   );

@@ -33,7 +33,7 @@ export async function sendDueReminders(notifier: Notifier, appUrl: string, now =
   const today = todayInZurich(now);
   const horizon = new Date(today.getTime() + 3 * 86_400_000);
   const candidates = await db.task.findMany({
-    where: { status: "OPEN", remindedAt: null, dueDate: { lte: horizon } },
+    where: { status: "OPEN", remindedAt: null, dueDate: { lte: horizon }, user: { demoExpiresAt: null } },
     include: { user: { select: { email: true, name: true, locale: true } } },
   });
   const due = candidates.filter((t) => shouldRemind(t, today));

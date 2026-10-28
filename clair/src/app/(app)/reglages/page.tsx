@@ -5,10 +5,11 @@ import { requireUser } from "@/lib/auth/session";
 import { getAnalyzer } from "@/lib/ai/analyzer";
 import { analysesThisMonth, monthlyAllowance } from "@/lib/documents";
 import { logout } from "@/app/actions/auth";
-import { Badge, Card, PageHeader, buttonClass } from "@/components/ui";
+import { Badge, Card, Notice, PageHeader, buttonClass } from "@/components/ui";
 import { ThemeToggle } from "@/components/client";
 import { DeleteAccountForm, PasswordForm, ProfileForm } from "./forms";
-import { getT } from "@/i18n/server";
+import { getLocale, getT } from "@/i18n/server";
+import { formatDate } from "@/lib/format";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,23 +31,26 @@ export default async function SettingsPage() {
   const used = await analysesThisMonth(user.id);
   const allowance = monthlyAllowance(user.plan);
   const analyzer = getAnalyzer();
-  const t = await getT();
+  const [t, locale] = await Promise.all([getT(), getLocale()]);
   const s = t.settings;
 
   return (
     <div className="grid animate-rise gap-6">
       <PageHeader title={s.title} />
+      {user.demoExpiresAt ? <Notice tone="mark">{t.demo.expiresOn(formatDate(user.demoExpiresAt, locale))}</Notice> : null}
 
       <Section title={s.profile} description={s.profileDesc}>
         <ProfileForm defaults={{ name: user.name ?? "", addressLine: user.addressLine ?? "", postalCode: user.postalCode ?? "", city: user.city ?? "" }} />
       </Section>
 
-      <Section
-        title={s.connection}
-        description={user.passwordHash ? s.connectionWithPassword : s.connectionWithoutPassword}
-      >
-        <PasswordForm hasPassword={Boolean(user.passwordHash)} />
-      </Section>
+      {user.demoExpiresAt ? null : (
+        <Section
+          title={s.connection}
+          description={user.passwordHash ? s.connectionWithPassword : s.connectionWithoutPassword}
+        >
+          <PasswordForm hasPassword={Boolean(user.passwordHash)} />
+        </Section>
+      )}
 
       <Section title={s.plan}>
         <div className="flex flex-wrap items-center gap-3">

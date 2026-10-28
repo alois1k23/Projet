@@ -1,6 +1,7 @@
 # TASKS
 
 ## En attente du fondateur
+- [ ] Décider si le mode démo restera actif sur le site public (D-022)
 - [ ] Fournir une clé API Anthropic (ou autoriser sa création) pour tester l'analyse réelle
 - [ ] Choisir l'hébergement (recommandation : hébergeur suisse avec PostgreSQL managé et stockage objet)
 - [ ] Autoriser le déploiement d'une bêta fermée (non publique)
@@ -29,3 +30,5 @@
 - [x] Interface, e-mails, exemples et pages légales en allemand
 - [x] Site de présentation, tarifs, FAQ, liste d'attente, guides, référencement
 - [x] 86 tests unitaires et d'intégration, 26 parcours de bout en bout
+- [x] Mode démo, démo en une commande (Docker), vidéo de démonstration
+- [x] 90 tests unitaires et d'intégration, 28 parcours de bout en bout

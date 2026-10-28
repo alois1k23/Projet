@@ -22,7 +22,7 @@ export async function SiteHeader({ signedIn = false }: { signedIn?: boolean }) {
           <Link href="/guides" className="rounded-lg px-3 py-2 hover:text-ink">{s.nav.guides}</Link>
         </nav>
         <div className="flex items-center gap-2">
-          <LanguageSwitcher className="hidden sm:inline-flex" />
+          <LanguageSwitcher />
           {signedIn ? (
             <ButtonLink href="/accueil" size="sm">{t.nav.home}</ButtonLink>
           ) : (

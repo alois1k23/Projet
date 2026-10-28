@@ -41,7 +41,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
         title={d.title}
         subtitle={total > 0 ? d.count(total) : undefined}
         action={
-          <ButtonLink href="/courriers/nouveau" className="hidden lg:inline-flex">
+          <ButtonLink href="/courriers/nouveau" className="max-lg:hidden">
             <Plus className="size-4" aria-hidden="true" /> {t.nav.addShort}
           </ButtonLink>
         }

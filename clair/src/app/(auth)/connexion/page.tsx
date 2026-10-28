@@ -5,6 +5,7 @@ import { AltSignIn } from "@/components/alt-sign-in";
 import { mailEnabled } from "@/lib/mail";
 import { signInOptions } from "@/lib/auth/providers";
 import { getT } from "@/i18n/server";
+import { DemoButton } from "@/components/demo-button";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         ) : null}
         <LoginForm mail={mailEnabled()} />
         <AltSignIn mail={mailEnabled()} {...signInOptions()} />
+        <DemoButton variant="secondary" size="md" className="border-t border-line pt-6" />
       </div>
     </>
   );

@@ -20,6 +20,8 @@ model User {
   postalCode   String?
   city         String?
   plan         Plan       @default(FREE)
+  /// Compte de démonstration (mode démo) : supprimé automatiquement après cette date.
+  demoExpiresAt DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   sessions     Session[]

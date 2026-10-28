@@ -14,6 +14,7 @@ const serverEnv = {
   CLAIR_APP_URL: `http://localhost:${PORT}`,
   CLAIR_INSECURE_COOKIES: "1",
   CLAIR_MAIL_TRANSPORT: "file",
+  CLAIR_DEMO: "1",
 };
 
 export default defineConfig({

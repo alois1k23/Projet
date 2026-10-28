@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
-import { env } from "@/lib/env";
+import { appUrl } from "@/lib/env";
 import { GUIDE_SLUGS, GUIDES_CHECKED_AT } from "@/content/guides";
 import { SAMPLES } from "@/lib/samples";
 
 /** Pages publiques uniquement. La langue suit le choix du visiteur (cookie ou navigateur), à la même adresse. */
+// Calculé à chaque requête : l'adresse publique dépend du déploiement, pas de la compilation.
+export const dynamic = "force-dynamic";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = env().CLAIR_APP_URL;
+  const base = appUrl();
   const pages = ["", "/exemple", "/guides", "/inscription", "/connexion", "/confidentialite", "/conditions"];
   return [
     ...pages.map((path) => ({ url: `${base}${path}`, changeFrequency: "monthly" as const, priority: path === "" ? 1 : 0.6 })),

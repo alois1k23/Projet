@@ -13,6 +13,8 @@ test("parcours mobile : navigation du bas, ajout et lecture d'un courrier sans d
 
   await nav.getByRole("link", { name: "Ajouter un courrier" }).click();
   await expect(page.getByText("Prendre une photo")).toBeVisible();
+  // Le bouton « Choisir des fichiers » est réservé aux ordinateurs.
+  await expect(page.getByText("Choisir des fichiers", { exact: true })).toBeHidden();
   // Appareil photo : on prend deux pages, puis on lance l'analyse.
   const fixture = path.join(__dirname, "fixtures", "prime-2027.png");
   await page.getByLabel("Prendre une photo").setInputFiles(fixture);

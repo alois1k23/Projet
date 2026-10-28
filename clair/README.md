@@ -32,6 +32,20 @@ L'application est servie sur http://localhost:3000.
 
 **Analyse IA** : renseignez `ANTHROPIC_API_KEY` pour activer l'analyse automatique (modèle par défaut : `claude-opus-5-5`). Sans clé, l'application fonctionne en saisie manuelle et l'interface l'indique clairement.
 
+## Lancer la démo (une commande)
+
+Il faut seulement [Docker Desktop](https://www.docker.com/products/docker-desktop/). Dans le dossier `clair/` :
+
+```bash
+docker compose -f docker-compose.demo.yml up --build
+```
+
+Puis ouvrir http://localhost:3000 et cliquer sur **Essayer la démo, sans inscription** : un compte temporaire s'ouvre avec trois courriers déjà expliqués (facture QR, prime d'assurance-maladie, commandement de payer). Aucune adresse e-mail, aucune clé, aucun service externe. Les comptes de démo sont effacés après 24 heures.
+
+Sans clé API, l'ajout d'une photo affiche un **résultat d'exemple** (le document n'est pas lu), et l'application le dit clairement. Pour une vraie analyse : `ANTHROPIC_API_KEY=... docker compose -f docker-compose.demo.yml up --build`.
+
+Sans Docker : `CLAIR_DEMO=1` dans `.env`, puis `npm run build && npm run demo`.
+
 ## Scripts
 
 | Commande | Rôle |
@@ -42,7 +56,8 @@ L'application est servie sur http://localhost:3000.
 | `npm test` | Tests unitaires et d'intégration (base `clair_test`) |
 | `npm run test:e2e` | Compilation puis parcours Playwright (base `clair_e2e`, analyse simulée) |
 | `npm run test:live` | Test réel contre l'API Claude (nécessite une clé, coûte quelques centimes) |
-| `npm run reminders` | Envoie les rappels d'échéance (à planifier chaque jour) |
+| `npm run demo` | Serveur de production en mode démo (après `npm run build`) |
+| `npm run reminders` | Envoie les rappels d'échéance et efface les démos expirées (à planifier chaque jour) |
 
 ## Architecture
 

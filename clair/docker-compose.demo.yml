@@ -1,0 +1,40 @@
+# Démo locale de Clair en une commande :
+#   docker compose -f docker-compose.demo.yml up --build
+# puis ouvrir http://localhost:3000 et cliquer sur « Essayer la démo ».
+# Sans clé API, les analyses sont simulées (et signalées comme telles).
+# Pour une analyse réelle : ANTHROPIC_API_KEY=... docker compose -f docker-compose.demo.yml up --build
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: clair
+      POSTGRES_PASSWORD: clair_demo
+      POSTGRES_DB: clair
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clair"]
+      interval: 2s
+      retries: 30
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://clair:clair_demo@db:5432/clair
+      CLAIR_STORAGE_DIR: /data/storage
+      CLAIR_APP_URL: http://localhost:3000
+      CLAIR_DEMO: "1"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      # Démo sur http://localhost uniquement : cookies sans l'attribut Secure.
+      CLAIR_INSECURE_COOKIES: "1"
+    volumes:
+      - data:/data
+
+volumes:
+  db:
+  data:

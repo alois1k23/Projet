@@ -8,7 +8,7 @@ import { getLocale } from "@/i18n/server";
 import { siteMessages } from "@/i18n/site";
 import { formatDate } from "@/lib/format";
 import { parseIsoDate } from "@/lib/ai/schema";
-import { env } from "@/lib/env";
+import { appUrl } from "@/lib/env";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const guide = getGuide((await params).slug, await getLocale());
@@ -29,7 +29,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     description: guide.description,
     inLanguage: locale === "de" ? "de-CH" : "fr-CH",
     dateModified: GUIDES_CHECKED_AT,
-    mainEntityOfPage: `${env().CLAIR_APP_URL}/guides/${guide.slug}`,
+    mainEntityOfPage: `${appUrl()}/guides/${guide.slug}`,
     publisher: { "@type": "Organization", name: "Clair" },
   };
 

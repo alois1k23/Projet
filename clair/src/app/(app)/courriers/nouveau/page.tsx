@@ -18,7 +18,8 @@ export default async function NewDocumentPage() {
   const used = await analysesThisMonth(user.id);
   const allowance = monthlyAllowance(user.plan);
   const remaining = Math.max(0, allowance - used);
-  const u = (await getT()).upload;
+  const t = await getT();
+  const u = t.upload;
 
   return (
     <div className="mx-auto max-w-xl animate-rise">
@@ -36,7 +37,7 @@ export default async function NewDocumentPage() {
         <UploadForm aiEnabled={!!analyzer && remaining > 0} />
         <p className="flex items-start gap-2 text-xs text-ink-3">
           <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-          {u.privacy}
+          {analyzer?.name === "mock" ? t.demo.privacySimulated : u.privacy}
         </p>
         <div className="border-t border-line pt-6">
           <SamplePicker />
