@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 const dataPath = fileURLToPath(new URL("../dashboard/data.js", import.meta.url));
 const sandbox = {};
 vm.runInNewContext(readFileSync(dataPath, "utf8"), sandbox);
-const { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS } = sandbox.STUDY;
+const { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS, MARKET } = sandbox.STUDY;
 
 // --- Intégrité ---
 assert.equal(CRITERIA.reduce((s, c) => s + c.weight, 0), 100, "les pondérations doivent totaliser 100 %");
@@ -23,6 +23,8 @@ for (const idea of IDEAS) {
   for (const k of idea.obs) assert.ok(k in idea.scores, `${idea.id} marque un critère inconnu ${k}`);
 }
 for (const r of RISKS) assert.ok(IDEAS.some((i) => i.id === r.idea), `risque lié à une idée inconnue ${r.idea}`);
+for (const p of MARKET.prices) if (p.source !== "—") assert.ok(sourceIds.has(p.source), `prix cité avec une source inconnue ${p.source}`);
+for (const g of MARKET.segments) for (const id of g.source.split(/,\s*/)) assert.ok(sourceIds.has(id), `segment cité avec une source inconnue ${id}`);
 for (const id of Object.keys(SCENARIOS)) assert.ok(IDEAS.some((i) => i.id === id), `scénario inconnu ${id}`);
 
 // --- Scores (même formule que le dashboard) ---

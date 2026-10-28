@@ -5,7 +5,7 @@
 
 ## 1. Méthode
 
-1. **Recherche documentaire** sur des sources publiques datées (OFS, OFSP, SIX, PostCom, Comparis, RevenueCat, presse spécialisée). Chaque donnée est référencée (S1…S28) avec sa date et un niveau de fiabilité.
+1. **Recherche documentaire** sur des sources publiques datées (OFS, OFSP, SIX, PostCom, Comparis, RevenueCat, presse spécialisée). Chaque donnée est référencée (S1…S43) avec sa date et un niveau de fiabilité.
 2. **Génération de 15 concepts** à partir de problèmes fréquents, en privilégiant les spécificités suisses qu'un acteur global copie difficilement (multilinguisme, LAMal, QR-facture, fiscalité cantonale, frontaliers, pénurie de logements).
 3. **Notation multicritère** de 0 à 10 sur 8 critères pondérés (grille fournie). Pour chaque note, on distingue :
    - **(O) observé** : la note s'appuie sur une donnée sourcée ;
@@ -72,9 +72,9 @@ Score final = Σ (note × pondération) / 10, sur 100.
 
 | Rang | Idée | Score /100 | 1er si pondérations ±50 % | Top 3 si pondérations ±50 % | 1er si notes incertaines |
 |---:|---|---:|---:|---:|---:|
-| 1 | Clair — Copilote du courrier administratif suisse | 77.5 | 100 % | 100 % | 93 % |
-| 2 | Nido — Copilote de recherche d'appartement | 71.5 | 0 % | 100 % | 4 % |
-| 3 | Tribu — Copilote de la charge mentale familiale | 71.0 | 0 % | 100 % | 3 % |
+| 1 | Clair — Copilote du courrier administratif suisse | 75.5 | 100 % | 100 % | 81 % |
+| 2 | Nido — Copilote de recherche d'appartement | 71.5 | 0 % | 100 % | 11 % |
+| 3 | Tribu — Copilote de la charge mentale familiale | 71.0 | 0 % | 100 % | 8 % |
 | 4 | Bascule — Assistant conformité des frontaliers | 64.5 | 0 % | 0 % | 0 % |
 | 5 | Relais — Coordination des proches aidants | 64.5 | 0 % | 0 % | 0 % |
 | 6 | Grüezi — Coach de langue locale par situations réelles | 64.0 | 0 % | 0 % | 0 % |
@@ -90,14 +90,15 @@ Score final = Σ (note × pondération) / 10, sur 100.
 
 **Lecture des tests de robustesse.**
 - Le trio de tête reste le même dans 100 % des simulations où les pondérations varient de ±50 %.
-- Avec des notes incertaines, Clair reste premier dans 93 % des cas, Nido dans 4 % et Tribu dans 3 %.
+- Avec des notes incertaines, Clair reste premier dans 81 % des cas, Nido dans 11 % et Tribu dans 8 %.
+- Révision du 28.10.2026 : la note « faiblesse des solutions existantes » de Clair passe de 8 à 6 après la découverte de plusieurs apps d'explication de courriers en Allemagne et en Autriche (voir MARKET_STUDY.md).
 - **Limite importante :** ces tests mesurent la stabilité du *modèle* face à mes propres incertitudes, pas la réalité du marché. Si mes notes sont biaisées dans le même sens, la simulation ne le détecte pas. Seuls les tests utilisateurs (section 6) le peuvent.
 
 ## 5. Les 15 concepts
 
 (O) = note appuyée sur une source ; (E) = estimation. Les coûts de MVP sont des estimations en semaines-personne pour une équipe fondatrice qui code elle-même.
 
-### 1. Clair — Copilote du courrier administratif suisse (77.5/100)
+### 1. Clair — Copilote du courrier administratif suisse (75.5/100)
 
 | | |
 |---|---|
@@ -106,14 +107,14 @@ Score final = Σ (note × pondération) / 10, sur 100.
 | **Solution** | Photographier ou transférer un courrier : l'app résume en français, extrait montant, échéance et action à faire, crée le rappel, prépare le paiement QR et rédige la réponse (contestation, résiliation, demande de délai). |
 | **Fonction principale** | Scan → « ce que ça veut dire / ce que je dois faire / avant quand » en 10 secondes. |
 | **Fréquence estimée** | Hebdomadaire (plusieurs courriers par mois par ménage) — estimation. |
-| **Concurrents** | ePost (boîte aux lettres numérique de La Poste), apps génériques de scan IA (BriefAI, Papeer), ChatGPT/Gemini en usage libre, eBill pour la seule partie factures. |
-| **Avantage potentiel** | Connaissance du contexte suisse (QR-facture, délais LAMal, impôts cantonaux, Serafe, régies), multilingue FR/DE/IT/EN, hébergement en Suisse, actions concrètes (rappel, paiement, lettre) plutôt qu'un simple résumé. |
+| **Concurrents** | ePost (boîte aux lettres numérique de La Poste), petites apps d'explication de courriers par IA en Allemagne et en Autriche (Postera, xPlainly, Totoy), ChatGPT/Gemini/Swisscom myAI en usage libre, eBill pour la seule partie factures. |
+| **Avantage potentiel** | Connaissance du contexte suisse (QR-facture, délais LAMal, impôts cantonaux, Serafe, régies), multilingue FR/DE/IT/EN, hébergement en Suisse, actions concrètes (rappel, paiement, lettre). La simple explication d'un courrier est déjà copiée par plusieurs apps : l'avantage durable doit venir de la spécialisation suisse, de la confiance et de la distribution. |
 | **Difficulté technique** | Moyenne : OCR + LLM multimodal, extraction structurée fiable, chiffrement, rappels. |
 | **Coût estimé du MVP** | 8–12 semaines-personne · < CHF 3 000 jusqu'au MVP (API IA, hébergement, comptes stores) |
 | **Modèle économique** | Freemium : 5 courriers/mois gratuits ; Plus ~CHF 5.90/mois ou ~CHF 49/an (hypothèse) ; plan Famille partagé. |
 | **Risques majeurs** | Erreur d'extraction sur une échéance ; réticence à confier des documents sensibles ; ePost pourrait ajouter de l'IA ; « ChatGPT suffit ». |
-| **Notes** | Problème 9 (O) · Marché 8 (O) · Fréquence 7 (E) · Concurrence faible 8 (O) · Monétisation 7 (E) · Faisabilité 7 (E) · Croissance 8 (E) · Lancement 7 (E) |
-| **Sources** | S3, S4, S8, S9, S10, S11, S12, S14, S28 |
+| **Notes** | Problème 9 (O) · Marché 8 (O) · Fréquence 7 (E) · Concurrence faible 6 (O) · Monétisation 7 (E) · Faisabilité 7 (E) · Croissance 8 (E) · Lancement 7 (E) |
+| **Sources** | S3, S4, S8, S9, S10, S11, S12, S14, S28, S29, S33, S34, S35, S36, S37, S38 |
 
 ### 2. Nido — Copilote de recherche d'appartement (71.5/100)
 
@@ -411,5 +412,20 @@ Voir aussi la section 07 du tableau de bord.
 | S26 | [Groupes WhatsApp de parents : surcharge d'informations et pression sociale (qualitatif)](https://wnyc.org/story/nyc-parents-on-school-whatsapp-group-chats-oh-my-god-its-hell) | La Libre / WNYC | 2024–2025 | Faible à moyenne (qualitatif) |
 | S27 | [e-ID étatique acceptée à 50,4 % le 28.09.2025 ; lancement annoncé pour fin 2026 (date incertaine)](https://www.mondaq.com/data-protection/1684898/switzerland-says-yes-to-e-id-digital-identity-is-on-its-way) | Mondaq / heise | 2025–2026 | Moyenne (date de lancement à vérifier) |
 | S28 | [Comparis : 1 personne sur 3 a eu du mal à payer ses primes en 2024 ; hausse des coûts fixes = 1er facteur d'incertitude 2026](https://res.cloudinary.com/comparis-cms/image/upload/v1766411525/press/fr/2025/12/20251212_MM_Fincancial_Outlook_FR_fsrxmf.pdf) | Comparis (Innofact) | 2024-12 / 2025-12 | Moyenne-élevée (sondage représentatif) |
+| S29 | [Scénarios des ménages : 4,1 millions de ménages privés en 2025, 4,5 millions dans dix ans](https://dam-api.bfs.admin.ch/hub/api/dam/assets/36197485/master) | OFS, Actualités OFS | 2025-10 | Élevée |
+| S30 | [Langue principale : allemand 61,0 %, français 22,3 % (enquête 2024)](https://www.fr.ch/deef/ssd/statistiques-par-themes/langues-et-religions) | OFS via État de Fribourg | 2025 | Élevée (reprise cantonale) |
+| S31 | [Immigration 2025 : ~165 000 nouveaux résidents permanents étrangers, ~83 000 départs](https://www.admin.ch/fr/newnsb/iiAHV0k5TFjK) | SEM / admin.ch | 2026-01-26 | Élevée (provisoire) |
+| S32 | [Digimonitor 2025 : 60 % des 15–75 ans utilisent l'IA au moins occasionnellement (79 % des 15–34 ans)](https://allnews.ch/node/143055) | IGEM / REMP via allnews | 2025 | Moyenne-élevée |
+| S33 | [Datenvertrauensstudie 2025 : confiance dans les fournisseurs d'IA 4,3/10 contre 7,2 pour les banques et 7,0 pour les autorités ; usage de l'IA 52,9 %](https://www.netzwoche.ch/news/2025-10-30/schweizer-bevoelkerung-vertraut-ki-etwas-mehr-und-dem-datenschutz-etwas-weniger) | Comparis (Innofact, n = 1 049) | 2025-10 | Moyenne-élevée |
+| S34 | [Postera : explication de courriers officiels allemands, 16 langues, Pro 6,99 €/mois ou 59,99 €/an](https://apps.apple.com/app/id6768274889) | App Store | consulté 2026-10-28 | Faible (fiche éditeur) |
+| S35 | [xPlainly : explication, dossiers, échéances, paiement ; 5 analyses 3,99 $, plan annuel 24,99 $ ; serveurs à Francfort](https://apps.apple.com/app/xplainly/id6764679503) | App Store | consulté 2026-10-28 | Faible (fiche éditeur) |
+| S36 | [Totoy (Vienne) lève 500 k€ pour son IA de simplification de documents officiels ; offre grand public et administrations](https://finder.techleap.nl/news/feed/totoy-secures-500k-for-document-ai) | Techleap | 2024-10 | Moyenne |
+| S37 | [Swisscom myAI : assistant IA grand public, version de base gratuite, Pro 14,90 CHF/mois dès 2026](https://www.swisscom.ch/fr/about/news/2025/09/24-myai.html) | Swisscom | 2025-09-24 | Élevée |
+| S38 | [Doccle (Belgique) : boîte administrative numérique, 2,6 à 3,5 M d'utilisateurs revendiqués](https://apps.apple.com/be/app/doccle/id970053203) | App Store / Doccle | 2025 | Faible à moyenne (déclaratif) |
+| S39 | [Digiposte (La Poste France) : coffre-fort numérique, plus de 10 M d'utilisateurs revendiqués](https://www.laposte.fr/particulier/digiposte/tous-mes-documents-partout-et-tout-le-temps) | La Poste | non daté | Faible à moyenne (déclaratif) |
+| S40 | [Volders rachète Aboalarm : ~10 M€ de chiffre d'affaires annuel cumulé, 2 M+ utilisateurs revendiqués (résiliation de contrats)](https://www.appgefahren.de/aboalarm-berliner-startup-volders-kauft-bekannten-kuendigungsservice-329400.html) | appgefahren / netzwelt | non daté | Faible à moyenne |
+| S41 | [Record de 3 306 997 commandements de payer en 2024 (3 048 529 en 2023)](https://econostrum.info/suisse/?p=102870) | Econostrum citant l'OFS | 2025 | Moyenne (reprise secondaire) |
+| S42 | [France : 61 % des usagers ont rencontré des difficultés dans leurs démarches administratives (Défenseur des droits / Ipsos, n = 5 030)](https://www.banquedesterritoires.fr/en-2024-61-des-usagers-sondes-rencontrent-des-difficultes-dans-leurs-demarches-administratives) | Banque des Territoires | 2025-10 | Élevée |
+| S43 | [Le Conseil fédéral ratifiera la convention du Conseil de l'Europe sur l'IA ; avant-projet de loi attendu fin 2026](https://www.bj.admin.ch/fr/intelligence-artificielle) | Office fédéral de la justice | 2025-02-12 | Élevée |
 
 Les noms de concurrents cités sans source (Cozi, Homegate, Tricount, Duolingo…) relèvent de la connaissance générale du marché et n'ont pas été revérifiés individuellement en octobre 2026.

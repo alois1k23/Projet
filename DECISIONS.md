@@ -22,10 +22,15 @@ Format : contexte → décision → conséquences. Les décisions majeures sont 
 - **Raison :** zéro build, ouvrable partout, publiable tel quel, graphiques interactifs suffisants (barres, nuage, radar, courbes).
 
 ## D-005 · Recommandation : Clair (2026-10-28) — validation fondateur requise
-- **Contexte :** Clair obtient 77,5/100 contre 71,5 pour Nido et 71,0 pour Tribu ; il reste premier dans 93 % des simulations où les notes varient.
+- **Contexte :** Clair obtient 75,5/100 (77,5 avant la révision D-007) contre 71,5 pour Nido et 71,0 pour Tribu ; il reste premier dans 81 % des simulations où les notes varient.
 - **Proposition :** retenir Clair, copilote du courrier administratif suisse, et absorber Bienvenue, Franchise, Fixe et un module Déménagement comme extensions futures.
 - **Point de vigilance assumé :** Nido rapporte plus à court terme dans les scénarios, mais dépend de l'accès aux portails et subit un churn structurel.
 - **Statut :** proposée, en attente.
 
 ## D-006 · Noms provisoires (2026-10-28)
 - Les noms (Clair, Nido, Tribu…) servent à l'analyse uniquement. Aucune vérification de marque ni de domaine n'a été faite. Elle aura lieu en phase 4.
+
+## D-007 · Révision de la note de concurrence de Clair (2026-10-28)
+- **Contexte :** l'étude de marché ciblée a trouvé plusieurs apps d'explication de courriers par IA en Allemagne et en Autriche (Postera, xPlainly, Totoy).
+- **Décision :** la note « faiblesse des solutions existantes » de Clair passe de 8 à 6. Score : 77,5 → 75,5. Clair reste premier.
+- **Conséquence :** le positionnement passe de « une IA qui explique vos lettres » à « le gestionnaire administratif de confiance des ménages suisses ». L'avantage doit venir de la profondeur suisse, de la confiance et de la distribution (MARKET_STUDY.md, section 7).

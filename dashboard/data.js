@@ -49,6 +49,21 @@
     { id: "S26", title: "Groupes WhatsApp de parents : surcharge d'informations et pression sociale (qualitatif)", publisher: "La Libre / WNYC", date: "2024–2025", url: "https://wnyc.org/story/nyc-parents-on-school-whatsapp-group-chats-oh-my-god-its-hell", reliability: "Faible à moyenne (qualitatif)" },
     { id: "S27", title: "e-ID étatique acceptée à 50,4 % le 28.09.2025 ; lancement annoncé pour fin 2026 (date incertaine)", publisher: "Mondaq / heise", date: "2025–2026", url: "https://www.mondaq.com/data-protection/1684898/switzerland-says-yes-to-e-id-digital-identity-is-on-its-way", reliability: "Moyenne (date de lancement à vérifier)" },
     { id: "S28", title: "Comparis : 1 personne sur 3 a eu du mal à payer ses primes en 2024 ; hausse des coûts fixes = 1er facteur d'incertitude 2026", publisher: "Comparis (Innofact)", date: "2024-12 / 2025-12", url: "https://res.cloudinary.com/comparis-cms/image/upload/v1766411525/press/fr/2025/12/20251212_MM_Fincancial_Outlook_FR_fsrxmf.pdf", reliability: "Moyenne-élevée (sondage représentatif)" },
+    { id: "S29", title: "Scénarios des ménages : 4,1 millions de ménages privés en 2025, 4,5 millions dans dix ans", publisher: "OFS, Actualités OFS", date: "2025-10", url: "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36197485/master", reliability: "Élevée" },
+    { id: "S30", title: "Langue principale : allemand 61,0 %, français 22,3 % (enquête 2024)", publisher: "OFS via État de Fribourg", date: "2025", url: "https://www.fr.ch/deef/ssd/statistiques-par-themes/langues-et-religions", reliability: "Élevée (reprise cantonale)" },
+    { id: "S31", title: "Immigration 2025 : ~165 000 nouveaux résidents permanents étrangers, ~83 000 départs", publisher: "SEM / admin.ch", date: "2026-01-26", url: "https://www.admin.ch/fr/newnsb/iiAHV0k5TFjK", reliability: "Élevée (provisoire)" },
+    { id: "S32", title: "Digimonitor 2025 : 60 % des 15–75 ans utilisent l'IA au moins occasionnellement (79 % des 15–34 ans)", publisher: "IGEM / REMP via allnews", date: "2025", url: "https://allnews.ch/node/143055", reliability: "Moyenne-élevée" },
+    { id: "S33", title: "Datenvertrauensstudie 2025 : confiance dans les fournisseurs d'IA 4,3/10 contre 7,2 pour les banques et 7,0 pour les autorités ; usage de l'IA 52,9 %", publisher: "Comparis (Innofact, n = 1 049)", date: "2025-10", url: "https://www.netzwoche.ch/news/2025-10-30/schweizer-bevoelkerung-vertraut-ki-etwas-mehr-und-dem-datenschutz-etwas-weniger", reliability: "Moyenne-élevée" },
+    { id: "S34", title: "Postera : explication de courriers officiels allemands, 16 langues, Pro 6,99 €/mois ou 59,99 €/an", publisher: "App Store", date: "consulté 2026-10-28", url: "https://apps.apple.com/app/id6768274889", reliability: "Faible (fiche éditeur)" },
+    { id: "S35", title: "xPlainly : explication, dossiers, échéances, paiement ; 5 analyses 3,99 $, plan annuel 24,99 $ ; serveurs à Francfort", publisher: "App Store", date: "consulté 2026-10-28", url: "https://apps.apple.com/app/xplainly/id6764679503", reliability: "Faible (fiche éditeur)" },
+    { id: "S36", title: "Totoy (Vienne) lève 500 k€ pour son IA de simplification de documents officiels ; offre grand public et administrations", publisher: "Techleap", date: "2024-10", url: "https://finder.techleap.nl/news/feed/totoy-secures-500k-for-document-ai", reliability: "Moyenne" },
+    { id: "S37", title: "Swisscom myAI : assistant IA grand public, version de base gratuite, Pro 14,90 CHF/mois dès 2026", publisher: "Swisscom", date: "2025-09-24", url: "https://www.swisscom.ch/fr/about/news/2025/09/24-myai.html", reliability: "Élevée" },
+    { id: "S38", title: "Doccle (Belgique) : boîte administrative numérique, 2,6 à 3,5 M d'utilisateurs revendiqués", publisher: "App Store / Doccle", date: "2025", url: "https://apps.apple.com/be/app/doccle/id970053203", reliability: "Faible à moyenne (déclaratif)" },
+    { id: "S39", title: "Digiposte (La Poste France) : coffre-fort numérique, plus de 10 M d'utilisateurs revendiqués", publisher: "La Poste", date: "non daté", url: "https://www.laposte.fr/particulier/digiposte/tous-mes-documents-partout-et-tout-le-temps", reliability: "Faible à moyenne (déclaratif)" },
+    { id: "S40", title: "Volders rachète Aboalarm : ~10 M€ de chiffre d'affaires annuel cumulé, 2 M+ utilisateurs revendiqués (résiliation de contrats)", publisher: "appgefahren / netzwelt", date: "non daté", url: "https://www.appgefahren.de/aboalarm-berliner-startup-volders-kauft-bekannten-kuendigungsservice-329400.html", reliability: "Faible à moyenne" },
+    { id: "S41", title: "Record de 3 306 997 commandements de payer en 2024 (3 048 529 en 2023)", publisher: "Econostrum citant l'OFS", date: "2025", url: "https://econostrum.info/suisse/?p=102870", reliability: "Moyenne (reprise secondaire)" },
+    { id: "S42", title: "France : 61 % des usagers ont rencontré des difficultés dans leurs démarches administratives (Défenseur des droits / Ipsos, n = 5 030)", publisher: "Banque des Territoires", date: "2025-10", url: "https://www.banquedesterritoires.fr/en-2024-61-des-usagers-sondes-rencontrent-des-difficultes-dans-leurs-demarches-administratives", reliability: "Élevée" },
+    { id: "S43", title: "Le Conseil fédéral ratifiera la convention du Conseil de l'Europe sur l'IA ; avant-projet de loi attendu fin 2026", publisher: "Office fédéral de la justice", date: "2025-02-12", url: "https://www.bj.admin.ch/fr/intelligence-artificielle", reliability: "Élevée" },
   ];
 
   // devWeeks : semaines-personne estimées pour un MVP commercialisable (hypothèse).
@@ -61,14 +76,14 @@
       solution: "Photographier ou transférer un courrier : l'app résume en français, extrait montant, échéance et action à faire, crée le rappel, prépare le paiement QR et rédige la réponse (contestation, résiliation, demande de délai).",
       coreFeature: "Scan → « ce que ça veut dire / ce que je dois faire / avant quand » en 10 secondes.",
       frequency: "Hebdomadaire (plusieurs courriers par mois par ménage) — estimation.",
-      competitors: "ePost (boîte aux lettres numérique de La Poste), apps génériques de scan IA (BriefAI, Papeer), ChatGPT/Gemini en usage libre, eBill pour la seule partie factures.",
-      advantage: "Connaissance du contexte suisse (QR-facture, délais LAMal, impôts cantonaux, Serafe, régies), multilingue FR/DE/IT/EN, hébergement en Suisse, actions concrètes (rappel, paiement, lettre) plutôt qu'un simple résumé.",
+      competitors: "ePost (boîte aux lettres numérique de La Poste), petites apps d'explication de courriers par IA en Allemagne et en Autriche (Postera, xPlainly, Totoy), ChatGPT/Gemini/Swisscom myAI en usage libre, eBill pour la seule partie factures.",
+      advantage: "Connaissance du contexte suisse (QR-facture, délais LAMal, impôts cantonaux, Serafe, régies), multilingue FR/DE/IT/EN, hébergement en Suisse, actions concrètes (rappel, paiement, lettre). La simple explication d'un courrier est déjà copiée par plusieurs apps : l'avantage durable doit venir de la spécialisation suisse, de la confiance et de la distribution.",
       techDifficulty: "Moyenne : OCR + LLM multimodal, extraction structurée fiable, chiffrement, rappels.",
       devWeeks: [8, 12], cashCost: "< CHF 3 000 jusqu'au MVP (API IA, hébergement, comptes stores)",
       businessModel: "Freemium : 5 courriers/mois gratuits ; Plus ~CHF 5.90/mois ou ~CHF 49/an (hypothèse) ; plan Famille partagé.",
       risks: "Erreur d'extraction sur une échéance ; réticence à confier des documents sensibles ; ePost pourrait ajouter de l'IA ; « ChatGPT suffit ».",
-      scores: { p: 9, m: 8, f: 7, w: 8, mon: 7, feas: 7, g: 8, l: 7 },
-      obs: ["p", "m", "w"], sources: ["S3", "S4", "S8", "S9", "S10", "S11", "S12", "S14", "S28"],
+      scores: { p: 9, m: 8, f: 7, w: 6, mon: 7, feas: 7, g: 8, l: 7 },
+      obs: ["p", "m", "w"], sources: ["S3", "S4", "S8", "S9", "S10", "S11", "S12", "S14", "S28", "S29", "S33", "S34", "S35", "S36", "S37", "S38"],
     },
     {
       id: "logement", name: "Nido", tagline: "Copilote de recherche d'appartement",
@@ -355,5 +370,30 @@
     { id: "H5", text: "Usage récurrent : 3 courriers ou plus par mois et par utilisateur actif.", method: "Bêta fermée de 50 utilisateurs pendant 6 semaines.", threshold: "Rétention S4 ≥ 35 %" },
   ];
 
-  root.STUDY = { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS, HYPOTHESES };
+  // Étude de marché ciblée sur Clair. Valeurs sourcées sauf mention « hypothèse ».
+  const MARKET = {
+    priceYear: 49, // CHF par an, hypothèse de prix
+    sizing: [
+      { key: "tam", label: "TAM", name: "Tous les ménages suisses", households: 4100000, basis: "4,1 M de ménages privés en 2025 (S29)" },
+      { key: "sam", label: "SAM", name: "Ménages suisses déjà utilisateurs d'IA", households: 2460000, basis: "4,1 M × 60 % d'utilisateurs d'IA (S29, S32)" },
+      { key: "sam_r", label: "SAM initial", name: "Même cible en Suisse romande", households: 549000, basis: "4,1 M × 22,3 % francophones × 60 % (S29, S30, S32) — approximation : la part des personnes est appliquée aux ménages" },
+      { key: "som", label: "SOM 3 ans", name: "Ménages payants visés à 3 ans", households: 11000, low: 5500, high: 16500, basis: "Hypothèse : 1 à 3 % du SAM initial" },
+    ],
+    segments: [
+      { name: "Actifs romands débordés", size: "≈ 550 000 ménages francophones utilisateurs d'IA", source: "S29, S30, S32", pain: "Volume de courrier, primes en hausse, manque de temps" },
+      { name: "Nouveaux arrivants", size: "≈ 165 000 nouveaux résidents permanents étrangers par an", source: "S31", pain: "Système inconnu, langue, démarches d'installation" },
+      { name: "Frontaliers", size: "411 450 personnes", source: "S6", pain: "Courriers de deux pays, règles fiscales spécifiques" },
+      { name: "Enfants qui gèrent le courrier de parents âgés", size: "Non chiffré ; eBill progresse le plus chez les plus de 80 ans (+20 % en 2025)", source: "S12", pain: "Gérer à distance le courrier d'un proche" },
+    ],
+    prices: [
+      { name: "ePost", perYear: 0, note: "Gratuit (options payantes)", source: "S10" },
+      { name: "ChatGPT / myAI de base", perYear: 0, note: "Gratuit, sans rappels ni suivi", source: "S37" },
+      { name: "xPlainly", perYear: 24.99, note: "Plan annuel, USD", source: "S35" },
+      { name: "Clair (hypothèse)", perYear: 49, note: "CHF 49/an ou 5.90/mois, à tester", source: "—", ours: true },
+      { name: "Postera Pro", perYear: 59.99, note: "EUR par an", source: "S34" },
+      { name: "Swisscom myAI Pro", perYear: 178.8, note: "14,90 CHF × 12", source: "S37" },
+    ],
+  };
+
+  root.STUDY = { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS, HYPOTHESES, MARKET };
 })(typeof window !== "undefined" ? window : globalThis);

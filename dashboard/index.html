@@ -134,6 +134,12 @@ details.idea[open] summary::before { content: "–"; }
 .top3 .panel { display: grid; gap: 10px; align-content: start; }
 .top3 .panel.pick { border-color: var(--series-1); box-shadow: 0 0 0 1px var(--series-1); }
 ul.tight { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.sizing { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 860px) { .sizing { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .sizing { grid-template-columns: minmax(0, 1fr); } }
+.size-tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.size-tile.focus { border-color: var(--series-1); box-shadow: 0 0 0 1px var(--series-1); }
+.size-tile .big { font-size: 1.5rem; }
 footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 20px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
@@ -216,9 +222,29 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
     <div class="top3" id="top3"></div>
   </section>
 
+  <section aria-labelledby="h-market">
+    <div class="section-head">
+      <div class="eyebrow">05 · Marché de Clair</div>
+      <h2 id="h-market">Taille du marché et prix de référence</h2>
+      <p class="muted">Valeur annuelle = ménages × CHF 49 par an (prix hypothétique). Le TAM est un plafond théorique, pas un objectif. Détail des calculs dans MARKET_STUDY.md.</p>
+    </div>
+    <div class="sizing" id="sizing"></div>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Prix annuels des alternatives</h3>
+        <div id="prices" class="chart" style="height:300px" role="img" aria-label="Prix annuels des alternatives à Clair"></div>
+        <p class="small muted">Devises d'origine (USD, EUR, CHF), non converties. Les alternatives gratuites n'offrent ni rappels ni suivi.</p>
+      </div>
+      <div class="panel table-wrap">
+        <h3>Segments prioritaires</h3>
+        <table id="seg-table"><thead><tr><th>Segment</th><th>Taille</th><th>Douleur</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
   <section aria-labelledby="h-scen">
     <div class="section-head">
-      <div class="eyebrow">05 · Potentiel économique</div>
+      <div class="eyebrow">06 · Potentiel économique</div>
       <h2 id="h-scen">Revenu mensuel récurrent sur 12 mois, trois scénarios</h2>
       <p class="muted">Modèle volontairement simple&nbsp;: inscrits cumulés × taux de conversion payant × prix. Les taux de conversion encadrent la médiane freemium publiée par RevenueCat (2,1&nbsp;% à J35). Ce sont des hypothèses de travail, pas des prévisions.</p>
     </div>
@@ -235,7 +261,7 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
 
   <section aria-labelledby="h-risk">
     <div class="section-head">
-      <div class="eyebrow">06 · Risques</div>
+      <div class="eyebrow">07 · Risques</div>
       <h2 id="h-risk">Matrice des risques des finalistes</h2>
       <p class="muted">Probabilité et impact notés de 1 à 5 (jugement). Couleur = criticité (probabilité × impact).</p>
     </div>
@@ -249,7 +275,7 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
 
   <section aria-labelledby="h-hyp">
     <div class="section-head">
-      <div class="eyebrow">07 · Avant d'écrire du code</div>
+      <div class="eyebrow">08 · Avant d'écrire du code</div>
       <h2 id="h-hyp">Hypothèses critiques à valider avec de vrais utilisateurs</h2>
     </div>
     <div class="panel table-wrap"><table id="hyp-table"><thead><tr><th>#</th><th>Hypothèse</th><th>Méthode</th><th>Seuil de succès</th></tr></thead><tbody></tbody></table></div>
@@ -257,7 +283,7 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
 
   <section aria-labelledby="h-ideas">
     <div class="section-head">
-      <div class="eyebrow">08 · Fiches</div>
+      <div class="eyebrow">09 · Fiches</div>
       <h2 id="h-ideas">Les 15 concepts en détail</h2>
     </div>
     <div class="panel" id="ideas"></div>
@@ -265,7 +291,7 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
 
   <section aria-labelledby="h-src">
     <div class="section-head">
-      <div class="eyebrow">09 · Sources</div>
+      <div class="eyebrow">10 · Sources</div>
       <h2 id="h-src">Sources consultées le 28 octobre 2026</h2>
       <p class="muted">Non consultés faute d'accès&nbsp;: Google Trends, extraction systématique des avis App Store / Google Play, Reddit en direct (seulement des miroirs), bases Crunchbase / PitchBook. Méthodes de validation proposées dans RESEARCH.md.</p>
     </div>
@@ -279,7 +305,7 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
 <script src="data.js"></script>
 <script>
 (function () {
-  const { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS, HYPOTHESES } = window.STUDY;
+  const { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS, HYPOTHESES, MARKET: STUDY_MARKET } = window.STUDY;
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const fmt = (n, d = 1) => n.toLocaleString("fr-CH", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -525,12 +551,36 @@ footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--li
     }).join("");
   }
 
-  function renderAll() { update(); renderMatrix(); renderRadars(); renderScen(); renderRisks(); }
+  // ---------- Marché ----------
+  function renderMarketStatic() {
+    const M = STUDY_MARKET;
+    const compact = (n) => n >= 1e6 ? fmt(n / 1e6) + " M" : n >= 1e3 ? Math.round(n / 1e3).toLocaleString("fr-CH") + " k" : String(n);
+    $("#sizing").innerHTML = M.sizing.map((z) => {
+      const hh = z.low ? `${compact(z.low)}–${compact(z.high)}` : compact(z.households);
+      const val = z.low ? `CHF ${fmt(z.low * M.priceYear / 1e6, 2)}–${fmt(z.high * M.priceYear / 1e6, 2)} M/an` : `CHF ${fmt(z.households * M.priceYear / 1e6, 0)} M/an`;
+      return `<div class="size-tile ${z.key === "sam_r" ? "focus" : ""}"><div class="eyebrow">${esc(z.label)}</div><div class="big">${hh}</div><div class="small">ménages · <span class="num">${val}</span></div><div class="small"><strong>${esc(z.name)}</strong></div><div class="small muted">${esc(z.basis)}</div></div>`;
+    }).join("");
+    $("#seg-table tbody").innerHTML = M.segments.map((g) => `<tr><td><strong>${esc(g.name)}</strong></td><td class="small">${esc(g.size)} <span class="muted">(${esc(g.source)})</span></td><td class="small">${esc(g.pain)}</td></tr>`).join("");
+  }
+  function renderPrices() {
+    const T = tokens();
+    const P = STUDY_MARKET.prices;
+    charts.prices.setOption({
+      grid: { left: 8, right: 56, top: 8, bottom: 8, containLabel: true },
+      tooltip: { ...tooltipBase(T), trigger: "item", formatter: (p) => `<strong>${esc(P[p.dataIndex].name)}</strong><br>${p.value === 0 ? "Gratuit" : fmt(p.value, 2) + " par an"}<br><span style="color:${T.ink3}">${esc(P[p.dataIndex].note)} · ${esc(P[p.dataIndex].source)}</span>` },
+      xAxis: { type: "value", show: false, max: 200 },
+      yAxis: { type: "category", inverse: true, data: P.map((x) => x.name), ...axisBase(T), axisLabel: { color: T.ink2, fontFamily: T.body, fontSize: 12 }, splitLine: { show: false } },
+      series: [{ type: "bar", barWidth: 14, data: P.map((x) => ({ value: x.perYear, itemStyle: { color: x.ours ? T.s1 : T.muted, borderRadius: [0, 4, 4, 0] } })),
+        label: { show: true, position: "right", color: T.ink2, fontFamily: T.data, fontSize: 11, formatter: (p) => p.value === 0 ? "0" : fmt(p.value, p.value % 1 ? 2 : 0) } }],
+    }, true);
+  }
+
+  function renderAll() { update(); renderMatrix(); renderRadars(); renderPrices(); renderScen(); renderRisks(); }
 
   function boot() {
-    renderSliders(); renderStatic(); renderTop3(); renderScenPick();
+    renderSliders(); renderStatic(); renderTop3(); renderMarketStatic(); renderScenPick();
     if (!window.echarts) { document.querySelectorAll(".chart").forEach((el) => { el.innerHTML = '<p class="muted small">Graphique indisponible : la bibliothèque ECharts n\'a pas pu être chargée. Les tableaux restent à jour.</p>'; el.style.height = "auto"; }); update(); return; }
-    charts.bar = mk($("#bar")); charts.matrix = mk($("#matrix")); charts.scen = mk($("#scen")); charts.risk = mk($("#risk"));
+    charts.bar = mk($("#bar")); charts.matrix = mk($("#matrix")); charts.scen = mk($("#scen")); charts.risk = mk($("#risk")); charts.prices = mk($("#prices"));
     renderAll();
     window.addEventListener("resize", () => Object.values(charts).forEach((c) => c.resize()));
     const rerender = () => requestAnimationFrame(renderAll);

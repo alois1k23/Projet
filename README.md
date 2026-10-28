@@ -16,6 +16,7 @@ Recommandation actuelle : **Clair**, un copilote du courrier administratif suiss
 | Tableau de bord interactif | [dashboard/index.html](dashboard/index.html) |
 | Données de l'analyse (source unique) | [dashboard/data.js](dashboard/data.js) |
 | Analyse des 3 finalistes et recommandation | [RECOMMENDATION.md](RECOMMENDATION.md) |
+| Étude de marché ciblée sur Clair | [MARKET_STUDY.md](MARKET_STUDY.md) |
 | Décisions | [DECISIONS.md](DECISIONS.md) |
 | Feuille de route et tâches | [ROADMAP.md](ROADMAP.md) · [TASKS.md](TASKS.md) |
 

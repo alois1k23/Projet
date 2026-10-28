@@ -1,6 +1,7 @@
 # RECOMMENDATION — Analyse des trois finalistes et choix proposé (phase 3)
 
 > Statut : **en attente de validation par le fondateur**. Aucun développement ne commence avant cette validation.
+> Mise à jour du 28.10.2026 après l'étude de marché ciblée (MARKET_STUDY.md) : score révisé de 77,5 à 75,5.
 > Les chiffres marqués « hypothèse » sont des hypothèses de travail. Aucun n'est un résultat démontré.
 
 ## Synthèse
@@ -8,8 +9,8 @@
 | | Clair | Nido | Tribu |
 |---|---|---|---|
 | Concept | Copilote du courrier administratif suisse | Copilote de recherche d'appartement | Copilote de la charge mentale familiale |
-| Score /100 | **77,5** | 71,5 | 71,0 |
-| 1re place si les notes varient | **93 %** | 4 % | 3 % |
+| Score /100 | **75,5** | 71,5 | 71,0 |
+| 1re place si les notes varient | **81 %** | 11 % | 8 % |
 | Douleur sourcée | Primes +4,4 % puis +5,0 %, 1 personne sur 3 en difficulté (S3, S4, S28) | Vacance de 0,93 % (S1) | Charge mentale de 71 % (France, S20) |
 | Usage | Récurrent, toute l'année | Intense mais temporaire | Quotidien |
 | Principal risque | « ChatGPT suffit », confiance | Accès aux annonces, churn | Concurrents financés |
@@ -50,7 +51,7 @@ Je dois être transparent sur un point : **Nido génère plus de revenu à court
 | ChatGPT / Gemini | Explique un document | Pas de mémoire du ménage, pas de rappels ni de paiement, pas de connaissance fiable des délais suisses, confidentialité floue |
 | ePost (La Poste) | Reçoit le courrier numérique | Ne l'explique pas et n'agit pas ; dépend de l'adhésion des expéditeurs |
 | eBill | Paie les factures des émetteurs inscrits | Ne couvre que les factures |
-| Apps scan + IA (BriefAI, Papeer) | Résumé + échéance | Conçues pour les États-Unis, pas de QR-facture, pas de multilinguisme suisse |
+| Apps d'explication de courriers (Postera, xPlainly, Totoy en Allemagne et Autriche ; BriefAI aux États-Unis) | Explication, échéances, parfois paiement et réponses | Conçues pour d'autres pays : pas de QR-facture, pas de règles cantonales ni LAMal, aucune n'a encore de traction visible |
 
 **Notre différence défendable** tient en trois points : la connaissance du contexte suisse, des **actions** concrètes (rappel, paiement QR, lettre de réponse prête) et un hébergement en Suisse conforme à la nLPD.
 
@@ -131,7 +132,7 @@ Modèle : inscrits à M12 × conversion payante × prix mensuel. Les conversions
 
 ## 5. Pourquoi Clair : l'argument en une page
 
-1. **Meilleur équilibre** : premier au score (77,5) avec 6 points d'avance, et premier dans 93 % des simulations où les notes varient.
+1. **Meilleur équilibre** : premier au score (75,5) avec 4 points d'avance, et premier dans 81 % des simulations où les notes varient.
 2. **Fossé local** : multilinguisme, cantons, QR-facture et délais LAMal rendent la copie par un acteur global coûteuse.
 3. **Rétention naturelle** : le courrier ne s'arrête jamais, contrairement à une recherche d'appartement.
 4. **Plateforme extensible** sans changer de promesse : Bienvenue (installation), Franchise (LAMal), Fixe (contrats et résiliations) et un module Déménagement deviennent des fonctions de Clair. Quatre autres idées de la liste servent alors de canaux d'acquisition.

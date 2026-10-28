@@ -13,7 +13,8 @@
 - [ ] Recherche de disponibilité du nom et du domaine (sans achat)
 
 ## Terminé
-- [x] Recherche documentaire (28 sources datées)
+- [x] Recherche documentaire (43 sources datées)
+- [x] Étude de marché ciblée sur Clair
 - [x] 15 concepts détaillés
 - [x] Notation multicritère et tests de robustesse
 - [x] Tableau de bord interactif
