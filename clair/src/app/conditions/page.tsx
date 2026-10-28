@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "../legal-layout";
 import { getLocale } from "@/i18n/server";
 
-const TITLE = { fr: "Conditions d’utilisation", de: "Nutzungsbedingungen" };
+const TITLE = { fr: "Conditions d’utilisation", de: "Nutzungsbedingungen", en: "Terms of use" };
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: TITLE[await getLocale()], alternates: { canonical: "/conditions" } };
@@ -10,6 +10,31 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function TermsPage() {
   const locale = await getLocale();
+  if (locale === "en") {
+    return (
+      <LegalPage title={TITLE.en} updated="28 October 2026">
+      <h2>The service</h2>
+      <p>Clair helps you understand and organise official mail: explaining documents, spotting amounts and deadlines, reminders and letter templates. The service is offered as a beta version, with no guarantee of availability.</p>
+
+      <h2>No legal or tax advice</h2>
+      <p>
+        Explanations are generated automatically and may contain mistakes. They do not replace the original document or the advice of a professional (lawyer, fiduciary, social services). <strong>Always check amounts and deadlines on the original letter</strong>, especially when Clair flags information as “to check”.
+      </p>
+
+      <h2>Letters</h2>
+      <p>Letter templates help you write. You remain responsible for their content, for sending them and for meeting deadlines.</p>
+
+      <h2>Your account</h2>
+      <p>You are responsible for keeping your password and your email inbox confidential. You can delete your account at any time from Settings.</p>
+
+      <h2>Free plan</h2>
+      <p>The free plan includes a limited number of automatic analyses per month. No payment is required during the beta. Any paid plan will be subject to separate terms and your explicit consent.</p>
+
+      <h2>Applicable law</h2>
+      <p>Swiss law. Place of jurisdiction and publisher details to be added before the public launch.</p>
+    </LegalPage>
+    );
+  }
   if (locale === "de") {
     return (
       <LegalPage title={TITLE.de} updated="28. Oktober 2026">

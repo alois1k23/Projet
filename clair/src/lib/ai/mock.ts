@@ -1,4 +1,5 @@
 import type { AnalysisOutput } from "./schema";
+import type { Locale } from "@/i18n/config";
 
 const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000).toISOString().slice(0, 10);
 
@@ -6,7 +7,7 @@ const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000).t
  * Réponses fixes utilisées par les tests automatisés (CLAIR_AI_PROVIDER=mock).
  * Le nom de fichier choisit le scénario. L’interface signale ce mode.
  */
-export function mockAnalysis(fileName: string, today: Date, locale: "fr" | "de" = "fr"): AnalysisOutput {
+export function mockAnalysis(fileName: string, today: Date, locale: Locale = "fr"): AnalysisOutput {
   const name = fileName.toLowerCase();
   if (name.includes("flou")) {
     return {
@@ -26,6 +27,30 @@ export function mockAnalysis(fileName: string, today: Date, locale: "fr" | "de" 
       warnings: ["Vérifiez le montant : la photo est floue."],
       suggestedLetters: [],
       confidence: { overall: 0.6, dueDate: 0.9, amount: 0.5 },
+    };
+  }
+  if (locale === "en") {
+    return {
+      isAdministrativeDocument: true,
+      documentType: "prime_assurance",
+      title: "New health insurance premium 2027",
+      sender: "Caisse-maladie Exemple SA",
+      language: "de",
+      summary:
+        "Your health insurer announces your premium for 2027: CHF 438.20 per month, CHF 24.10 more than in 2026. If you want to switch basic insurance, your cancellation must reach the insurer before the end of November.",
+      amount: 438.2,
+      currency: "CHF",
+      dueDate: addDays(today, 30),
+      urgency: "haute",
+      actions: [
+        { kind: "CHECK", title: "Compare 2027 premiums", dueDate: addDays(today, 20), amount: null },
+        { kind: "CANCEL", title: "Send the cancellation if you switch insurer", dueDate: addDays(today, 30), amount: null },
+      ],
+      payment: null,
+      references: [{ label: "Insured person number", value: "756.1234.5678.97" }],
+      warnings: ["If your cancellation does not arrive in time, your contract continues in 2027 at the new rate."],
+      suggestedLetters: ["resiliation-assurance"],
+      confidence: { overall: 0.95, dueDate: 0.92, amount: 0.97 },
     };
   }
   if (locale === "de") {

@@ -5,6 +5,10 @@ import { getLocale } from "@/i18n/server";
 
 const TEXT = {
   fr: { updated: "Dernière mise à jour :", draft: "Version de travail pour la bêta. Ce texte doit être relu par un juriste avant tout lancement public." },
+  en: {
+    updated: "Last updated:",
+    draft: "Working version for the beta. This text must be reviewed by a lawyer before any public launch. In case of discrepancy, the French version prevails.",
+  },
   de: {
     updated: "Letzte Aktualisierung:",
     draft: "Arbeitsversion für die Beta. Dieser Text muss vor dem öffentlichen Start juristisch geprüft werden. Bei Abweichungen gilt die französische Fassung.",

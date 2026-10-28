@@ -18,6 +18,7 @@ export function demoEnabled(): boolean {
 const PROFILE: Record<Locale, { name: string; addressLine: string; postalCode: string; city: string }> = {
   fr: { name: "Sophie Martin", addressLine: "Rue du Lac 12", postalCode: "1003", city: "Lausanne" },
   de: { name: "Lukas Meier", addressLine: "Seestrasse 12", postalCode: "8002", city: "Zürich" },
+  en: { name: "Emma Wilson", addressLine: "Rue de la Servette 25", postalCode: "1201", city: "Genève" },
 };
 
 /** Crée un compte éphémère déjà rempli avec les courriers d'exemple. */

@@ -26,22 +26,22 @@ function prefill(templateId: TemplateId, doc: Document | null): Record<string, s
   switch (templateId) {
     case "resiliation-assurance":
       values.insuranceType = doc.category === "prime_assurance" || doc.category === "decompte_assurance" ? "base" : "";
-      values.policyNumber = find(/assur|police|versich/i);
+      values.policyNumber = find(/assur|police|versich|insur|policy/i);
       values.endDate = `${new Date().getUTCFullYear()}-12-31`;
       break;
     case "resiliation-contrat":
-      values.contractNumber = find(/contrat|client|vertrag|kunde/i);
+      values.contractNumber = find(/contrat|client|vertrag|kunde|contract|customer/i);
       break;
     case "contestation-facture":
-      values.invoiceNumber = find(/facture|rechnung/i);
+      values.invoiceNumber = find(/facture|rechnung|invoice/i);
       values.amount = amount !== null ? amount.toFixed(2) : "";
       break;
     case "delai-paiement":
-      values.reference = find(/facture|poursuite|référence|rechnung/i) || analysis?.payment?.reference || "";
+      values.reference = find(/facture|poursuite|référence|rechnung|betreibung|invoice|debt|reference/i) || analysis?.payment?.reference || "";
       values.amount = amount !== null ? amount.toFixed(2) : "";
       break;
     case "reclamation-taxation":
-      values.taxpayerNumber = find(/contribuable|steuer/i);
+      values.taxpayerNumber = find(/contribuable|steuer|taxpayer/i);
       break;
   }
   return values;

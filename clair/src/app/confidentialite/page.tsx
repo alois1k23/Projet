@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "../legal-layout";
 import { getLocale } from "@/i18n/server";
 
-const TITLE = { fr: "Politique de confidentialité", de: "Datenschutzerklärung" };
+const TITLE = { fr: "Politique de confidentialité", de: "Datenschutzerklärung", en: "Privacy policy" };
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: TITLE[await getLocale()], alternates: { canonical: "/confidentialite" } };
@@ -10,6 +10,51 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PrivacyPage() {
   const locale = await getLocale();
+  if (locale === "en") {
+    return (
+      <LegalPage title={TITLE.en} updated="28 October 2026">
+      <p>
+        Clair processes personal and sometimes sensitive documents. This page explains what data we process, why, where it is stored and how you stay in control. It aims to comply with the Swiss Federal Act on Data Protection (FADP) and, for people in the European Union, the GDPR.
+      </p>
+
+      <h2>Data processed</h2>
+      <ul>
+        <li><strong>Account</strong>: email address, name, password (stored only as an Argon2id hash), language and, if you enter it, your postal address for the letter header. If you sign in with Google or Apple: the identifier of your account with that provider.</li>
+        <li><strong>Mail</strong>: the files you add and the extracted information (sender, amount, deadline, summary).</li>
+        <li><strong>Deadlines and letters</strong> that you create.</li>
+        <li><strong>Waiting list</strong>: your email address, if you ask to be notified when Clair Plus launches.</li>
+        <li><strong>Technical data</strong>: a strictly necessary session cookie and a cookie that remembers your language. No advertising cookies or tracking tools.</li>
+      </ul>
+
+      <h2>Purposes</h2>
+      <p>Only to provide the service: explain your mail, remind you of deadlines (including by email) and prepare your letters. Your data is neither sold nor used for advertising.</p>
+
+      <h2>Security</h2>
+      <ul>
+        <li>Files are encrypted (AES-256-GCM) before they are written to disk.</li>
+        <li>Connections are encrypted (HTTPS) and sessions expire automatically.</li>
+        <li>Login links sent by email are valid for 15 minutes and work only once.</li>
+      </ul>
+
+      <h2>Processors</h2>
+      <p>
+        To analyse a letter, its content is sent to <strong>Anthropic PBC</strong> (Claude model), in the United States. Under its commercial terms, Anthropic does not use this data to train its models. This transfer outside Switzerland must be covered by appropriate contractual clauses; this will be finalised before the public launch. If you do not want automatic analysis, you can enter the information yourself.
+      </p>
+      <p>Emails are sent through an email provider that will be chosen before the public launch. If you sign in with Google or Apple, their own privacy rules also apply.</p>
+
+      <h2>Retention</h2>
+      <p>Your data is kept as long as your account exists. When you delete a letter or your account, the corresponding data and files are deleted immediately from the database and storage. Any backups are overwritten according to their rotation cycle.</p>
+
+      <h2>Your rights</h2>
+      <ul>
+        <li><strong>Access and portability</strong>: export all your data from Settings, in one click.</li>
+        <li><strong>Rectification</strong>: correct any information from the letter’s page.</li>
+        <li><strong>Erasure</strong>: delete a letter or your whole account from Settings.</li>
+      </ul>
+      <p>For any question, contact the data controller (contact details to be added before the public launch).</p>
+    </LegalPage>
+    );
+  }
   if (locale === "de") {
     return (
       <LegalPage title={TITLE.de} updated="28. Oktober 2026">

@@ -30,7 +30,10 @@ export async function SiteHeader({ signedIn = false }: { signedIn?: boolean }) {
               <Link href="/connexion" className="hidden rounded-lg px-3 py-2 text-sm font-semibold text-ink-2 hover:text-ink sm:inline-flex">
                 {s.nav.login}
               </Link>
-              <ButtonLink href="/inscription" size="sm">{s.nav.signup}</ButtonLink>
+              <ButtonLink href="/inscription" size="sm" className="whitespace-nowrap">
+                <span className="sm:hidden">{s.nav.signupShort}</span>
+                <span className="max-sm:hidden">{s.nav.signup}</span>
+              </ButtonLink>
             </>
           )}
         </div>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { fr } from "@/i18n/fr";
 import { de } from "@/i18n/de";
+import { en } from "@/i18n/en";
 import { siteMessages } from "@/i18n/site";
 import { isLocale, localeFromAcceptLanguage } from "@/i18n/config";
 import { issueText } from "@/i18n/issues";
@@ -25,13 +26,13 @@ function strings(value: unknown): string[] {
 }
 
 describe("dictionnaires", () => {
-  it("l'allemand a exactement les mêmes clés que le français", () => {
-    expect(leaves(de).sort()).toEqual(leaves(fr).sort());
-    expect(leaves(siteMessages.de).sort()).toEqual(leaves(siteMessages.fr).sort());
+  it("l'allemand et l'anglais ont exactement les mêmes clés que le français", () => {
+    for (const dict of [de, en]) expect(leaves(dict).sort()).toEqual(leaves(fr).sort());
+    for (const site of [siteMessages.de, siteMessages.en]) expect(leaves(site).sort()).toEqual(leaves(siteMessages.fr).sort());
   });
 
   it("aucun texte n'est vide et l'allemand suisse n'utilise pas « ß »", () => {
-    for (const dict of [fr, de, siteMessages.fr, siteMessages.de]) {
+    for (const dict of [fr, de, en, siteMessages.fr, siteMessages.de, siteMessages.en]) {
       for (const s of strings(dict)) expect(s.trim().length).toBeGreaterThan(0);
     }
     for (const s of [...strings(de), ...strings(siteMessages.de)]) expect(s).not.toContain("ß");
@@ -54,7 +55,8 @@ describe("choix de la langue", () => {
 
   it("suit les préférences du navigateur", () => {
     expect(localeFromAcceptLanguage("de-CH,de;q=0.9,fr;q=0.8")).toBe("de");
-    expect(localeFromAcceptLanguage("en-US,en;q=0.9,de;q=0.5,fr;q=0.7")).toBe("fr");
+    expect(localeFromAcceptLanguage("en-US,en;q=0.9,de;q=0.5,fr;q=0.7")).toBe("en");
+    expect(localeFromAcceptLanguage("pt-BR,de;q=0.5,fr;q=0.7")).toBe("fr");
     expect(localeFromAcceptLanguage("it-CH")).toBe("fr");
     expect(localeFromAcceptLanguage(null)).toBe("fr");
     expect(localeFromAcceptLanguage("garbage;q=x")).toBe("fr");
@@ -76,6 +78,7 @@ describe("e-mails", () => {
     expect(deMail.text).toContain("https://app.example/reinitialiser?jeton=x");
     expect(loginLinkEmail("https://x", true, "fr").subject).toBe(fr.email.welcomeTitle);
     expect(loginLinkEmail("https://x", false, "de").subject).toBe(de.email.loginTitle);
+    expect(passwordResetEmail("https://x", "en").html).toContain('lang="en"');
   });
 
   it("échappent le HTML", () => {
@@ -86,7 +89,7 @@ describe("e-mails", () => {
 describe("contenus", () => {
   it("chaque guide existe dans les deux langues, avec des sources officielles en https", () => {
     for (const slug of GUIDE_SLUGS) {
-      for (const locale of ["fr", "de"] as const) {
+      for (const locale of ["fr", "de", "en"] as const) {
         const g = getGuide(slug, locale);
         expect(g, `${slug}/${locale}`).not.toBeNull();
         expect(g!.sections.length).toBeGreaterThan(1);
@@ -94,16 +97,18 @@ describe("contenus", () => {
         for (const s of g!.sources) expect(s.url).toMatch(/^https:\/\//);
       }
     }
-    expect(listGuides("de").map((g) => g.slug)).toEqual(listGuides("fr").map((g) => g.slug));
+    for (const l of ["de", "en"] as const) expect(listGuides(l).map((g) => g.slug)).toEqual(listGuides("fr").map((g) => g.slug));
     expect(getGuide("inconnu", "fr")).toBeNull();
   });
 
-  it("les exemples existent en allemand", () => {
+  it("les exemples existent en allemand et en anglais", () => {
     const today = new Date("2026-10-28T00:00:00Z");
     for (const sample of SAMPLES) {
-      expect(sample.label.de.length).toBeGreaterThan(3);
-      const a = normalizeAnalysis(sample.analysis(today, "de"));
-      expect(a.summary).not.toEqual(normalizeAnalysis(sample.analysis(today, "fr")).summary);
+      const summaries = (["fr", "de", "en"] as const).map((l) => {
+        expect(sample.label[l].length).toBeGreaterThan(3);
+        return normalizeAnalysis(sample.analysis(today, l)).summary;
+      });
+      expect(new Set(summaries).size).toBe(3);
     }
   });
 });

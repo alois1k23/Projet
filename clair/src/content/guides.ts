@@ -258,7 +258,125 @@ const de: Guide[] = [
   },
 ];
 
-const GUIDES: Record<Locale, Guide[]> = { fr, de };
+const en: Guide[] = [
+  {
+    slug: "commandement-de-payer",
+    title: "Payment order: what to do within 10 days",
+    description: "Received a payment order (commandement de payer / Zahlungsbefehl)? What it means, the 10-day deadline to object and the mistakes to avoid.",
+    intro:
+      "A payment order is how a creditor starts debt collection against you, through the debt collection office. It does not prove that the debt exists: anyone can request one. But it starts short deadlines.",
+    sections: [
+      {
+        heading: "The two deadlines to know",
+        list: [
+          "10 days to file an objection (opposition / Rechtsvorschlag), counted from the day after it is served (art. 74 DEBA).",
+          "20 days to pay, if you accept the debt (art. 69 DEBA).",
+        ],
+      },
+      {
+        heading: "Filing an objection",
+        paragraphs: [
+          "The objection is free and you do not need to give a reason. You can declare it directly to the person who hands you the payment order, or in writing to the debt collection office within 10 days. Keep proof (registered mail or confirmation from the office).",
+          "The objection stops the debt collection. To continue, the creditor must ask a court to set it aside (mainlevée / Rechtsöffnung) or take legal action.",
+        ],
+      },
+      {
+        heading: "If the debt is justified",
+        paragraphs: [
+          "Pay the debt collection office directly or contact the creditor to agree on an arrangement. Debt collection usually stays visible on your debt collection register extract, even after payment, unless the creditor withdraws it.",
+        ],
+      },
+      {
+        heading: "Avoid",
+        list: [
+          "Ignoring the letter: without an objection, the creditor can ask for the debt collection to continue (seizure or bankruptcy, depending on the case).",
+          "Counting the deadline from the printed date: what counts is when it was served.",
+          "Facing several debt collections alone: social services and debt advice services in your canton can help for free.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "Federal Act on Debt Enforcement and Bankruptcy (DEBA), SR 281.1, art. 69, 74 and 78", url: "https://www.fedlex.admin.ch/eli/cc/11/529_488_529/en" },
+    ],
+  },
+  {
+    slug: "resilier-caisse-maladie",
+    title: "Switching health insurer: deadlines and cancellation letter",
+    description: "Cancelling basic health insurance (LAMal / KVG) for 1 January: the date of receipt that counts, the 30 June option and the letter to send.",
+    intro:
+      "Every autumn, health insurers announce next year’s premiums. You can then switch insurer for basic health insurance, which provides the same legal benefits everywhere.",
+    sections: [
+      {
+        heading: "For 1 January",
+        paragraphs: [
+          "Your cancellation letter must be received by the insurer by 30 November at the latest. The date of receipt counts, not the date you send it: send it by registered mail, early enough.",
+        ],
+      },
+      {
+        heading: "For 30 June",
+        paragraphs: [
+          "With the ordinary deductible and a traditional insurance model, you can also cancel for the end of June, with three months’ notice: the insurer must receive the letter by 31 March.",
+        ],
+      },
+      {
+        heading: "What the letter must contain",
+        list: [
+          "Your name, address and insured person number.",
+          "The words “compulsory health insurance (LAMal / KVG)” and the end date you want.",
+          "Your signature (and that of every adult concerned).",
+        ],
+      },
+      {
+        heading: "Never be left uninsured",
+        paragraphs: [
+          "Your old insurer only releases you once the new insurer has confirmed that you are insured without interruption (art. 7 KVG). Take out the new insurance before or at the same time as you cancel.",
+          "Supplementary insurance (LCA / VVG) follows its own contract: notice periods are often longer, and a new insurer can refuse you. Only cancel it once you have been accepted elsewhere.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "ch.ch – Cancelling and changing health insurer", url: "https://www.ch.ch/en/family-and-partnership/maternity-and-paternity/pregnancy-and-birth/changing-and-cancelling-health-insurance/" },
+      { label: "Federal Act on Health Insurance (HIA / KVG), SR 832.10, art. 7", url: "https://www.fedlex.admin.ch/eli/cc/1995/1328_1328_1328/en" },
+    ],
+  },
+  {
+    slug: "facture-qr",
+    title: "Paying a QR bill without mistakes",
+    description: "The QR bill replaced the orange and red payment slips. How to pay it, and what the IBAN and the reference are for.",
+    intro:
+      "Since 1 October 2022, the orange and red payment slips are no longer accepted: Swiss bills have a payment part with a QR code.",
+    sections: [
+      {
+        heading: "Pay in seconds",
+        list: [
+          "In your bank’s app, choose “scan” and point it at the QR code: the amount, IBAN and reference fill in by themselves.",
+          "In e-banking on a computer, you can type the details by hand or use a QR code reader.",
+          "At the post office counter, the payment part is accepted as it is.",
+        ],
+      },
+      {
+        heading: "IBAN and reference",
+        paragraphs: [
+          "The reference links your payment to the bill at the creditor’s. Copy it exactly: without it, the payment may not be matched and you may get a reminder. With a QR-IBAN, the reference is mandatory.",
+        ],
+      },
+      {
+        heading: "Watch out for",
+        list: [
+          "Check the payee’s name before confirming, especially for an unexpected bill.",
+          "An empty amount means you choose it (for example a donation or a down payment).",
+          "Pay before the due date shown to avoid reminder fees.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "Swiss Confederation (SME portal) – Replacement of payment slips on 30.09.2022 (in French)", url: "https://www.kmu.admin.ch/fr/remplacement-des-bulletins-de-versement-le-30092022-passer-maintenant-a-la-qr-facture-ou-a-ebill" },
+      { label: "PostFinance – End of payment slips, press release (in French)", url: "https://www.postfinance.ch/fr/notre-profil/medias/newsroom/bulletins-de-versement-seront-retires-du-marche-2022.html" },
+    ],
+  },
+];
+
+const GUIDES: Record<Locale, Guide[]> = { fr, de, en };
 
 export function listGuides(locale: Locale): Guide[] {
   return GUIDES[locale];

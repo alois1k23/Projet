@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.7.0 — 2026-10-28 · Anglais
+### Ajouté
+- **Interface en anglais** : application, e-mails, explications de l'IA (en anglais simple, avec le terme officiel suisse entre parenthèses quand il aide), exemples, démo (profil « Emma Wilson », Genève), site public, guides et pages légales. Les navigateurs anglophones voient Clair en anglais ; sélecteur FR · DE · EN.
+- Les lettres de réponse restent en français ou en allemand, les langues des administrations suisses (la langue proposée par défaut est le français pour l'interface anglaise).
+### Corrigé
+- Le pré-remplissage des lettres ne reconnaissait pas les libellés de références en anglais (n° d'assuré, de contrat, de facture).
+- En-tête du site sur téléphone : libellé court « S'inscrire / Registrieren / Sign up » pour éviter un bouton sur deux lignes.
+
 ## 0.6.0 — 2026-10-28 · Mode démo
 ### Ajouté
 - **Mode démo** (`CLAIR_DEMO=1`) : bouton « Essayer la démo, sans inscription » sur l'accueil, la connexion, l'inscription et les exemples. Il ouvre un compte temporaire, sans e-mail, avec trois courriers déjà expliqués et un profil rempli (lettres prêtes sans saisie). Bandeau permanent, bouton « Créer mon vrai compte » qui efface la démo, suppression automatique après 24 heures, jamais de rappel e-mail, 10 démos par heure et par connexion au maximum.

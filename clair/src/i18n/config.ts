@@ -1,11 +1,11 @@
-export const LOCALES = ["fr", "de"] as const;
+export const LOCALES = ["fr", "de", "en"] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "fr";
 export const LOCALE_COOKIE = "clair-lang";
 
-export const LOCALE_NAMES: Record<Locale, string> = { fr: "Français", de: "Deutsch" };
+export const LOCALE_NAMES: Record<Locale, string> = { fr: "Français", de: "Deutsch", en: "English" };
 /** Langue utilisée pour les formats de date (les montants suivent toujours la convention suisse 1’240.50). */
-export const INTL_LOCALE: Record<Locale, string> = { fr: "fr-CH", de: "de-CH" };
+export const INTL_LOCALE: Record<Locale, string> = { fr: "fr-CH", de: "de-CH", en: "en-CH" };
 
 export function isLocale(value: unknown): value is Locale {
   return typeof value === "string" && (LOCALES as readonly string[]).includes(value);

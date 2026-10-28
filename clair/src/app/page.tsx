@@ -39,7 +39,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
         url: appUrl(),
         applicationCategory: "FinanceApplication",
         operatingSystem: "Web",
-        inLanguage: ["fr-CH", "de-CH"],
+        inLanguage: ["fr-CH", "de-CH", "en-CH"],
         description: s.metaDescription,
         offers: { "@type": "Offer", price: "0", priceCurrency: "CHF" },
       },

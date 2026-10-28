@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: s.metaDescription,
     applicationName: "Clair",
     appleWebApp: { capable: true, title: "Clair", statusBarStyle: "default" },
-    openGraph: { type: "website", siteName: "Clair", title: s.metaTitle, description: s.metaDescription, locale: locale === "de" ? "de_CH" : "fr_CH" },
+    openGraph: { type: "website", siteName: "Clair", title: s.metaTitle, description: s.metaDescription, locale: INTL_LOCALE[locale].replace("-", "_") },
     twitter: { card: "summary_large_image", title: s.metaTitle, description: s.metaDescription },
   };
 }

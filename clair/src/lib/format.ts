@@ -3,10 +3,12 @@ const chf = new Intl.NumberFormat("de-CH", { minimumFractionDigits: 2, maximumFr
 const longDate = {
   fr: new Intl.DateTimeFormat("fr-CH", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
   de: new Intl.DateTimeFormat("de-CH", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
+  en: new Intl.DateTimeFormat("en-CH", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
 };
 const shortDate = {
   fr: new Intl.DateTimeFormat("fr-CH", { day: "numeric", month: "short", timeZone: "UTC" }),
   de: new Intl.DateTimeFormat("de-CH", { day: "numeric", month: "short", timeZone: "UTC" }),
+  en: new Intl.DateTimeFormat("en-CH", { day: "numeric", month: "short", timeZone: "UTC" }),
 };
 type DateLocale = keyof typeof longDate;
 

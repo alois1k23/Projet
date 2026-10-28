@@ -25,7 +25,7 @@ export function LetterForm({
   const td = t.templates[templateId]!;
   const [state, action] = useActionState(createLetter, initialFormState);
   const [values, setValues] = useState<Record<string, string>>(initialValues);
-  const [language, setLanguage] = useState<LetterLanguage>(appLocale);
+  const [language, setLanguage] = useState<LetterLanguage>(appLocale === "de" ? "de" : "fr");
   const [me, setMe] = useState<Sender>(sender);
   const draft = useMemo(() => buildLetter(template, values, language), [template, values, language]);
   const e = state.fieldErrors ?? {};

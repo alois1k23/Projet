@@ -108,3 +108,38 @@ test.describe("site public", () => {
     expect(og.headers()["content-type"]).toContain("image/png");
   });
 });
+
+test.describe("anglais", () => {
+  test.use({ locale: "en-GB" });
+
+  test("un visiteur anglophone voit le site en anglais et essaie la démo", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en-CH");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Your official mail");
+    await expectAccessible(page);
+
+    await page.getByRole("main").getByRole("button", { name: "Try the demo, no sign-up" }).first().click();
+    await expect(page).toHaveURL(/\/accueil/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Emma");
+    await page.goto("/courriers");
+    await page.getByRole("link", { name: /Payment order/ }).first().click();
+    await expect(page.getByRole("heading", { name: "In short" })).toBeVisible();
+    await expect(page.getByText(/file an objection/).first()).toBeVisible();
+    await expectAccessible(page);
+
+    // Le numéro d'assuré est repris de l'analyse en anglais pour pré-remplir la résiliation.
+    await page.goto("/courriers");
+    await page.getByRole("link", { name: /health insurance premium/ }).first().click();
+    await page.getByRole("link", { name: "Prepare the letter" }).first().click();
+    await expect(page.getByLabel("Insured person or policy number")).toHaveValue("756.1234.5678.97");
+
+    // Les lettres restent en français ou en allemand, les langues des administrations suisses.
+    await page.goto("/lettres/nouvelle?modele=resiliation-contrat");
+    await expect(page.getByLabel("Language of the letter")).toHaveValue("fr");
+  });
+
+  test("guide en anglais", async ({ page }) => {
+    await page.goto("/guides/facture-qr");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Paying a QR bill without mistakes");
+  });
+});

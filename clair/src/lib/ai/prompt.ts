@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/config";
 /**
  * Instructions système stables (pas de date ni de donnée variable ici,
  * pour que le préfixe reste identique d’une requête à l’autre).
@@ -32,9 +33,9 @@ Limites
 - Tu donnes des informations, pas un conseil juridique ou fiscal. Si l’enjeu est important (poursuite, litige, montant élevé), ajoute un point d’attention recommandant de demander conseil.
 - Si l’image n’est pas un document administratif, mets isAdministrativeDocument à false et explique-le dans le résumé.`;
 
-export function userInstruction(today: Date, pageCount = 1, locale: "fr" | "de" = "fr"): string {
+export function userInstruction(today: Date, pageCount = 1, locale: Locale = "fr"): string {
   const iso = today.toISOString().slice(0, 10);
   const pages = pageCount > 1 ? ` Il compte ${pageCount} pages, fournies dans l’ordre : analyse-les ensemble comme un seul courrier.` : "";
-  const language = locale === "de" ? "en allemand (orthographe suisse, sans « ß »)" : "en français";
+  const language = { fr: "en français", de: "en allemand (orthographe suisse, sans « ß »)", en: "en anglais simple (garde entre parenthèses le terme officiel suisse quand il aide, par exemple « objection (opposition / Rechtsvorschlag) »)" }[locale];
   return `Nous sommes le ${iso}. Analyse ce courrier.${pages} Rédige les textes ${language}.`;
 }

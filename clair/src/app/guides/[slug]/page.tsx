@@ -5,6 +5,7 @@ import { ArrowLeft, Camera, ExternalLink } from "lucide-react";
 import { ButtonLink, Notice } from "@/components/ui";
 import { getGuide, GUIDES_CHECKED_AT } from "@/content/guides";
 import { getLocale } from "@/i18n/server";
+import { INTL_LOCALE } from "@/i18n/config";
 import { siteMessages } from "@/i18n/site";
 import { formatDate } from "@/lib/format";
 import { parseIsoDate } from "@/lib/ai/schema";
@@ -27,7 +28,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     "@type": "Article",
     headline: guide.title,
     description: guide.description,
-    inLanguage: locale === "de" ? "de-CH" : "fr-CH",
+    inLanguage: INTL_LOCALE[locale],
     dateModified: GUIDES_CHECKED_AT,
     mainEntityOfPage: `${appUrl()}/guides/${guide.slug}`,
     publisher: { "@type": "Organization", name: "Clair" },

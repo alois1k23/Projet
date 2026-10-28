@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/config";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { env } from "@/lib/env";
@@ -18,7 +19,7 @@ export interface AnalyzeInput {
   fileName: string;
   today?: Date;
   /** Langue dans laquelle rédiger l'explication. */
-  locale?: "fr" | "de";
+  locale?: Locale;
 }
 
 export const MAX_PAGES = 10;

@@ -91,5 +91,8 @@ Les guides ne contiennent que des faits vérifiés sur des sources officielles (
 ## D-021 · Tarifs affichés sans prix (2026-10-28)
 Le prix de Clair Plus n’est pas affiché : il dépend du coût réel des analyses, à mesurer pendant la bêta. La page annonce « Bientôt, prix annoncé avant tout paiement » et propose une liste d’attente. Aucun paiement n’est possible (D-013).
 
+## D-023 · Anglais pour les nouveaux arrivants, lettres en FR/DE (2026-10-28)
+L’anglais vise les expatriés et nouveaux arrivants, qui reçoivent du courrier dans une langue qu’ils ne lisent pas. L’interface et les explications sont en anglais, mais les lettres générées restent en français ou en allemand : les administrations et caisses suisses répondent dans leur langue officielle. Les termes suisses (LAMal / KVG, opposition / Rechtsvorschlag) restent visibles entre parenthèses pour que l’utilisateur les reconnaisse sur ses courriers.
+
 ## D-022 · Mode démo honnête et éphémère (2026-10-28)
 Demande du fondateur : un mode démo avant de configurer les services externes. Choix : de vrais comptes, mais temporaires (24 h), pré-remplis avec les courriers d’exemple, sans e-mail (adresse en `.invalid`, qui ne peut rien recevoir). Sans clé API, l’analyse d’une photo est simulée : c’est affiché en permanence, conformément à la règle « ne jamais présenter une simulation comme réelle ». Le mode est désactivé par défaut ; il faudra décider s’il reste actif sur le site public (coût nul sans clé, mais coût d’API réel avec une clé : la limite de 10 démos par heure et par connexion, et le quota de 5 analyses par compte, s’appliquent).

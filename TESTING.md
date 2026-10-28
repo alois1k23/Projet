@@ -84,9 +84,18 @@ Défauts trouvés par les tests et corrigés : test « mot de passe oublié » q
 
 Défauts trouvés et corrigés : défilement horizontal sur téléphone à l'accueil et dans « À faire » (non détecté jusque-là, car le contrôle mobile comparait la page à une fenêtre que l'émulation élargit ; corrigé, 29 parcours) ; compilation impossible sans base de données (sitemap et robots générés à la compilation) ; boutons réservés à l'ordinateur visibles sur téléphone.
 
+### Version 0.7 (anglais) : résultats du 28 octobre 2026
+
+| Commande | Résultat |
+|---|---|
+| `npm test` | ✅ 90 tests (parité des trois dictionnaires, langue du navigateur anglaise, e-mails, guides et exemples en anglais) |
+| `npm run test:e2e` | ✅ 31 parcours (dont site et démo en anglais, pré-remplissage d'une lettre depuis une analyse anglaise, guide anglais) |
+
+Défaut trouvé et corrigé : pré-remplissage des lettres impossible avec des libellés anglais.
+
 ### Ce qui n'est pas testé
 - L'analyse réelle par Claude : aucun courrier n'a été lu par le vrai modèle. C'est le risque n° 1 (hypothèse H3).
 - Safari iOS et Firefox (seul Chromium est installé) ; la prise de photo réelle depuis un téléphone ; la conversion HEIC (Chromium ne sait pas décoder ce format) ; l'installation sur l'écran d'accueil.
 - Charge et performance sous trafic.
 - Envoi réel d'e-mails (SMTP implémenté, aucun serveur configuré) et connexion réelle avec Google ou Apple (aucun identifiant).
-- Qualité de l'allemand de l'IA sur de vrais courriers ; relecture des textes allemands par une personne germanophone.
+- Qualité de l'allemand et de l'anglais de l'IA sur de vrais courriers ; relecture des textes allemands et anglais par des locuteurs natifs.

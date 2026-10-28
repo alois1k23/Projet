@@ -4,7 +4,7 @@ Création d'une application du quotidien à fort potentiel, d'abord pour la Suis
 
 ## Où en sommes-nous ?
 
-**Clair est développé et testé (version 0.5)** : un copilote du courrier administratif suisse (nom provisoire), en français et en allemand. Il explique un courrier (même de plusieurs pages), suit les échéances, envoie des rappels et prépare les réponses. Il comprend aussi un site de présentation avec tarifs, FAQ, liste d'attente et guides pratiques. Code dans [`clair/`](clair/README.md).
+**Clair est développé et testé (version 0.5)** : un copilote du courrier administratif suisse (nom provisoire), en français, en allemand et en anglais. Il explique un courrier (même de plusieurs pages), suit les échéances, envoie des rappels et prépare les réponses. Il comprend aussi un site de présentation avec tarifs, FAQ, liste d'attente et guides pratiques. Code dans [`clair/`](clair/README.md).
 
 **Essayer la démo** : voir la vidéo [`demo/clair-demo.mp4`](demo/clair-demo.mp4), ou la lancer en une commande avec Docker (voir [`clair/README.md`](clair/README.md#lancer-la-démo-une-commande)).
 

@@ -4,7 +4,7 @@ import type { Locale } from "./config";
 const fr = {
   metaTitle: "Clair — votre courrier administratif, enfin clair",
   metaDescription: "Photographiez un courrier : Clair vous dit ce qu’il signifie, ce que vous devez faire et avant quand. Factures QR, primes LAMal, impôts, poursuites. Pour les ménages en Suisse.",
-  nav: { how: "Comment ça marche", features: "Fonctions", security: "Sécurité", pricing: "Tarifs", faq: "Questions", guides: "Guides", login: "Se connecter", signup: "Créer un compte", menu: "Menu" },
+  nav: { how: "Comment ça marche", features: "Fonctions", security: "Sécurité", pricing: "Tarifs", faq: "Questions", guides: "Guides", login: "Se connecter", signup: "Créer un compte", signupShort: "S’inscrire", menu: "Menu" },
   accountDeleted: "Votre compte et toutes vos données ont été supprimés.",
   hero: {
     eyebrow: "Pour les ménages en Suisse",
@@ -124,7 +124,7 @@ export type SiteMessages = typeof fr;
 const de: SiteMessages = {
   metaTitle: "Clair — Ihre Behördenpost, endlich klar",
   metaDescription: "Fotografieren Sie einen Brief: Clair sagt Ihnen, was er bedeutet, was Sie tun müssen und bis wann. QR-Rechnungen, Krankenkassenprämien, Steuern, Betreibungen. Für Haushalte in der Schweiz.",
-  nav: { how: "So funktioniert’s", features: "Funktionen", security: "Sicherheit", pricing: "Preise", faq: "Fragen", guides: "Ratgeber", login: "Anmelden", signup: "Konto erstellen", menu: "Menü" },
+  nav: { how: "So funktioniert’s", features: "Funktionen", security: "Sicherheit", pricing: "Preise", faq: "Fragen", guides: "Ratgeber", login: "Anmelden", signup: "Konto erstellen", signupShort: "Registrieren", menu: "Menü" },
   accountDeleted: "Ihr Konto und alle Ihre Daten wurden gelöscht.",
   hero: {
     eyebrow: "Für Haushalte in der Schweiz",
@@ -239,4 +239,122 @@ const de: SiteMessages = {
   },
 };
 
-export const siteMessages: Record<Locale, SiteMessages> = { fr, de };
+const en: SiteMessages = {
+  metaTitle: "Clair — your official mail, finally clear",
+  metaDescription: "Take a photo of a letter: Clair tells you what it means, what you need to do and by when. QR bills, health insurance premiums, taxes, debt collection. For households in Switzerland.",
+  nav: { how: "How it works", features: "Features", security: "Security", pricing: "Pricing", faq: "FAQ", guides: "Guides", login: "Log in", signup: "Create an account", signupShort: "Sign up", menu: "Menu" },
+  accountDeleted: "Your account and all your data have been deleted.",
+  hero: {
+    eyebrow: "For households in Switzerland",
+    titleBefore: "Your official mail,",
+    titleMark: "finally clear",
+    lead: "Take a photo of a letter: Clair tells you what it means, what you need to do and by when. Then it helps you do it.",
+    cta: "Try it for free",
+    demo: "See a sample, no account",
+    reassurance: "Free during the beta · an email address is enough · encrypted documents",
+  },
+  card: {
+    sender: "Krankenkasse Beispiel AG",
+    original: ["Ihre Prämie 2027 · Grundversicherung KVG", "Monatliche Prämie ab 1. Januar: CHF 438.20"],
+    summaryLabel: "In short",
+    summary: "Your premium goes up to CHF 438.20 per month, CHF 289.20 more per year.",
+    action: "To switch insurer: cancel by the end of November.",
+    chips: ["Compare premiums", "Cancellation letter"],
+  },
+  problem: {
+    title: "Official mail should not be scary",
+    items: [
+      { title: "Unfamiliar terms", text: "Deductible, co-payment, provisional instalment, payment order: every letter has its own vocabulary." },
+      { title: "Deadlines that matter", text: "A missed objection, a cancellation that arrives one day late: the consequences can last a whole year." },
+      { title: "Two or three languages", text: "Health insurer in Zurich, employer in Bern, municipality in Geneva: your mail does not always arrive in a language you read." },
+    ],
+  },
+  how: {
+    title: "How it works",
+    steps: [
+      { title: "Take a photo", text: "Of the letter as you received it, one or several pages, in French, German, Italian or English." },
+      { title: "Read what matters", text: "What the letter says, what to do and the deadline, highlighted. Uncertain details are flagged." },
+      { title: "Act", text: "Copy the IBAN, tick off the task, add the deadline to your calendar or prepare the reply." },
+    ],
+  },
+  features: {
+    title: "Everything you need, nothing more",
+    items: [
+      { title: "Plain-language explanation", text: "A three-sentence summary, without jargon, in your language, even when the letter is in another one." },
+      { title: "Amounts and deadlines", text: "Amount, IBAN, payment reference and due date are found, and the IBAN is checked." },
+      { title: "Reminders", text: "An email a few days before each deadline, and an export to your calendar." },
+      { title: "Letters ready to sign", text: "Cancellation, dispute, payment extension, tax objection: as a PDF, in French or German, as Swiss offices expect." },
+      { title: "Multi-page letters", text: "Photograph every page: Clair reads them together." },
+      { title: "Searchable folder", text: "Find any letter by sender, title or content." },
+    ],
+  },
+  languages: "Letters in French, German, Italian or English: you get the explanation in the language you choose, English, French or German.",
+  security: {
+    title: "Your documents stay yours",
+    items: [
+      { title: "Encrypted", text: "Every file is encrypted (AES-256-GCM) before it is stored." },
+      { title: "Never sold", text: "No ads, no reselling, no tracking. A single cookie: the one for your session." },
+      { title: "Deletable at any time", text: "Export or delete one letter or your whole account in one click." },
+      { title: "Transparent", text: "The analysis goes through Anthropic (Claude), which does not use this data to train its models. You can also enter everything yourself." },
+    ],
+    note: "Clair is in beta. Final hosting and the contractual framework for data transfers will be set before the public launch.",
+    policy: "Read the privacy policy",
+  },
+  pricing: {
+    title: "Pricing",
+    subtitle: "Start for free. No payment is required during the beta.",
+    free: {
+      name: "Free",
+      price: "CHF 0",
+      period: "during the beta",
+      items: ["5 automatic analyses per month", "Unlimited manual entry", "Deadlines, reminders and calendar export", "Unlimited PDF letters", "Export and deletion of your data"],
+      cta: "Create a free account",
+    },
+    plus: {
+      name: "Clair Plus",
+      price: "Soon",
+      period: "price announced before any payment",
+      items: ["Unlimited automatic analyses", "Sharing with someone close (family, guardianship)", "SMS reminders", "Priority support"],
+      badge: "In preparation",
+      cta: "Notify me",
+    },
+  },
+  faq: {
+    title: "Frequently asked questions",
+    items: [
+      { q: "Does Clair replace an adviser?", a: "No. Clair explains and organises, but does not give legal or tax advice. For complex situations (a disputed debt collection, a legal dispute), contact social services, a legal advice service or a fiduciary." },
+      { q: "Are the explanations reliable?", a: "They are generated automatically and may contain mistakes. Clair shows how sure it is and flags what you should check. Always compare amounts and deadlines with the original letter." },
+      { q: "Which letters does Clair understand?", a: "Bills (including QR bills), reminders, health insurance premiums and statements, taxes, debt collection, letters from the municipality, landlord, bank or employer." },
+      { q: "I don’t speak French or German. Can I use Clair?", a: "Yes. Clair reads French, German, Italian and English and explains everything in English. Reply letters are written in French or German, the languages Swiss offices expect." },
+      { q: "Do I need to install an app?", a: "No. Clair works in the browser of your phone or computer. You can add it to your home screen like an app." },
+      { q: "What happens if I delete my account?", a: "Your account, your mail, its files, your deadlines and your letters are deleted immediately and permanently." },
+      { q: "How much will Clair Plus cost?", a: "The price is not set yet: it will depend on the real cost of analyses measured during the beta. It will be announced before any payment, and the free plan will remain available." },
+    ],
+  },
+  waitlist: {
+    title: "Get notified when Clair Plus launches",
+    text: "A single email, at launch. No ads, unsubscribe in one click.",
+    email: "Your email address",
+    submit: "Notify me",
+    sending: "Signing up…",
+    done: "Noted: we will write to you when Clair Plus launches.",
+    invalid: "Invalid email address.",
+    tooMany: "Too many requests. Try again later.",
+  },
+  finalCta: { title: "Your next letter is on its way. Be ready.", text: "Free account in 30 seconds.", button: "Get started" },
+  footer: { tagline: "Your official mail, finally clear.", product: "Product", legal: "Legal", beta: "beta version", madeIn: "Made for Switzerland" },
+  guides: {
+    title: "Practical guides",
+    subtitle: "The most common official letters in Switzerland, explained simply.",
+    readMore: "Read the guide",
+    back: "All guides",
+    updated: (date: string) => `Checked on ${date}`,
+    sources: "Sources",
+    disclaimer: "General information, not legal advice. Rules can change: check the official sources and, if in doubt, get advice.",
+    ctaTitle: "Did you receive this letter?",
+    ctaText: "Take a photo of it: Clair tells you what it means and what you need to do, with the deadline.",
+    ctaButton: "Try it with my letter",
+  },
+};
+
+export const siteMessages: Record<Locale, SiteMessages> = { fr, de, en };
