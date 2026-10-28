@@ -1,5 +1,39 @@
 # Vidéos promotionnelles de Clair
 
+## Vidéo explicative (TikTok, français) — recommandée
+
+| Fichier | Contenu |
+|---|---|
+| `out/clair-explicatif.mp4` | 63 s, 1080 × 1920, 30 i/s, avec habillage sonore original (−14,9 LUFS, niveau TikTok) |
+| `out/clair-explicatif-muet.mp4` | La même, sans son, pour poser une musique de la bibliothèque commerciale TikTok |
+
+| Temps | Chapitre | Ce qui est montré |
+|---|---|---|
+| 0–3,5 s | Accroche | « Ce courrier, vous le comprenez ? » puis « Il vous l’explique. Et bien plus. » |
+| 3,5–9,5 s | 01 Photographier | Prise de vue, deuxième page, « Analyser les 2 pages » |
+| 9,5–17,5 s | 02 Comprendre | Étapes de l’analyse, résumé en 3 phrases tapé en direct, « Original en allemand » |
+| 17,5–25 s | 03 L’essentiel | Montant, échéance, IBAN contrôlé et copié, référence ; « À vérifier » en cas de doute |
+| 25–32 s | 04 Agir | « C’est fait » sur la prochaine étape, puis la liste « À faire » triée par urgence |
+| 32–38 s | 05 Ne rien oublier | Rappel par e-mail, échéances ajoutées à l’agenda |
+| 38–46,5 s | 06 Répondre | 5 modèles, formulaire pré-rempli, lettre en PDF prête à signer, français ou allemand |
+| 46,5–51 s | 07 Tout retrouver | Recherche instantanée dans tous les courriers |
+| 51–56,5 s | 08 Sécurité | Chiffrement, aucune revente, export ou suppression ; interface FR · DE · EN |
+| 56,5–63 s | Fin | Gratuit pendant la bêta, logo, **« Bientôt disponible sur iOS et Android »** |
+
+Un téléphone réaliste reste à l’écran pendant toute la démonstration ; une « caméra » zoome sur la zone utile pour que l’interface reste lisible sur un téléphone, sans passer sous les boutons de TikTok (zoom limité, rien d’important sous y = 1500). Les données sont fictives (« Elektrizitätswerk Beispiel AG », « Sophie Martin »).
+
+Le son (`sound/soundtrack.py`) est entièrement synthétisé : nappe d’accords, pulsation douce, et bruitages (déclencheur photo, toucher, frappe, notification, validation) placés sur les mêmes repères que l’animation (`src/explainer/cues.json`). Aucun échantillon externe, donc aucun droit à payer.
+
+```bash
+npm run render:explainer   # rend les deux versions dans out/ (CONCURRENCY=2 par défaut, pour limiter la mémoire)
+```
+
+Légende proposée :
+> Factures, impôts, caisse-maladie, poursuites… Clair lit vos courriers administratifs, vous les explique en français et vous dit quoi faire avant quand. Voici tout ce qu’il fait, en une minute. Bientôt sur iOS et Android : abonnez-vous pour le lancement.
+> #suisse #suisseromande #administratif #lamal #caissemaladie #impots #facture #geneve #lausanne #startup #appli
+
+## Première vidéo courte (25 s, FR · DE · EN)
+
 Vidéo TikTok / Reels / Shorts en motion design, réalisée avec [Remotion](https://www.remotion.dev/) (React).
 
 | Fichier | Langue | Format |

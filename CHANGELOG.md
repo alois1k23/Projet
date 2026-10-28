@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.9.0 — 2026-10-28 · Vidéo explicative
+### Ajouté
+- Vidéo explicative TikTok en français (63 s) présentant toutes les fonctions en 8 chapitres, avec téléphone réaliste, caméra qui cadre l'interface et barre de progression (`video/out/clair-explicatif.mp4`).
+- Habillage sonore original synthétisé et synchronisé sur les repères de l'animation ; version muette pour poser une musique TikTok.
+
 ## 0.8.0 — 2026-10-28 · Vidéo TikTok
 ### Ajouté
 - Vidéo promotionnelle en motion design (Remotion), format vertical 1080 × 1920, 25 s, en français, allemand et anglais (`video/out/`), terminant par « Bientôt disponible sur iOS et Android ».
