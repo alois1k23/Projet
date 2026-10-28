@@ -31,21 +31,23 @@ Pour un compte qui fait la promotion d'une application, le compte Entreprise est
 
 ## 4. Profil
 
-**Nom d'utilisateur** (2 à 24 caractères : lettres, chiffres, points, tirets bas). Par ordre de préférence, selon disponibilité :
-1. `@clair.suisse` (recommandé)
-2. `@clairapp`
-3. `@clair_courrier`
-4. `@clair.suisse.app`
+**Nom d'utilisateur** (2 à 24 caractères : lettres, chiffres, points, tirets bas). Le compte vise l'international : pas de pays dans le nom. Par ordre de préférence, selon disponibilité :
+1. `@clairapp` (recommandé)
+2. `@getclair`
+3. `@clair.app`
+4. `@useclair`
 
-Évitez `@clair.ch` : il ressemble à une adresse de site, et le domaine clair.ch appartient très probablement à quelqu'un d'autre.
+Évitez un nom en `.ch` ou `.com` : il ressemble à une adresse de site qui ne vous appartient pas.
 
 Gardez le même nom partout (Instagram, YouTube Shorts) si possible.
 
 **Nom affiché** (30 caractères au plus) : `Clair · courrier admin`
 
 **Bio** (80 caractères au plus) — choisir une :
-- `Le courrier administratif suisse, enfin clair. Bientôt sur iOS et Android.` (74)
-- `Factures, impôts, LAMal : on vous explique tout. Bientôt sur iOS et Android.` (76)
+- `Vos courriers administratifs, enfin clairs. Bientôt sur iOS et Android.` (71)
+- `Vos courriers administratifs, enfin clairs. D’abord en Suisse, bientôt partout.` (79)
+
+L'application ne connaît aujourd'hui que les règles suisses (LAMal, factures QR, poursuites, francs) : tant que d'autres pays ne sont pas couverts, les vidéos restent sur des exemples suisses et la bio ne promet rien d'autre.
 
 **Photo de profil** : `video/brand/tiktok-photo-profil.png` (1080 × 1080, lisible même en tout petit).
 
