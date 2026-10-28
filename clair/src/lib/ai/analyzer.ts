@@ -17,6 +17,8 @@ export interface AnalyzeInput {
   pages: PageInput[];
   fileName: string;
   today?: Date;
+  /** Langue dans laquelle rédiger l'explication. */
+  locale?: "fr" | "de";
 }
 
 export const MAX_PAGES = 10;
@@ -26,12 +28,15 @@ export interface DocumentAnalyzer {
   analyze(input: AnalyzeInput): Promise<NormalizedAnalysis>;
 }
 
+export type AnalysisErrorCode = "noPages" | "refused" | "tooLong" | "unreadable" | "misconfigured" | "badFile" | "busy" | "down" | "unexpected";
+
+/** Erreur d'analyse. `code` est une clé de traduction (`analysisErrors.*`). */
 export class AnalysisError extends Error {
   constructor(
-    message: string,
+    readonly code: AnalysisErrorCode,
     readonly retryable: boolean,
   ) {
-    super(message);
+    super(code);
     this.name = "AnalysisError";
   }
 }
@@ -44,8 +49,8 @@ export class AnthropicAnalyzer implements DocumentAnalyzer {
     private readonly model: string,
   ) {}
 
-  async analyze({ pages, today = new Date() }: AnalyzeInput): Promise<NormalizedAnalysis> {
-    if (pages.length === 0) throw new AnalysisError("Aucune page à analyser.", false);
+  async analyze({ pages, today = new Date(), locale = "fr" }: AnalyzeInput): Promise<NormalizedAnalysis> {
+    if (pages.length === 0) throw new AnalysisError("noPages", false);
     const fileBlocks: Anthropic.Beta.BetaContentBlockParam[] = pages.map(({ content, mimeType }) => {
       const data = content.toString("base64");
       return mimeType === "application/pdf"
@@ -62,45 +67,45 @@ export class AnthropicAnalyzer implements DocumentAnalyzer {
         fallbacks: "default",
         system: SYSTEM_PROMPT,
         output_config: { effort: "medium", format: betaZodOutputFormat(AnalysisOutputSchema) },
-        messages: [{ role: "user", content: [...fileBlocks, { type: "text", text: userInstruction(today, pages.length) }] }],
+        messages: [{ role: "user", content: [...fileBlocks, { type: "text", text: userInstruction(today, pages.length, locale) }] }],
       });
     } catch (error) {
       throw toAnalysisError(error);
     }
 
     if (response.stop_reason === "refusal") {
-      throw new AnalysisError("L’analyse automatique a été refusée pour ce document. Vous pouvez saisir les informations vous-même.", false);
+      throw new AnalysisError("refused", false);
     }
     if (response.stop_reason === "max_tokens") {
-      throw new AnalysisError("Le document est trop long pour être analysé en une fois.", false);
+      throw new AnalysisError("tooLong", false);
     }
     const parsed = response.parsed_output as AnalysisOutput | null;
-    if (!parsed) throw new AnalysisError("La réponse de l’analyse était illisible. Réessayez.", true);
+    if (!parsed) throw new AnalysisError("unreadable", true);
     return normalizeAnalysis(parsed);
   }
 }
 
 function toAnalysisError(error: unknown): AnalysisError {
   if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) {
-    return new AnalysisError("Le service d’analyse est mal configuré.", false);
+    return new AnalysisError("misconfigured", false);
   }
   if (error instanceof Anthropic.BadRequestError) {
-    return new AnalysisError("Ce fichier n’a pas pu être lu. Essayez une photo plus nette ou un PDF.", false);
+    return new AnalysisError("badFile", false);
   }
   if (error instanceof Anthropic.RateLimitError) {
-    return new AnalysisError("Le service d’analyse est très sollicité. Réessayez dans une minute.", true);
+    return new AnalysisError("busy", true);
   }
   if (error instanceof Anthropic.APIConnectionError || error instanceof Anthropic.InternalServerError || error instanceof Anthropic.APIError) {
-    return new AnalysisError("Le service d’analyse ne répond pas. Réessayez dans quelques instants.", true);
+    return new AnalysisError("down", true);
   }
-  return new AnalysisError("L’analyse a échoué de façon inattendue.", true);
+  return new AnalysisError("unexpected", true);
 }
 
 /** Analyseur de test : réponses déterministes, jamais utilisé sans activation explicite. */
 export class MockAnalyzer implements DocumentAnalyzer {
   readonly name = "mock" as const;
   async analyze(input: AnalyzeInput): Promise<NormalizedAnalysis> {
-    return normalizeAnalysis(mockAnalysis(input.fileName, input.today ?? new Date()));
+    return normalizeAnalysis(mockAnalysis(input.fileName, input.today ?? new Date(), input.locale));
   }
 }
 

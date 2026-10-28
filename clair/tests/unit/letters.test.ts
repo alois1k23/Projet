@@ -2,10 +2,26 @@ import { PDFDocument, StandardFonts } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 import { buildLetter, getTemplate, placeAndDate, senderBlock, TEMPLATES, validateFields } from "@/lib/letters/templates";
 import { renderLetterPdf, toWinAnsi, wrap } from "@/lib/letters/pdf";
+import { fr } from "@/i18n/fr";
+import { de } from "@/i18n/de";
 
 const sender = { name: "Sophie Martin", addressLine: "Rue du Lac 12", postalCode: "1003", city: "Lausanne" };
 
 describe("modèles de lettres", () => {
+  it("chaque champ de chaque modèle a un libellé en français et en allemand", () => {
+    for (const t of Object.values(TEMPLATES)) {
+      for (const dict of [fr, de]) {
+        const td = dict.templates[t.id]!;
+        expect(td.label.length, t.id).toBeGreaterThan(3);
+        for (const f of t.fields) {
+          if (f.key === "recipientName" || f.key === "recipientAddress") continue;
+          expect(td.fields[f.key]?.label, `${t.id}.${f.key}`).toBeTruthy();
+          if (f.type === "select") for (const o of f.options) expect(td.options[o], `${t.id}.${o}`).toBeTruthy();
+        }
+      }
+    }
+  });
+
   it("retrouve un modèle et ignore les identifiants inconnus ou piégés", () => {
     expect(getTemplate("resiliation-assurance")?.id).toBe("resiliation-assurance");
     expect(getTemplate("inconnu")).toBeNull();
@@ -18,8 +34,8 @@ describe("modèles de lettres", () => {
     const errors = validateFields(t, { recipientName: "Caisse", insuranceType: "inconnu", endDate: "31.12.2026" });
     expect(errors.recipientAddress).toBeDefined();
     expect(errors.policyNumber).toBeDefined();
-    expect(errors.insuranceType).toBe("Choix invalide.");
-    expect(errors.endDate).toBe("Date invalide.");
+    expect(errors.insuranceType).toBe("invalidChoice");
+    expect(errors.endDate).toBe("invalidDate");
   });
 
   it("rédige une résiliation LAMal en français avec la règle du nouvel assureur", () => {
@@ -47,7 +63,7 @@ describe("modèles de lettres", () => {
 
   it("chaque modèle produit une lettre complète dans les deux langues", () => {
     for (const t of Object.values(TEMPLATES)) {
-      const values = Object.fromEntries(t.fields.map((f) => [f.key, f.type === "date" ? "2026-11-30" : f.type === "select" ? f.options[0]!.value : "valeur"]));
+      const values = Object.fromEntries(t.fields.map((f) => [f.key, f.type === "date" ? "2026-11-30" : f.type === "select" ? f.options[0]! : "valeur"]));
       expect(validateFields(t, values), t.id).toEqual({});
       for (const lang of ["fr", "de"] as const) {
         const l = buildLetter(t, values, lang);

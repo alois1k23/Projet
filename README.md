@@ -4,7 +4,9 @@ Création d'une application du quotidien à fort potentiel, d'abord pour la Suis
 
 ## Où en sommes-nous ?
 
-**Le MVP de Clair est développé et testé** : un copilote du courrier administratif suisse (nom provisoire). Il explique un courrier, suit les échéances et prépare les réponses. Code dans [`clair/`](clair/README.md).
+**Clair est développé et testé (version 0.5)** : un copilote du courrier administratif suisse (nom provisoire), en français et en allemand. Il explique un courrier (même de plusieurs pages), suit les échéances, envoie des rappels et prépare les réponses. Il comprend aussi un site de présentation avec tarifs, FAQ, liste d'attente et guides pratiques. Code dans [`clair/`](clair/README.md).
+
+Rien n'est publié ni payant : e-mails, Google et Apple attendent vos identifiants (voir [TASKS.md](TASKS.md)).
 
 Prochaine étape recommandée : bêta fermée avec une vraie clé API pour mesurer la précision sur de vrais courriers (voir [TASKS.md](TASKS.md)).
 
@@ -21,6 +23,7 @@ Prochaine étape recommandée : bêta fermée avec une vraie clé API pour mesur
 | Spécification produit (PRD) | [PRODUCT.md](PRODUCT.md) |
 | Identité et design system | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) |
 | Tests et résultats | [TESTING.md](TESTING.md) |
+| Historique des versions | [CHANGELOG.md](CHANGELOG.md) |
 | Décisions | [DECISIONS.md](DECISIONS.md) |
 | Feuille de route et tâches | [ROADMAP.md](ROADMAP.md) · [TASKS.md](TASKS.md) |
 

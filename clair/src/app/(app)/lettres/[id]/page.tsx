@@ -8,8 +8,11 @@ import { placeAndDate, senderBlock, type LetterLanguage } from "@/lib/letters/te
 import { deleteLetter } from "@/app/actions/letters";
 import { Card, PageHeader, buttonClass } from "@/components/ui";
 import { ConfirmSubmit, CopyButton } from "@/components/client";
+import { getT } from "@/i18n/server";
 
-export const metadata: Metadata = { title: "Lettre" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getT()).letters.title };
+}
 
 export default async function LetterPage({ params }: { params: Promise<{ id: string }> }) {
   const user = await requireUser();
@@ -18,22 +21,23 @@ export default async function LetterPage({ params }: { params: Promise<{ id: str
   if (!letter) notFound();
   const sender = { name: user.name ?? "", addressLine: user.addressLine, postalCode: user.postalCode, city: user.city };
   const lang = letter.language as LetterLanguage;
+  const L = (await getT()).letters;
   const fullText = [senderBlock(sender), "", letter.recipient, "", placeAndDate(sender, letter.createdAt, lang), "", letter.subject, "", letter.body, "", sender.name].join("\n");
 
   return (
     <div className="animate-rise">
       <Link href="/lettres" className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink-2 hover:text-ink">
-        <ArrowLeft className="size-4" aria-hidden="true" /> Lettres
+        <ArrowLeft className="size-4" aria-hidden="true" /> {L.title}
       </Link>
       <PageHeader
-        title="Votre lettre est prête"
-        subtitle="Téléchargez-la, imprimez-la et signez-la. Pour une résiliation, préférez l’envoi en recommandé."
+        title={L.readyTitle}
+        subtitle={L.readySubtitle}
       />
       <div className="mb-6 flex flex-wrap gap-2">
         <a href={`/api/lettres/${letter.id}/pdf`} className={buttonClass("primary")}>
-          <Download className="size-4" aria-hidden="true" /> Télécharger le PDF
+          <Download className="size-4" aria-hidden="true" /> {L.downloadPdf}
         </a>
-        <CopyButton value={fullText} label="Copier le texte" variant="secondary" />
+        <CopyButton value={fullText} label={L.copyText} variant="secondary" />
       </div>
       <Card className="mx-auto max-w-2xl bg-white p-8 font-[Helvetica,Arial,sans-serif] text-[14px] leading-relaxed text-[#14181f] sm:p-12">
         <p className="whitespace-pre-line text-xs">{senderBlock(sender)}</p>
@@ -45,8 +49,8 @@ export default async function LetterPage({ params }: { params: Promise<{ id: str
       </Card>
       <form action={deleteLetter} className="mt-6 flex justify-center">
         <input type="hidden" name="letterId" value={letter.id} />
-        <ConfirmSubmit confirmLabel="Confirmer la suppression">
-          <Trash2 className="size-4" aria-hidden="true" /> Supprimer cette lettre
+        <ConfirmSubmit confirmLabel={L.confirmDelete}>
+          <Trash2 className="size-4" aria-hidden="true" /> {L.deleteLetter}
         </ConfirmSubmit>
       </form>
     </div>

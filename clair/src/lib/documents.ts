@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/config";
 import "server-only";
 import { Prisma, type Plan, type TaskKind } from "@prisma/client";
 import { db } from "@/lib/db";
@@ -60,7 +61,7 @@ export async function applyAnalysis(documentId: string, userId: string, analysis
   ]);
 }
 
-export async function createSampleDocument(userId: string, sampleId: string): Promise<string | null> {
+export async function createSampleDocument(userId: string, sampleId: string, locale: Locale = "fr"): Promise<string | null> {
   const sample = getSample(sampleId);
   if (!sample) return null;
   const today = todayInZurich();
@@ -72,10 +73,10 @@ export async function createSampleDocument(userId: string, sampleId: string): Pr
       sizeBytes: 0,
       source: "SAMPLE",
       status: "PENDING",
-      title: sample.label,
+      title: sample.label[locale],
     },
   });
-  await applyAnalysis(doc.id, userId, normalizeAnalysis(sample.analysis(today)));
+  await applyAnalysis(doc.id, userId, normalizeAnalysis(sample.analysis(today, locale)));
   return doc.id;
 }
 

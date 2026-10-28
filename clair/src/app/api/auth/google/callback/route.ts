@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { decodeIdToken } from "arctic";
 import { createSession } from "@/lib/auth/session";
+import { getLocale } from "@/i18n/server";
 import { googleClient, profileFromIdToken, signInWithOAuth } from "@/lib/auth/oauth";
 import { env } from "@/lib/env";
 
@@ -20,7 +21,7 @@ export async function GET(request: Request) {
   try {
     const tokens = await google.client.validateAuthorizationCode(code, verifier);
     const profile = profileFromIdToken("google", decodeIdToken(tokens.idToken()) as Record<string, unknown>, google.clientId);
-    const { userId, created } = await signInWithOAuth(profile);
+    const { userId, created } = await signInWithOAuth(profile, await getLocale());
     await createSession(userId);
     return Response.redirect(`${base}/accueil${created ? "?bienvenue=1" : ""}`, 303);
   } catch (error) {

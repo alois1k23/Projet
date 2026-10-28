@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { updateDocument } from "@/app/actions/documents";
 import { initialFormState } from "@/app/actions/types";
 import { SubmitButton } from "@/components/client";
+import { useT } from "@/i18n/client";
 import { FieldError, Input, Label, Notice, Select, Textarea } from "@/components/ui";
 
 export interface EditDefaults {
@@ -18,6 +19,8 @@ export interface EditDefaults {
 
 export function EditForm({ defaults, categories }: { defaults: EditDefaults; categories: { value: string; label: string }[] }) {
   const [state, action] = useActionState(updateDocument, initialFormState);
+  const t = useT();
+  const l = t.detail.edit;
   const e = state.fieldErrors ?? {};
   const v = { ...defaults, ...state.values };
   return (
@@ -29,16 +32,16 @@ export function EditForm({ defaults, categories }: { defaults: EditDefaults; cat
         </div>
       ) : null}
       <div className="sm:col-span-2">
-        <Label htmlFor="title">Titre</Label>
+        <Label htmlFor="title">{l.title}</Label>
         <Input id="title" name="title" defaultValue={v.title} required aria-invalid={!!e.title} aria-describedby="title-error" />
         <FieldError id="title-error" message={e.title} />
       </div>
       <div>
-        <Label htmlFor="sender">Expéditeur</Label>
+        <Label htmlFor="sender">{l.sender}</Label>
         <Input id="sender" name="sender" defaultValue={v.sender} />
       </div>
       <div>
-        <Label htmlFor="category">Type de courrier</Label>
+        <Label htmlFor="category">{l.category}</Label>
         <Select id="category" name="category" defaultValue={v.category}>
           {categories.map((c) => (
             <option key={c.value} value={c.value}>
@@ -48,21 +51,21 @@ export function EditForm({ defaults, categories }: { defaults: EditDefaults; cat
         </Select>
       </div>
       <div>
-        <Label htmlFor="amount" hint="En CHF, par exemple 186.45">Montant</Label>
+        <Label htmlFor="amount" hint={l.amountHint}>{l.amount}</Label>
         <Input id="amount" name="amount" inputMode="decimal" defaultValue={v.amount} aria-invalid={!!e.amount} aria-describedby="amount-error" />
         <FieldError id="amount-error" message={e.amount} />
       </div>
       <div>
-        <Label htmlFor="dueDate" hint="Date limite indiquée sur le courrier">Échéance</Label>
+        <Label htmlFor="dueDate" hint={l.dueHint}>{l.dueDate}</Label>
         <Input id="dueDate" name="dueDate" type="date" defaultValue={v.dueDate} aria-invalid={!!e.dueDate} aria-describedby="dueDate-error" />
         <FieldError id="dueDate-error" message={e.dueDate} />
       </div>
       <div className="sm:col-span-2">
-        <Label htmlFor="summary">Notes</Label>
-        <Textarea id="summary" name="summary" defaultValue={v.summary} placeholder="Ce que dit le courrier, ce qu’il faut faire" />
+        <Label htmlFor="summary">{l.notes}</Label>
+        <Textarea id="summary" name="summary" defaultValue={v.summary} placeholder={l.notesPlaceholder} />
       </div>
       <div className="sm:col-span-2">
-        <SubmitButton pendingLabel="Enregistrement…">Enregistrer</SubmitButton>
+        <SubmitButton pendingLabel={t.common.saving}>{t.common.save}</SubmitButton>
       </div>
     </form>
   );

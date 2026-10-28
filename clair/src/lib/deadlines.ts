@@ -1,3 +1,6 @@
+import { fr } from "@/i18n/fr";
+import type { Messages } from "@/i18n/messages";
+
 export type Urgency = "overdue" | "today" | "soon" | "later" | "none";
 
 const DAY_MS = 86_400_000;
@@ -32,15 +35,15 @@ export function urgencyOf(due: Date | null, today: Date): Urgency {
   return "later";
 }
 
-export function relativeLabel(due: Date | null, today: Date): string {
-  if (!due) return "Sans échéance";
+export function relativeLabel(due: Date | null, today: Date, r: Messages["relative"] = fr.relative): string {
+  if (!due) return r.none;
   const d = daysUntil(due, today);
-  if (d < -1) return `En retard de ${-d} jours`;
-  if (d === -1) return "En retard d’un jour";
-  if (d === 0) return "Aujourd’hui";
-  if (d === 1) return "Demain";
-  if (d <= 30) return `Dans ${d} jours`;
-  return `Dans ${Math.round(d / 7)} semaines`;
+  if (d < -1) return r.overdueDays(-d);
+  if (d === -1) return r.overdueOne;
+  if (d === 0) return r.today;
+  if (d === 1) return r.tomorrow;
+  if (d <= 30) return r.inDays(d);
+  return r.inWeeks(Math.round(d / 7));
 }
 
 export interface Dated {

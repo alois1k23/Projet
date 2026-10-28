@@ -3,6 +3,7 @@ import { shouldRemind, todayInZurich } from "@/lib/deadlines";
 import { formatDate, formatMoney, toNumber } from "@/lib/format";
 import type { Mailer } from "@/lib/mail";
 import { reminderEmail } from "@/lib/mail/templates";
+import { isLocale } from "@/i18n/config";
 
 export interface ReminderMessage {
   to: string;
@@ -33,7 +34,7 @@ export async function sendDueReminders(notifier: Notifier, appUrl: string, now =
   const horizon = new Date(today.getTime() + 3 * 86_400_000);
   const candidates = await db.task.findMany({
     where: { status: "OPEN", remindedAt: null, dueDate: { lte: horizon } },
-    include: { user: { select: { email: true, name: true } } },
+    include: { user: { select: { email: true, name: true, locale: true } } },
   });
   const due = candidates.filter((t) => shouldRemind(t, today));
   const byUser = new Map<string, typeof due>();
@@ -41,14 +42,10 @@ export async function sendDueReminders(notifier: Notifier, appUrl: string, now =
 
   for (const tasks of byUser.values()) {
     const user = tasks[0]!.user;
-    const lines = tasks.map((t) => `• ${t.title} – ${formatDate(t.dueDate)}${toNumber(t.amount) !== null ? ` – ${formatMoney(toNumber(t.amount))}` : ""}`);
-    const email = reminderEmail(user.name?.split(" ")[0] ?? null, lines, `${appUrl}/echeances`, tasks.length);
-    await notifier.send({
-      to: user.email,
-      subject: tasks.length === 1 ? `Rappel : ${tasks[0]!.title}` : `Rappel : ${tasks.length} échéances approchent`,
-      text: `Bonjour${user.name ? ` ${user.name.split(" ")[0]}` : ""},\n\n${lines.join("\n")}\n\nVoir dans Clair : ${appUrl}/echeances`,
-      html: email.html,
-    });
+    const locale = isLocale(user.locale) ? user.locale : "fr";
+    const lines = tasks.map((t) => `• ${t.title} – ${formatDate(t.dueDate, locale)}${toNumber(t.amount) !== null ? ` – ${formatMoney(toNumber(t.amount))}` : ""}`);
+    const email = reminderEmail(user.name?.split(" ")[0] ?? null, lines, `${appUrl}/echeances`, tasks[0]!.title, tasks.length, locale);
+    await notifier.send({ to: user.email, subject: email.subject, text: email.text, html: email.html });
     await db.task.updateMany({ where: { id: { in: tasks.map((t) => t.id) } }, data: { remindedAt: now } });
   }
   return due.length;

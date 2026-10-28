@@ -3,41 +3,27 @@ import type { Document } from "@prisma/client";
 import { ChevronRight, FileText } from "lucide-react";
 import { Badge } from "@/components/ui";
 import { formatMoney, formatShortDate, toNumber } from "@/lib/format";
+import { getLocale, getT } from "@/i18n/server";
 
-export const CATEGORY_LABELS: Record<string, string> = {
-  facture: "Facture",
-  rappel: "Rappel",
-  poursuite: "Poursuite",
-  prime_assurance: "Prime d’assurance",
-  decompte_assurance: "Décompte d’assurance",
-  impots: "Impôts",
-  bail: "Logement",
-  commune: "Commune",
-  salaire: "Salaire",
-  banque: "Banque",
-  contrat: "Contrat",
-  autre: "Autre",
-};
-
-export const LANGUAGE_LABELS: Record<string, string> = { fr: "Français", de: "Allemand", it: "Italien", en: "Anglais", autre: "Autre langue" };
-
-export function StatusBadge({ doc }: { doc: Pick<Document, "status" | "source"> }) {
-  if (doc.source === "SAMPLE") return <Badge tone="primary">Exemple</Badge>;
+export async function StatusBadge({ doc }: { doc: Pick<Document, "status" | "source"> }) {
+  const s = (await getT()).documents.status;
+  if (doc.source === "SAMPLE") return <Badge tone="primary">{s.example}</Badge>;
   switch (doc.status) {
     case "NEEDS_REVIEW":
-      return <Badge tone="warning">À vérifier</Badge>;
+      return <Badge tone="warning">{s.review}</Badge>;
     case "FAILED":
-      return <Badge tone="danger">Analyse échouée</Badge>;
+      return <Badge tone="danger">{s.failed}</Badge>;
     case "MANUAL":
-      return <Badge tone="neutral">Saisie manuelle</Badge>;
+      return <Badge tone="neutral">{s.manual}</Badge>;
     case "PENDING":
-      return <Badge tone="neutral">En cours</Badge>;
+      return <Badge tone="neutral">{s.pending}</Badge>;
     default:
       return null;
   }
 }
 
-export function DocumentCard({ doc }: { doc: Document }) {
+export async function DocumentCard({ doc }: { doc: Document }) {
+  const [t, locale] = await Promise.all([getT(), getLocale()]);
   const amount = toNumber(doc.amount);
   return (
     <li>
@@ -48,9 +34,9 @@ export function DocumentCard({ doc }: { doc: Document }) {
         <span className="min-w-0 flex-1">
           <span className="block truncate font-semibold">{doc.title}</span>
           <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2">
-            <span className="truncate">{doc.sender ?? (doc.category ? CATEGORY_LABELS[doc.category] : "Expéditeur inconnu")}</span>
+            <span className="truncate">{doc.sender ?? (doc.category ? t.documents.categories[doc.category] : t.documents.unknownSender)}</span>
             <span className="text-ink-3" aria-hidden="true">·</span>
-            <span className="tabular text-ink-3">{formatShortDate(doc.createdAt)}</span>
+            <span className="tabular text-ink-3">{formatShortDate(doc.createdAt, locale)}</span>
             <StatusBadge doc={doc} />
           </span>
         </span>

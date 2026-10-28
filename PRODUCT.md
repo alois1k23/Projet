@@ -54,14 +54,18 @@ Sources et détails : MARKET_STUDY.md.
 | Courriers d'exemple fictifs | ✅ |
 | Quota gratuit (5 analyses par mois) | ✅ |
 | Réglages : profil, thème clair/sombre, export, suppression du compte | ✅ |
-| Rappels d'échéance | ⚠️ Logique faite et testée ; **envoi d'e-mails non branché** (journal uniquement) |
-| Pages confidentialité et conditions | ⚠️ Brouillons à faire relire par un juriste |
+| Rappels d'échéance par e-mail | ✅ Implémenté et testé ; ⚠️ nécessite un serveur SMTP (non configuré) |
+| Courriers de plusieurs pages (jusqu'à 10) | ✅ |
+| Connexion par lien e-mail, mot de passe oublié | ✅ (nécessite SMTP) |
+| Connexion Google et Apple | ✅ Implémenté ; ⚠️ identifiants à fournir |
+| Interface, e-mails et explications en allemand | ✅ |
+| Site de présentation, tarifs, FAQ, liste d'attente, guides, référencement | ✅ (non publié) |
+| Pages confidentialité et conditions (FR, DE) | ⚠️ Brouillons à faire relire par un juriste |
 
 ### V1 (après la bêta)
-- Envoi des rappels par e-mail et notifications push (PWA).
+- Notifications push (PWA).
 - Partage familial (plan Famille) et gestion du courrier d'un proche.
 - Paiement : ouverture de l'app bancaire avec les données QR, puis intégration eBill.
-- Interface en allemand.
 - Abonnement Clair Plus (Stripe ou paiement via les stores) **après accord explicite**.
 - Transfert de courriers par e-mail (adresse personnelle de dépôt).
 

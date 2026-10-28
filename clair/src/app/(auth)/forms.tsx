@@ -8,37 +8,39 @@ import { SubmitButton } from "@/components/client";
 import { PasswordInput } from "@/components/password-input";
 import { FieldError, Input, Label, Notice } from "@/components/ui";
 import { PASSWORD_MIN_LENGTH } from "@/lib/auth/constants";
+import { useT } from "@/i18n/client";
 
 export function LoginForm({ mail }: { mail: boolean }) {
   const [state, action] = useActionState(login, initialFormState);
+  const a = useT().auth;
   const e = state.fieldErrors ?? {};
   return (
     <form action={action} className="space-y-5" noValidate>
       {state.error ? <Notice tone="danger">{state.error}</Notice> : null}
       <div>
-        <Label htmlFor="email">Adresse e-mail</Label>
+        <Label htmlFor="email">{a.email}</Label>
         <Input id="email" name="email" type="email" inputMode="email" autoComplete="email" required defaultValue={state.values?.email} aria-invalid={!!e.email} aria-describedby="email-error" />
         <FieldError id="email-error" message={e.email} />
       </div>
       <div>
         <div className="flex items-baseline justify-between gap-3">
-          <Label htmlFor="password">Mot de passe</Label>
+          <Label htmlFor="password">{a.password}</Label>
           {mail ? (
             <Link href="/mot-de-passe-oublie" className="text-sm font-semibold text-primary hover:underline">
-              Mot de passe oublié ?
+              {a.forgot}
             </Link>
           ) : null}
         </div>
         <PasswordInput id="password" name="password" autoComplete="current-password" required aria-invalid={!!e.password} aria-describedby="password-error" />
         <FieldError id="password-error" message={e.password} />
       </div>
-      <SubmitButton className="w-full" size="lg" pendingLabel="Connexion…">
-        Se connecter
+      <SubmitButton className="w-full" size="lg" pendingLabel={a.loggingIn}>
+        {a.login}
       </SubmitButton>
       <p className="text-center text-sm text-ink-2">
-        Pas encore de compte ?{" "}
+        {a.noAccount}{" "}
         <Link href="/inscription" className="font-semibold text-primary hover:underline">
-          Créer un compte
+          {a.createAccount}
         </Link>
       </p>
     </form>
@@ -48,40 +50,41 @@ export function LoginForm({ mail }: { mail: boolean }) {
 /** Inscription réduite à l'essentiel : e-mail et mot de passe. Le nom est demandé plus tard, seulement si une lettre en a besoin. */
 export function SignupForm() {
   const [state, action] = useActionState(signup, initialFormState);
+  const a = useT().auth;
   const e = state.fieldErrors ?? {};
   return (
     <form action={action} className="space-y-5" noValidate>
       {state.error ? <Notice tone="danger">{state.error}</Notice> : null}
       <div>
-        <Label htmlFor="email">Adresse e-mail</Label>
+        <Label htmlFor="email">{a.email}</Label>
         <Input id="email" name="email" type="email" inputMode="email" autoComplete="email" required defaultValue={state.values?.email} aria-invalid={!!e.email} aria-describedby="email-error" />
         <FieldError id="email-error" message={e.email} />
       </div>
       <div>
-        <Label htmlFor="password" hint={`Au moins ${PASSWORD_MIN_LENGTH} caractères. Une petite phrase est plus facile à retenir.`}>
-          Choisissez un mot de passe
+        <Label htmlFor="password" hint={a.passwordHint(PASSWORD_MIN_LENGTH)}>
+          {a.choosePassword}
         </Label>
         <PasswordInput id="password" name="password" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} required aria-invalid={!!e.password} aria-describedby="password-error" />
         <FieldError id="password-error" message={e.password} />
       </div>
-      <SubmitButton className="w-full" size="lg" pendingLabel="Création du compte…">
-        Créer mon compte gratuit
+      <SubmitButton className="w-full" size="lg" pendingLabel={a.creating}>
+        {a.signupSubmit}
       </SubmitButton>
       <p className="text-center text-xs text-ink-3">
-        En créant un compte, vous acceptez les{" "}
+        {a.consent.before}{" "}
         <Link href="/conditions" className="font-semibold underline hover:text-ink">
-          conditions d’utilisation
+          {a.consent.terms}
         </Link>{" "}
-        et la{" "}
+        {a.consent.and}{" "}
         <Link href="/confidentialite" className="font-semibold underline hover:text-ink">
-          politique de confidentialité
+          {a.consent.privacy}
         </Link>
         .
       </p>
       <p className="text-center text-sm text-ink-2">
-        Déjà un compte ?{" "}
+        {a.alreadyAccount}{" "}
         <Link href="/connexion" className="font-semibold text-primary hover:underline">
-          Se connecter
+          {a.login}
         </Link>
       </p>
     </form>

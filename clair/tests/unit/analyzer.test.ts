@@ -79,7 +79,7 @@ describe("AnthropicAnalyzer", () => {
     const { client } = fakeClient(new Anthropic.APIConnectionError({ message: "socket hang up" }));
     const promise = new AnthropicAnalyzer(client, "m").analyze({ pages: [{ content: Buffer.from("x"), mimeType: "image/png" }], fileName: "a", today });
     await expect(promise).rejects.toBeInstanceOf(AnalysisError);
-    await expect(promise).rejects.toThrow(/ne répond pas/);
+    await expect(promise).rejects.toMatchObject({ code: "down", retryable: true });
   });
 });
 

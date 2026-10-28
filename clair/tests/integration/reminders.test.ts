@@ -37,4 +37,15 @@ describe("rappels d'échéances", () => {
     expect(await sendDueReminders(notifier, "https://app.example", now)).toBe(0);
     expect(sent).toHaveLength(1);
   });
+
+  it("écrit le rappel dans la langue de l'utilisateur", async () => {
+    const user = await db.user.create({ data: { email: "erinnerung@example.ch", name: "Lukas Meier", locale: "de" } });
+    await db.task.create({ data: { userId: user.id, title: "Rechnung bezahlen", dueDate: new Date("2026-10-30T00:00:00Z"), amount: 92 } });
+    const sent: ReminderMessage[] = [];
+    await sendDueReminders({ send: async (m) => void sent.push(m) }, "https://app.example", new Date("2026-10-28T06:00:00Z"));
+    expect(sent[0]!.subject).toBe("Erinnerung: Rechnung bezahlen");
+    expect(sent[0]!.text).toContain("Guten Tag Lukas");
+    expect(sent[0]!.text).toContain("30. Oktober 2026");
+    expect(sent[0]!.html).toContain('lang="de"');
+  });
 });

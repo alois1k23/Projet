@@ -1,5 +1,6 @@
 import { Mail } from "lucide-react";
 import { buttonClass } from "./ui";
+import { getT } from "@/i18n/server";
 
 function GoogleLogo() {
   return (
@@ -21,26 +22,27 @@ function AppleLogo() {
 }
 
 /** Autres façons de se connecter, affichées seulement si elles sont configurées sur le serveur. */
-export function AltSignIn({ mail, google, apple }: { mail: boolean; google: boolean; apple: boolean }) {
+export async function AltSignIn({ mail, google, apple }: { mail: boolean; google: boolean; apple: boolean }) {
   if (!mail && !google && !apple) return null;
+  const t = await getT();
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3 text-xs font-semibold text-ink-3 uppercase" aria-hidden="true">
-        <span className="h-px flex-1 bg-line" /> ou <span className="h-px flex-1 bg-line" />
+        <span className="h-px flex-1 bg-line" /> {t.auth.or} <span className="h-px flex-1 bg-line" />
       </div>
       {google ? (
         <a href="/api/auth/google" className={buttonClass("secondary", "lg", "w-full")}>
-          <GoogleLogo /> Continuer avec Google
+          <GoogleLogo /> {t.auth.google}
         </a>
       ) : null}
       {apple ? (
         <a href="/api/auth/apple" className={buttonClass("secondary", "lg", "w-full")}>
-          <AppleLogo /> Continuer avec Apple
+          <AppleLogo /> {t.auth.apple}
         </a>
       ) : null}
       {mail ? (
         <a href="/connexion/lien" className={buttonClass("secondary", "lg", "w-full")}>
-          <Mail className="size-5" aria-hidden="true" /> Recevoir un lien par e-mail
+          <Mail className="size-5" aria-hidden="true" /> {t.auth.emailLink}
         </a>
       ) : null}
     </div>

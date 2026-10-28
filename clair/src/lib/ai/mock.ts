@@ -6,7 +6,7 @@ const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000).t
  * Réponses fixes utilisées par les tests automatisés (CLAIR_AI_PROVIDER=mock).
  * Le nom de fichier choisit le scénario. L’interface signale ce mode.
  */
-export function mockAnalysis(fileName: string, today: Date): AnalysisOutput {
+export function mockAnalysis(fileName: string, today: Date, locale: "fr" | "de" = "fr"): AnalysisOutput {
   const name = fileName.toLowerCase();
   if (name.includes("flou")) {
     return {
@@ -26,6 +26,30 @@ export function mockAnalysis(fileName: string, today: Date): AnalysisOutput {
       warnings: ["Vérifiez le montant : la photo est floue."],
       suggestedLetters: [],
       confidence: { overall: 0.6, dueDate: 0.9, amount: 0.5 },
+    };
+  }
+  if (locale === "de") {
+    return {
+      isAdministrativeDocument: true,
+      documentType: "prime_assurance",
+      title: "Neue Krankenkassenprämie 2027",
+      sender: "Caisse-maladie Exemple SA",
+      language: "de",
+      summary:
+        "Ihre Krankenkasse teilt Ihnen Ihre Prämie für 2027 mit: CHF 438.20 pro Monat, CHF 24.10 mehr als 2026. Wenn Sie die Grundversicherung wechseln möchten, muss Ihre Kündigung vor Ende November bei ihr eintreffen.",
+      amount: 438.2,
+      currency: "CHF",
+      dueDate: addDays(today, 30),
+      urgency: "haute",
+      actions: [
+        { kind: "CHECK", title: "Prämien 2027 vergleichen", dueDate: addDays(today, 20), amount: null },
+        { kind: "CANCEL", title: "Kündigung senden, falls Sie die Kasse wechseln", dueDate: addDays(today, 30), amount: null },
+      ],
+      payment: null,
+      references: [{ label: "Versichertennummer", value: "756.1234.5678.97" }],
+      warnings: ["Ohne rechtzeitig eingetroffene Kündigung läuft Ihr Vertrag 2027 zum neuen Tarif weiter."],
+      suggestedLetters: ["resiliation-assurance"],
+      confidence: { overall: 0.95, dueDate: 0.92, amount: 0.97 },
     };
   }
   return {

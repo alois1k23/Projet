@@ -1,19 +1,26 @@
 // Convention suisse pour les montants en francs, y compris en Romandie : 1’240.50.
 const chf = new Intl.NumberFormat("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const longDate = new Intl.DateTimeFormat("fr-CH", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
-const shortDate = new Intl.DateTimeFormat("fr-CH", { day: "numeric", month: "short", timeZone: "UTC" });
+const longDate = {
+  fr: new Intl.DateTimeFormat("fr-CH", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
+  de: new Intl.DateTimeFormat("de-CH", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }),
+};
+const shortDate = {
+  fr: new Intl.DateTimeFormat("fr-CH", { day: "numeric", month: "short", timeZone: "UTC" }),
+  de: new Intl.DateTimeFormat("de-CH", { day: "numeric", month: "short", timeZone: "UTC" }),
+};
+type DateLocale = keyof typeof longDate;
 
 export function formatMoney(amount: number | null | undefined, currency = "CHF"): string {
   if (amount === null || amount === undefined) return "—";
   return `${currency} ${chf.format(amount)}`;
 }
 
-export function formatDate(date: Date | null | undefined): string {
-  return date ? longDate.format(date) : "—";
+export function formatDate(date: Date | null | undefined, locale: DateLocale = "fr"): string {
+  return date ? longDate[locale].format(date) : "—";
 }
 
-export function formatShortDate(date: Date | null | undefined): string {
-  return date ? shortDate.format(date) : "—";
+export function formatShortDate(date: Date | null | undefined, locale: DateLocale = "fr"): string {
+  return date ? shortDate[locale].format(date) : "—";
 }
 
 /** Convertit une valeur Decimal de Prisma (ou nombre) en nombre JavaScript. */

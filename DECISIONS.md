@@ -78,3 +78,15 @@ Demande du fondateur : rendre Clair facile pour attirer plus de monde. Six obsta
 5. **« Prochaine étape » en tête de chaque courrier**, avec les boutons utiles (C’est fait, Copier l’IBAN, Préparer la lettre).
 6. **Installable sur l’écran d’accueil** (manifeste PWA, icônes, raccourci « Ajouter un courrier »).
 Vocabulaire : « Échéances » devient « À faire ».
+
+## D-018 · Tout est livré sans compte externe (2026-10-28)
+Demande du fondateur : « Tout ! Je veux que ça soit complet ». Les e-mails (SMTP), Google et Apple sont entièrement implémentés mais **désactivés tant que les identifiants ne sont pas fournis** : aucun compte payant ou externe n’a été créé. L’application reste utilisable sans eux (mot de passe, saisie manuelle). Les boutons correspondants n’apparaissent que si la fonction est configurée.
+
+## D-019 · Langue : une seule adresse par page, pas de préfixe /fr /de (2026-10-28)
+La langue suit le profil, puis un cookie, puis le navigateur. Avantages : aucune URL à dupliquer, les liens des e-mails et des lettres restent valables. Inconvénient : les moteurs de recherche indexent surtout la version française (le robot n’envoie en général pas d’en-tête de langue). Si le référencement germanophone devient prioritaire, passer à des URL préfixées avec `hreflang`.
+
+## D-020 · Contenus juridiques et guides : prudence et sources (2026-10-28)
+Les guides ne contiennent que des faits vérifiés sur des sources officielles (Fedlex, ch.ch, Confédération, PostFinance), avec leur date de vérification et un avertissement « pas un conseil juridique ». Les versions allemandes des pages légales sont des traductions de travail ; la version française fait foi jusqu’à la relecture par un juriste.
+
+## D-021 · Tarifs affichés sans prix (2026-10-28)
+Le prix de Clair Plus n’est pas affiché : il dépend du coût réel des analyses, à mesurer pendant la bêta. La page annonce « Bientôt, prix annoncé avant tout paiement » et propose une liste d’attente. Aucun paiement n’est possible (D-013).

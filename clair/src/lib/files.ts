@@ -18,15 +18,15 @@ export function sniffMime(bytes: Buffer): SupportedMime | null {
   return null;
 }
 
-export type UploadCheck = { ok: true; mimeType: SupportedMime } | { ok: false; error: string };
+export type UploadError = "fileEmpty" | "fileOver10" | "fileFormat";
+export type UploadCheck = { ok: true; mimeType: SupportedMime } | { ok: false; error: UploadError };
 
+/** Vérifie un fichier téléversé. Les erreurs sont des clés de traduction (`upload.*`). */
 export function checkUpload(bytes: Buffer): UploadCheck {
-  if (bytes.length === 0) return { ok: false, error: "Le fichier est vide." };
-  if (bytes.length > MAX_UPLOAD_BYTES) return { ok: false, error: "Le fichier dépasse 10 Mo. Réduisez la taille de la photo ou du PDF." };
+  if (bytes.length === 0) return { ok: false, error: "fileEmpty" };
+  if (bytes.length > MAX_UPLOAD_BYTES) return { ok: false, error: "fileOver10" };
   const mimeType = sniffMime(bytes);
-  if (!mimeType) {
-    return { ok: false, error: "Format non pris en charge. Utilisez une photo JPEG, PNG ou WebP, ou un PDF. Sur iPhone, réglez l’appareil photo sur « Le plus compatible »." };
-  }
+  if (!mimeType) return { ok: false, error: "fileFormat" };
   return { ok: true, mimeType };
 }
 

@@ -8,6 +8,7 @@ test.describe("e-mails d’authentification", () => {
 
     await page.goto("/connexion");
     await page.getByRole("link", { name: "Mot de passe oublié ?" }).click();
+    await expect(page.getByRole("heading", { name: "Mot de passe oublié" })).toBeVisible();
     await page.getByLabel("Adresse e-mail").fill(email);
     await page.getByRole("button", { name: "Recevoir un lien" }).click();
     await expect(page.getByText(/C’est envoyé/)).toBeVisible();

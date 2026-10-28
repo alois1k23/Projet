@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { parseIsoDate } from "@/lib/ai/schema";
 import type { FormState } from "./types";
+import { getT } from "@/i18n/server";
 
 export async function toggleTask(formData: FormData): Promise<void> {
   const user = await requireUser();
@@ -19,23 +20,28 @@ export async function toggleTask(formData: FormData): Promise<void> {
 }
 
 const TaskSchema = z.object({
-  title: z.string().trim().min(1, "Décrivez la tâche.").max(140),
+  title: z.string().trim().min(1, "describe").max(140),
   dueDate: z
     .string()
     .trim()
-    .refine((v) => v === "" || parseIsoDate(v) !== null, "Date invalide.")
+    .refine((v) => v === "" || parseIsoDate(v) !== null, "invalidDate")
     .optional(),
 });
 
 export async function createTask(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await requireUser();
+  const t = await getT();
   const parsed = TaskSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { fieldErrors: { [String(parsed.error.issues[0]?.path[0] ?? "title")]: parsed.error.issues[0]?.message ?? "Invalide." } };
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    const message = issue?.message === "describe" ? t.tasks.describe : issue?.message === "invalidDate" ? t.validation.invalidDate : t.validation.tooLong;
+    return { fieldErrors: { [String(issue?.path[0] ?? "title")]: message } };
+  }
   await db.task.create({
     data: { userId: user.id, title: parsed.data.title, dueDate: parsed.data.dueDate ? parseIsoDate(parsed.data.dueDate) : null },
   });
   revalidateAppPages();
-  return { success: "Échéance ajoutée." };
+  return { success: t.tasks.added };
 }
 
 export async function deleteTask(formData: FormData): Promise<void> {

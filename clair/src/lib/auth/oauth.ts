@@ -49,7 +49,7 @@ export function profileFromIdToken(provider: OAuthProvider, claims: Record<strin
 /**
  * Retrouve ou crée l'utilisateur. Un compte existant n'est rattaché que si le fournisseur a vérifié l'adresse e-mail.
  */
-export async function signInWithOAuth(profile: OAuthProfile): Promise<{ userId: string; created: boolean }> {
+export async function signInWithOAuth(profile: OAuthProfile, locale: string = "fr"): Promise<{ userId: string; created: boolean }> {
   const linked = await db.oAuthAccount.findUnique({
     where: { provider_providerAccountId: { provider: profile.provider, providerAccountId: profile.providerAccountId } },
   });
@@ -63,7 +63,7 @@ export async function signInWithOAuth(profile: OAuthProfile): Promise<{ userId: 
     return { userId: existing.id, created: false };
   }
   const user = await db.user.create({
-    data: { email: profile.email, name: profile.name, oauthAccounts: { create: { provider: profile.provider, providerAccountId: profile.providerAccountId } } },
+    data: { email: profile.email, name: profile.name, locale, oauthAccounts: { create: { provider: profile.provider, providerAccountId: profile.providerAccountId } } },
   });
   return { userId: user.id, created: true };
 }

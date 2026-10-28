@@ -55,8 +55,28 @@
 
 Défaut trouvé et corrigé : après « C'est fait », la case de la même tâche dans la liste restait visuellement décochée.
 
+### Version 0.5 (complète) : résultats du 28 octobre 2026
+
+| Commande | Résultat |
+|---|---|
+| `npm run lint` / `npm run typecheck` | ✅ 0 erreur |
+| `npm test` | ✅ 86 tests réussis (10 fichiers) |
+| `npm run test:e2e` | ✅ 26 parcours réussis (25 ordinateur, 1 mobile), build de production |
+
+Nouveaux contrôles :
+- Parité des dictionnaires FR/DE (mêmes clés, aucun texte vide, pas de « ß »), choix de la langue selon le navigateur, traduction des codes d'erreur.
+- E-mails et rappels dans la langue de l'utilisateur ; échappement HTML.
+- Guides présents dans les deux langues avec des sources en https ; exemples traduits.
+- Parcours complet en allemand (inscription, exemple, analyse, lettre en allemand par défaut), changement de langue sur le site et persistance dans le profil.
+- Site public : sections, FAQ, liste d'attente (adresse invalide puis valide), guides sourcés, `sitemap.xml`, `robots.txt`, image Open Graph.
+- Accessibilité (axe) de la page d'accueil, d'un guide et des écrans allemands.
+- Revue visuelle : accueil public FR (1280 px), DE (390 px), guide DE en sombre, exemple DE mobile ; aucun défilement horizontal.
+
+Défauts trouvés par les tests et corrigés : test « mot de passe oublié » qui remplissait le champ avant la fin de la navigation ; contrôle d'accessibilité lancé avant l'arrivée du titre de page (diffusé en différé par Next.js).
+
 ### Ce qui n'est pas testé
 - L'analyse réelle par Claude : aucun courrier n'a été lu par le vrai modèle. C'est le risque n° 1 (hypothèse H3).
 - Safari iOS et Firefox (seul Chromium est installé) ; la prise de photo réelle depuis un téléphone ; la conversion HEIC (Chromium ne sait pas décoder ce format) ; l'installation sur l'écran d'accueil.
 - Charge et performance sous trafic.
-- Envoi réel d'e-mails (non implémenté).
+- Envoi réel d'e-mails (SMTP implémenté, aucun serveur configuré) et connexion réelle avec Google ou Apple (aucun identifiant).
+- Qualité de l'allemand de l'IA sur de vrais courriers ; relecture des textes allemands par une personne germanophone.

@@ -9,9 +9,9 @@
 | 5 | PRD | ✅ |
 | 6 | MVP fonctionnel et testé | ✅ |
 | 6 bis | **Bêta fermée : vraie clé API, 20 à 50 testeurs, mesure de la précision** | ⏳ Prochaine étape |
-| 7 | Site de présentation et liste d'attente | 🔜 |
+| 7 | Site de présentation, liste d'attente, guides, référencement | ✅ (non publié) |
 | 8 | Vidéo promotionnelle (Remotion) | 🔜 |
 | 9 | Modèle économique détaillé et plan de lancement | 🔜 |
-| V1 | Rappels par e-mail, partage familial, interface allemande, offre Plus | 🔜 Après la bêta |
+| V1 | Rappels par e-mail ✅, interface allemande ✅, connexion Google/Apple ✅ (à activer) ; partage familial, offre Plus | 🔜 Après la bêta |
 
 Décisions nécessitant votre accord : achat de domaine, déploiement public, engagement financier (hébergement, API), lancement d'un service payant.

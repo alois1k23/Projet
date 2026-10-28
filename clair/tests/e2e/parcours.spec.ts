@@ -167,7 +167,7 @@ test.describe("courriers", () => {
     await page.getByRole("link", { name: /Facture d’électricité/ }).click();
     await page.getByRole("button", { name: "Supprimer ce courrier" }).click();
     await page.getByRole("button", { name: "Supprimer définitivement" }).click();
-    await expect(page.getByText("Le courrier et son fichier ont été supprimés.")).toBeVisible();
+    await expect(page.getByText("Le courrier et ses fichiers ont été supprimés.")).toBeVisible();
   });
 
   test("un utilisateur ne peut pas voir le courrier d'un autre", async ({ page, browser }) => {
@@ -188,7 +188,7 @@ test.describe("courriers", () => {
 test.describe("démonstration et facilité d’usage", () => {
   test("un visiteur voit un vrai résultat sans compte, puis s’inscrit en deux champs", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: "Voir un exemple, sans compte" }).click();
+    await page.getByRole("main").getByRole("link", { name: "Voir un exemple, sans compte" }).first().click();
     await page.getByRole("link", { name: /Un commandement de payer/ }).click();
     await expect(page.getByText("Démonstration avec un courrier fictif")).toBeVisible();
     const nextStep = page.getByRole("region", { name: "Prochaine étape" });

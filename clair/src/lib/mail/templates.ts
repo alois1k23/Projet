@@ -1,3 +1,6 @@
+import type { Locale } from "@/i18n/config";
+import { messages } from "@/i18n/messages";
+
 export interface Email {
   subject: string;
   text: string;
@@ -7,9 +10,9 @@ export interface Email {
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 /** Mise en page sobre, lisible dans tous les clients de messagerie (tableaux et styles en ligne). */
-export function layout({ title, intro, button, outro }: { title: string; intro: string[]; button?: { label: string; url: string }; outro?: string[] }): Email & { subject: string } {
+export function layout({ title, intro, button, outro, locale = "fr" }: { title: string; intro: string[]; button?: { label: string; url: string }; outro?: string[]; locale?: Locale }): Email & { subject: string } {
   const p = (t: string) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.55;color:#111827">${escapeHtml(t)}</p>`;
-  const html = `<!doctype html><html lang="fr"><body style="margin:0;background:#f4f5f7;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
+  const html = `<!doctype html><html lang="${locale}"><body style="margin:0;background:#f4f5f7;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:32px 16px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:14px;padding:32px">
 <tr><td>
@@ -20,36 +23,28 @@ ${button ? `<p style="margin:24px 0"><a href="${escapeHtml(button.url)}" style="
 <p style="margin:0 0 16px;font-size:13px;color:#5f6877;word-break:break-all">${escapeHtml(button.url)}</p>` : ""}
 ${(outro ?? []).map((t) => `<p style="margin:0 0 12px;font-size:13px;line-height:1.5;color:#5f6877">${escapeHtml(t)}</p>`).join("")}
 </td></tr></table></td></tr></table></body></html>`;
-  const text = [title, "", ...intro, ...(button ? ["", `${button.label} : ${button.url}`] : []), "", ...(outro ?? [])].join("\n");
+  const text = [title, "", ...intro, ...(button ? ["", `${button.label}${locale === "fr" ? " :" : ":"} ${button.url}`] : []), "", ...(outro ?? [])].join("\n");
   return { subject: title, text, html };
 }
 
-export function passwordResetEmail(url: string): Email {
+export function passwordResetEmail(url: string, locale: Locale = "fr"): Email {
+  const m = messages[locale].email;
+  return layout({ locale, title: m.resetTitle, intro: m.resetIntro, button: { label: m.resetButton, url }, outro: [m.resetOutro] });
+}
+
+export function loginLinkEmail(url: string, newAccount: boolean, locale: Locale = "fr"): Email {
+  const m = messages[locale].email;
   return layout({
-    title: "Choisissez un nouveau mot de passe",
-    intro: ["Vous avez demandé à réinitialiser le mot de passe de votre compte Clair.", "Ce lien est valable une heure et ne fonctionne qu’une fois."],
-    button: { label: "Choisir un nouveau mot de passe", url },
-    outro: ["Vous n’êtes pas à l’origine de cette demande ? Ignorez cet e-mail : votre mot de passe actuel reste valable."],
+    locale,
+    title: newAccount ? m.welcomeTitle : m.loginTitle,
+    intro: [newAccount ? m.welcomeIntro : m.loginIntro, m.linkValidity],
+    button: { label: newAccount ? m.welcomeButton : m.loginButton, url },
+    outro: [m.linkOutro],
   });
 }
 
-export function loginLinkEmail(url: string, newAccount: boolean): Email {
-  return layout({
-    title: newAccount ? "Bienvenue dans Clair" : "Votre lien de connexion",
-    intro: [
-      newAccount ? "Cliquez sur le bouton pour créer votre compte et commencer. Aucun mot de passe n’est nécessaire." : "Cliquez sur le bouton pour vous connecter à Clair.",
-      "Ce lien est valable 15 minutes et ne fonctionne qu’une fois.",
-    ],
-    button: { label: newAccount ? "Créer mon compte" : "Me connecter", url },
-    outro: ["Vous n’avez rien demandé ? Ignorez cet e-mail, personne ne pourra se connecter sans ce lien."],
-  });
-}
-
-export function reminderEmail(firstName: string | null, lines: string[], url: string, count: number): Email {
-  return layout({
-    title: count === 1 ? "Une échéance approche" : `${count} échéances approchent`,
-    intro: [`Bonjour${firstName ? ` ${firstName}` : ""},`, ...lines],
-    button: { label: "Voir dans Clair", url },
-    outro: ["Vous recevez ce rappel parce que ces échéances figurent dans votre compte Clair."],
-  });
+export function reminderEmail(firstName: string | null, lines: string[], url: string, firstTitle: string, count: number, locale: Locale = "fr"): Email {
+  const m = messages[locale].email;
+  const email = layout({ locale, title: m.reminderTitle(count), intro: [m.hello(firstName), ...lines], button: { label: m.reminderButton, url }, outro: [m.reminderOutro] });
+  return { ...email, subject: m.reminderSubject(count, firstTitle) };
 }

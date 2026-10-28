@@ -9,8 +9,11 @@ import { toNumber } from "@/lib/format";
 import { getTemplate, TEMPLATES, type TemplateId } from "@/lib/letters/templates";
 import { PageHeader } from "@/components/ui";
 import { LetterForm } from "./letter-form";
+import { getT } from "@/i18n/server";
 
-export const metadata: Metadata = { title: "Nouvelle lettre" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getT()).letters.new };
+}
 
 /** Pré-remplit les champs à partir du courrier analysé. */
 function prefill(templateId: TemplateId, doc: Document | null): Record<string, string> {
@@ -49,22 +52,23 @@ export default async function NewLetterPage({ searchParams }: { searchParams: Pr
   const { modele, courrier } = await searchParams;
   const doc = courrier ? await db.document.findFirst({ where: { id: courrier, userId: user.id } }) : null;
   const template = modele ? getTemplate(modele) : null;
+  const t = await getT();
 
   if (!template) {
     return (
       <div className="animate-rise">
-        <PageHeader title="Préparer une lettre" subtitle="Choisissez le type de lettre. Clair remplit ce qu’il peut à partir de votre courrier." />
+        <PageHeader title={t.letters.chooseTitle} subtitle={t.letters.chooseIntro} />
         <ul className="grid gap-3 sm:grid-cols-2">
-          {Object.values(TEMPLATES).map((t) => (
-            <li key={t.id}>
+          {Object.values(TEMPLATES).map((tpl) => (
+            <li key={tpl.id}>
               <Link
-                href={`/lettres/nouvelle?modele=${t.id}${doc ? `&courrier=${doc.id}` : ""}`}
+                href={`/lettres/nouvelle?modele=${tpl.id}${doc ? `&courrier=${doc.id}` : ""}`}
                 className="group block h-full rounded-[var(--radius-card)] border border-line bg-surface p-5 transition-colors hover:border-primary"
               >
                 <span className="flex items-center gap-2 font-bold group-hover:text-primary">
-                  <PenLine className="size-4 shrink-0" aria-hidden="true" /> {t.label}
+                  <PenLine className="size-4 shrink-0" aria-hidden="true" /> {t.templates[tpl.id]!.label}
                 </span>
-                <span className="mt-1 block text-sm text-ink-2">{t.description}</span>
+                <span className="mt-1 block text-sm text-ink-2">{t.templates[tpl.id]!.description}</span>
               </Link>
             </li>
           ))}
@@ -76,18 +80,16 @@ export default async function NewLetterPage({ searchParams }: { searchParams: Pr
   return (
     <div className="animate-rise">
       <Link href={doc ? `/courriers/${doc.id}` : "/lettres/nouvelle"} className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink-2 hover:text-ink">
-        <ArrowLeft className="size-4" aria-hidden="true" /> {doc ? "Retour au courrier" : "Tous les modèles"}
+        <ArrowLeft className="size-4" aria-hidden="true" /> {doc ? t.letters.backToDocument : t.letters.allTemplates}
       </Link>
-      <PageHeader title={template.label} subtitle={template.description} />
+      <PageHeader title={t.templates[template.id]!.label} subtitle={t.templates[template.id]!.description} />
       <LetterForm
         templateId={template.id}
         documentId={doc?.id ?? null}
         initialValues={prefill(template.id, doc)}
         sender={{ name: user.name ?? "", addressLine: user.addressLine, postalCode: user.postalCode, city: user.city }}
       />
-      <p className="mt-6 text-xs text-ink-3">
-        Ce modèle est une aide à la rédaction, pas un conseil juridique. Relisez la lettre et vérifiez les délais avant de l’envoyer, de préférence en recommandé.
-      </p>
+      <p className="mt-6 text-xs text-ink-3">{t.letters.disclaimer}</p>
     </div>
   );
 }

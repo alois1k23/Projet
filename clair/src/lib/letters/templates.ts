@@ -3,9 +3,10 @@ import type { LETTER_TEMPLATE_IDS } from "@/lib/ai/schema";
 export type TemplateId = (typeof LETTER_TEMPLATE_IDS)[number];
 export type LetterLanguage = "fr" | "de";
 
+/** Champ d’un modèle. Libellés et aides sont dans les dictionnaires (`templates.<id>.fields.<key>`). */
 export type Field =
-  | { key: string; label: string; type: "text" | "date" | "textarea"; required: boolean; hint?: string }
-  | { key: string; label: string; type: "select"; required: boolean; options: { value: string; label: string }[]; hint?: string };
+  | { key: string; type: "text" | "date" | "textarea"; required: boolean }
+  | { key: string; type: "select"; required: boolean; options: string[] };
 
 export interface Sender {
   name: string;
@@ -22,15 +23,13 @@ export interface LetterDraft {
 
 export interface LetterTemplate {
   id: TemplateId;
-  label: string;
-  description: string;
   fields: Field[];
   build(values: Record<string, string>, lang: LetterLanguage): Omit<LetterDraft, "recipient">;
 }
 
 const recipientFields: Field[] = [
-  { key: "recipientName", label: "Destinataire", type: "text", required: true },
-  { key: "recipientAddress", label: "Adresse du destinataire", type: "textarea", required: true, hint: "Rue et numéro, NPA et localité" },
+  { key: "recipientName", type: "text", required: true },
+  { key: "recipientAddress", type: "textarea", required: true },
 ];
 
 const fmt = (iso: string | undefined, lang: LetterLanguage) => {
@@ -45,23 +44,16 @@ const v = (values: Record<string, string>, key: string) => (values[key] ?? "").t
 export const TEMPLATES: Record<TemplateId, LetterTemplate> = {
   "resiliation-assurance": {
     id: "resiliation-assurance",
-    label: "Résilier une assurance",
-    description: "Caisse-maladie (assurance de base ou complémentaire) ou autre assurance.",
     fields: [
       ...recipientFields,
       {
         key: "insuranceType",
-        label: "Type d’assurance",
         type: "select",
         required: true,
-        options: [
-          { value: "base", label: "Assurance de base (LAMal)" },
-          { value: "complementaire", label: "Assurance complémentaire (LCA)" },
-          { value: "autre", label: "Autre assurance" },
-        ],
+        options: ["base", "complementaire", "autre"],
       },
-      { key: "policyNumber", label: "N° d’assuré ou de police", type: "text", required: true },
-      { key: "endDate", label: "Date de fin du contrat", type: "date", required: true, hint: "Pour l’assurance de base : en général le 31 décembre" },
+      { key: "policyNumber", type: "text", required: true },
+      { key: "endDate", type: "date", required: true },
     ],
     build(values, lang) {
       const type = v(values, "insuranceType");
@@ -96,12 +88,10 @@ export const TEMPLATES: Record<TemplateId, LetterTemplate> = {
 
   "resiliation-contrat": {
     id: "resiliation-contrat",
-    label: "Résilier un contrat ou un abonnement",
-    description: "Téléphonie, internet, salle de sport, magazine, etc.",
     fields: [
       ...recipientFields,
-      { key: "contractNumber", label: "N° de contrat ou de client", type: "text", required: true },
-      { key: "endDate", label: "Date de fin souhaitée", type: "date", required: false, hint: "Laissez vide pour « la prochaine échéance possible »" },
+      { key: "contractNumber", type: "text", required: true },
+      { key: "endDate", type: "date", required: false },
     ],
     build(values, lang) {
       const number = v(values, "contractNumber");
@@ -131,14 +121,12 @@ export const TEMPLATES: Record<TemplateId, LetterTemplate> = {
 
   "contestation-facture": {
     id: "contestation-facture",
-    label: "Contester une facture",
-    description: "Montant erroné, prestation non reçue, facture en double.",
     fields: [
       ...recipientFields,
-      { key: "invoiceNumber", label: "N° de facture", type: "text", required: true },
-      { key: "invoiceDate", label: "Date de la facture", type: "date", required: false },
-      { key: "amount", label: "Montant facturé (CHF)", type: "text", required: false },
-      { key: "reason", label: "Motif de la contestation", type: "textarea", required: true, hint: "Expliquez simplement ce qui ne va pas" },
+      { key: "invoiceNumber", type: "text", required: true },
+      { key: "invoiceDate", type: "date", required: false },
+      { key: "amount", type: "text", required: false },
+      { key: "reason", type: "textarea", required: true },
     ],
     build(values, lang) {
       const number = v(values, "invoiceNumber");
@@ -172,13 +160,11 @@ export const TEMPLATES: Record<TemplateId, LetterTemplate> = {
 
   "delai-paiement": {
     id: "delai-paiement",
-    label: "Demander un délai ou un paiement échelonné",
-    description: "Pour une facture que vous ne pouvez pas régler en une fois.",
     fields: [
       ...recipientFields,
-      { key: "reference", label: "N° de facture ou référence", type: "text", required: true },
-      { key: "amount", label: "Montant dû (CHF)", type: "text", required: true },
-      { key: "proposal", label: "Votre proposition", type: "textarea", required: true, hint: "Par exemple : 3 mensualités de CHF 400 à partir du 30 novembre" },
+      { key: "reference", type: "text", required: true },
+      { key: "amount", type: "text", required: true },
+      { key: "proposal", type: "textarea", required: true },
     ],
     build(values, lang) {
       const ref = v(values, "reference");
@@ -211,14 +197,12 @@ export const TEMPLATES: Record<TemplateId, LetterTemplate> = {
 
   "reclamation-taxation": {
     id: "reclamation-taxation",
-    label: "Réclamer contre une décision de taxation",
-    description: "En général dans les 30 jours suivant la notification de la décision.",
     fields: [
       ...recipientFields,
-      { key: "taxpayerNumber", label: "N° de contribuable", type: "text", required: true },
-      { key: "taxYear", label: "Année fiscale", type: "text", required: true },
-      { key: "decisionDate", label: "Date de la décision", type: "date", required: true },
-      { key: "reason", label: "Motifs de la réclamation", type: "textarea", required: true, hint: "Par exemple : la déduction des frais de garde n’a pas été prise en compte" },
+      { key: "taxpayerNumber", type: "text", required: true },
+      { key: "taxYear", type: "text", required: true },
+      { key: "decisionDate", type: "date", required: true },
+      { key: "reason", type: "textarea", required: true },
     ],
     build(values, lang) {
       const number = v(values, "taxpayerNumber");
@@ -255,15 +239,17 @@ export function getTemplate(id: string): LetterTemplate | null {
   return Object.hasOwn(TEMPLATES, id) ? TEMPLATES[id as TemplateId] : null;
 }
 
-/** Vérifie les champs obligatoires. Retourne les erreurs par champ. */
-export function validateFields(template: LetterTemplate, values: Record<string, string>): Record<string, string> {
-  const errors: Record<string, string> = {};
+export type FieldError = "required" | "tooLong" | "invalidDate" | "invalidChoice";
+
+/** Vérifie les champs. Retourne, par champ, une clé de traduction (`validation.*`). */
+export function validateFields(template: LetterTemplate, values: Record<string, string>): Record<string, FieldError> {
+  const errors: Record<string, FieldError> = {};
   for (const field of template.fields) {
     const value = (values[field.key] ?? "").trim();
-    if (field.required && !value) errors[field.key] = "Ce champ est obligatoire.";
-    else if (value.length > 2000) errors[field.key] = "Texte trop long.";
-    else if (field.type === "date" && value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) errors[field.key] = "Date invalide.";
-    else if (field.type === "select" && value && !field.options.some((o) => o.value === value)) errors[field.key] = "Choix invalide.";
+    if (field.required && !value) errors[field.key] = "required";
+    else if (value.length > 2000) errors[field.key] = "tooLong";
+    else if (field.type === "date" && value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) errors[field.key] = "invalidDate";
+    else if (field.type === "select" && value && !field.options.includes(value)) errors[field.key] = "invalidChoice";
   }
   return errors;
 }

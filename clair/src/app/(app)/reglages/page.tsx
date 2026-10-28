@@ -8,8 +8,12 @@ import { logout } from "@/app/actions/auth";
 import { Badge, Card, PageHeader, buttonClass } from "@/components/ui";
 import { ThemeToggle } from "@/components/client";
 import { DeleteAccountForm, PasswordForm, ProfileForm } from "./forms";
+import { getT } from "@/i18n/server";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
-export const metadata: Metadata = { title: "Réglages" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getT()).settings.title };
+}
 
 function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
   return (
@@ -26,76 +30,80 @@ export default async function SettingsPage() {
   const used = await analysesThisMonth(user.id);
   const allowance = monthlyAllowance(user.plan);
   const analyzer = getAnalyzer();
+  const t = await getT();
+  const s = t.settings;
 
   return (
     <div className="grid animate-rise gap-6">
-      <PageHeader title="Réglages" />
+      <PageHeader title={s.title} />
 
-      <Section title="Profil" description="Votre nom et votre adresse apparaissent en en-tête des lettres que Clair prépare.">
+      <Section title={s.profile} description={s.profileDesc}>
         <ProfileForm defaults={{ name: user.name ?? "", addressLine: user.addressLine ?? "", postalCode: user.postalCode ?? "", city: user.city ?? "" }} />
       </Section>
 
       <Section
-        title="Connexion"
-        description={user.passwordHash ? "Changez votre mot de passe." : "Vous vous connectez par lien e-mail, Google ou Apple. Vous pouvez aussi définir un mot de passe."}
+        title={s.connection}
+        description={user.passwordHash ? s.connectionWithPassword : s.connectionWithoutPassword}
       >
         <PasswordForm hasPassword={Boolean(user.passwordHash)} />
       </Section>
 
-      <Section title="Offre">
+      <Section title={s.plan}>
         <div className="flex flex-wrap items-center gap-3">
-          <Badge tone={user.plan === "PLUS" ? "primary" : "neutral"}>{user.plan === "PLUS" ? "Clair Plus" : "Gratuit"}</Badge>
+          <Badge tone={user.plan === "PLUS" ? "primary" : "neutral"}>{user.plan === "PLUS" ? s.plus : s.free}</Badge>
           {Number.isFinite(allowance) ? (
             <p className="text-sm text-ink-2">
               <span className="tabular font-semibold text-ink">
-                {Math.min(used, allowance)} / {allowance}
+                {s.usage(Math.min(used, allowance), allowance)}
               </span>{" "}
-              analyses automatiques utilisées ce mois-ci. La saisie manuelle et les lettres restent illimitées.
+              {s.usageText}
             </p>
           ) : null}
         </div>
-        <p className="mt-3 text-sm text-ink-2">Clair Plus (analyses illimitées, partage familial) arrive bientôt. Aucun paiement n’est demandé pendant la bêta.</p>
+        <p className="mt-3 text-sm text-ink-2">{s.plusSoon}</p>
       </Section>
 
-      <Section title="Apparence">
+      <Section title={s.language} description={s.languageDesc}>
+        <LanguageSwitcher />
+      </Section>
+
+      <Section title={s.appearance}>
         <ThemeToggle />
       </Section>
 
-      <Section title="Vos données" description="Vous gardez le contrôle : exportez ou supprimez tout, à tout moment.">
+      <Section title={s.data} description={s.dataDesc}>
         <ul className="mb-5 space-y-2 text-sm text-ink-2">
           <li className="flex gap-2">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
-            Vos fichiers sont chiffrés (AES-256) avant d’être stockés.
+            {s.encrypted}
           </li>
           <li className="flex gap-2">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
-            {analyzer?.name === "anthropic"
-              ? "Pour l’analyse, le courrier est transmis à Anthropic (Claude), qui ne l’utilise pas pour entraîner ses modèles."
-              : "Aucun service d’analyse externe n’est configuré : vos documents ne quittent pas ce serveur."}
+            {analyzer?.name === "anthropic" ? s.aiAnthropic : s.aiNone}
           </li>
         </ul>
         <a href="/api/export" className={buttonClass("secondary")}>
-          <Download className="size-4" aria-hidden="true" /> Exporter toutes mes données
+          <Download className="size-4" aria-hidden="true" /> {s.export}
         </a>
-        <p className="mt-2 text-xs text-ink-3">Fichier JSON contenant votre profil, vos courriers (fichiers inclus), vos échéances et vos lettres.</p>
+        <p className="mt-2 text-xs text-ink-3">{s.exportHint}</p>
         <p className="mt-4 text-sm">
           <Link href="/confidentialite" className="font-semibold text-primary hover:underline">
-            Politique de confidentialité
+            {s.privacyPolicy}
           </Link>
         </p>
       </Section>
 
-      <Section title="Session">
+      <Section title={s.session}>
         <form action={logout}>
           <button type="submit" className={buttonClass("secondary")}>
-            <LogOut className="size-4" aria-hidden="true" /> Se déconnecter
+            <LogOut className="size-4" aria-hidden="true" /> {t.common.logout}
           </button>
         </form>
       </Section>
 
       <Card className="border-danger/30 p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-danger">Supprimer mon compte</h2>
-        <p className="mt-1 mb-5 text-sm text-ink-2">Votre compte, vos courriers, leurs fichiers, vos échéances et vos lettres seront supprimés immédiatement et définitivement.</p>
+        <h2 className="text-lg font-bold text-danger">{s.dangerTitle}</h2>
+        <p className="mt-1 mb-5 text-sm text-ink-2">{s.dangerText}</p>
         <DeleteAccountForm email={user.email} />
       </Card>
     </div>

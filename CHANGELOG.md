@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 0.5.0 — 2026-10-28 · Version complète (demande « Tout ! »)
+### Ajouté
+- **Interface en allemand** : toute l'application, les e-mails, les explications de l'IA, les exemples, les guides et les pages légales existent en français et en allemand (orthographe suisse, sans « ß »). Langue choisie selon le profil, puis le choix enregistré, puis le navigateur ; sélecteur FR/DE dans l'en-tête, le pied de page et les réglages, fonctionnel sans JavaScript.
+- **Site de présentation** : problème, fonctionnement, fonctions, sécurité, tarifs (gratuit pendant la bêta, Clair Plus « bientôt », prix annoncé avant tout paiement), FAQ, liste d'attente Clair Plus.
+- **Guides pratiques** sourcés (commandement de payer, changement de caisse-maladie, facture QR), FR et DE, vérifiés le 28.10.2026.
+- **Référencement** : `sitemap.xml`, `robots.txt`, image Open Graph, données structurées (WebApplication, FAQPage, Article), titres et descriptions par langue.
+- **Courriers de plusieurs pages** (jusqu'à 10 photos ou PDF) analysés ensemble.
+- **E-mails** : mot de passe oublié, connexion par lien sans mot de passe (bouton de confirmation, résistant aux antivirus qui ouvrent les liens), rappels d'échéance ; envoi SMTP si configuré, sinon fichier local en développement.
+- **Connexion Google et Apple** (OpenID Connect avec PKCE), activée seulement si les identifiants sont fournis.
+### Modifié
+- Les erreurs d'analyse sont stockées sous forme de code et traduites à l'affichage.
+- Les messages de validation des formulaires sont des codes traduits au moment de répondre.
+- Démonstration, guides et pages légales partagent l'en-tête et le pied de page du site.
+
 ## 0.4.0 — 2026-10-28 · Facilité d'usage
 ### Ajouté
 - Démonstration publique sans compte (`/exemple`), accessible depuis la page d'accueil.
