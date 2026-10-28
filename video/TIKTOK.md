@@ -31,6 +31,8 @@ Pour un compte qui fait la promotion d'une application, le compte Entreprise est
 
 ## 4. Profil
 
+**Compte créé le 28 octobre 2026 : `@clair.app`**, nom affiché « Clair · courrier admin ».
+
 **Nom d'utilisateur** (2 à 24 caractères : lettres, chiffres, points, tirets bas). Le compte vise l'international : pas de pays dans le nom. Par ordre de préférence, selon disponibilité :
 1. `@clairapp` (recommandé)
 2. `@getclair`
