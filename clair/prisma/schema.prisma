@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String?
+  /// Adresse utilisée dans l'en-tête des lettres générées.
+  addressLine  String?
+  postalCode   String?
+  city         String?
+  plan         Plan       @default(FREE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  sessions     Session[]
+  documents    Document[]
+  tasks        Task[]
+  letters      Letter[]
+}
+
+enum Plan {
+  FREE
+  PLUS
+}
+
+/// Le jeton de session n'est jamais stocké en clair : seul son hachage SHA-256 l'est.
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Document {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  /// Clé du fichier chiffré dans le stockage. Nulle pour les exemples.
+  storageKey   String?
+  source       DocumentSource @default(UPLOAD)
+  status       DocumentStatus @default(PENDING)
+  title        String
+  sender       String?
+  category     String?
+  language     String?
+  summary      String?
+  /// Résultat complet de l'analyse (validé par le schéma Zod).
+  analysis     Json?
+  amount       Decimal?       @db.Decimal(12, 2)
+  currency     String?
+  dueDate      DateTime?      @db.Date
+  confidence   Float?
+  errorMessage String?
+  analyzedAt   DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  tasks        Task[]
+  letters      Letter[]
+
+  @@index([userId, createdAt])
+}
+
+enum DocumentSource {
+  UPLOAD
+  SAMPLE
+}
+
+enum DocumentStatus {
+  PENDING
+  ANALYZED
+  NEEDS_REVIEW
+  MANUAL
+  FAILED
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentId  String?
+  document    Document?  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  title       String
+  kind        TaskKind   @default(OTHER)
+  dueDate     DateTime?  @db.Date
+  amount      Decimal?   @db.Decimal(12, 2)
+  status      TaskStatus @default(OPEN)
+  remindedAt  DateTime?
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId, status, dueDate])
+}
+
+enum TaskKind {
+  PAY
+  REPLY
+  CANCEL
+  CHECK
+  OTHER
+}
+
+enum TaskStatus {
+  OPEN
+  DONE
+}
+
+model Letter {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentId String?
+  document   Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  templateId String
+  language   String
+  recipient  String
+  subject    String
+  body       String
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, createdAt])
+}

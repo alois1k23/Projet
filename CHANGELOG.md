@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.0 — 2026-10-28
+### Ajouté
+- Application Clair (`clair/`) : inscription et sessions sécurisées, ajout de courriers (photo, PDF), analyse par Claude avec sortie structurée validée, mode saisie manuelle, détection des informations incertaines, échéancier et export .ics, 5 modèles de lettres FR/DE avec PDF, courriers d'exemple, quota gratuit, réglages, export JSON et suppression du compte, thème clair/sombre, interface mobile.
+- Chiffrement AES-256-GCM des documents, Argon2id, contrôle d'accès par propriétaire, limitation des tentatives.
+- Tests : 57 unitaires et d'intégration, 14 parcours Playwright, contrôles axe-core ; test réel de l'API Claude (ignoré sans clé).
+- Intégration continue GitHub Actions.
+- PRODUCT.md (PRD), DESIGN_SYSTEM.md, décisions D-008 à D-016.
+
 ## 0.2.0 — 2026-10-28
 ### Ajouté
 - Étude de marché ciblée sur Clair (MARKET_STUDY.md) : taille du marché, demande, segments, concurrence, prix, distribution, réglementation, SWOT, questionnaire de validation.

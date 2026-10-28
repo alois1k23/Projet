@@ -2,15 +2,16 @@
 
 | Phase | Contenu | Statut |
 |---|---|---|
-| 1 | Recherche des opportunités, 15 concepts | ✅ Terminé |
-| 2 | Analyse multicritère et tableau de bord | ✅ Terminé |
-| 3 | Analyse des 3 finalistes, recommandation | ✅ Terminé · **validation fondateur en attente** |
-| 3 bis | Validation terrain (≈ 3 semaines) : entretiens, corpus, landing page, prévente | ⏳ Proposé |
-| 4 | Identité de marque, vérification du nom et du domaine | 🔒 Après validation |
-| 5 | PRD, personas, parcours, wireframes, MVP / V1 / V2 | 🔒 |
-| 6 | Développement du MVP | 🔒 |
-| 7 | Site de présentation et liste d'attente | 🔒 (une landing de validation peut être avancée en 3 bis) |
-| 8 | Vidéo promotionnelle (Remotion) | 🔒 |
-| 9 | Modèle économique détaillé, prévisionnel 12 mois, plan de lancement | 🔒 |
+| 1–2 | Recherche, 15 concepts, analyse multicritère, tableau de bord | ✅ |
+| 3 | Recommandation : Clair | ✅ Validée par le fondateur (demande de développement) |
+| Étude de marché ciblée | TAM/SAM/SOM, concurrence, prix | ✅ |
+| 4 | Identité de marque et design system | ✅ Première version (nom non vérifié juridiquement) |
+| 5 | PRD | ✅ |
+| 6 | MVP fonctionnel et testé | ✅ |
+| 6 bis | **Bêta fermée : vraie clé API, 20 à 50 testeurs, mesure de la précision** | ⏳ Prochaine étape |
+| 7 | Site de présentation et liste d'attente | 🔜 |
+| 8 | Vidéo promotionnelle (Remotion) | 🔜 |
+| 9 | Modèle économique détaillé et plan de lancement | 🔜 |
+| V1 | Rappels par e-mail, partage familial, interface allemande, offre Plus | 🔜 Après la bêta |
 
-Décisions nécessitant votre accord : choix définitif de l'application, tout engagement financier, achat de domaine, déploiement public, lancement d'un service payant.
+Décisions nécessitant votre accord : achat de domaine, déploiement public, engagement financier (hébergement, API), lancement d'un service payant.
