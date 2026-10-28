@@ -10,8 +10,11 @@ datasource db {
 model User {
   id           String     @id @default(cuid())
   email        String     @unique
-  passwordHash String
+  /// Nul pour les comptes créés par lien e-mail, Google ou Apple.
+  passwordHash String?
   name         String?
+  /// Langue de l'interface et des explications : "fr" ou "de".
+  locale       String     @default("fr")
   /// Adresse utilisée dans l'en-tête des lettres générées.
   addressLine  String?
   postalCode   String?
@@ -23,6 +26,7 @@ model User {
   documents    Document[]
   tasks        Task[]
   letters      Letter[]
+  oauthAccounts OAuthAccount[]
 }
 
 enum Plan {
@@ -46,10 +50,9 @@ model Document {
   userId       String
   user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   originalName String
+  /// Type et taille de la première page (affichage) ; le détail est dans `files`.
   mimeType     String
   sizeBytes    Int
-  /// Clé du fichier chiffré dans le stockage. Nulle pour les exemples.
-  storageKey   String?
   source       DocumentSource @default(UPLOAD)
   status       DocumentStatus @default(PENDING)
   title        String
@@ -69,8 +72,23 @@ model Document {
   updatedAt    DateTime       @updatedAt
   tasks        Task[]
   letters      Letter[]
+  files        DocumentFile[]
 
   @@index([userId, createdAt])
+}
+
+/// Une page (photo) ou un PDF d'un courrier, chiffré dans le stockage.
+model DocumentFile {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  position   Int
+  storageKey String   @unique
+  mimeType   String
+  sizeBytes  Int
+  createdAt  DateTime @default(now())
+
+  @@unique([documentId, position])
 }
 
 enum DocumentSource {
@@ -132,4 +150,44 @@ model Letter {
   createdAt  DateTime  @default(now())
 
   @@index([userId, createdAt])
+}
+
+/// Jeton à usage unique envoyé par e-mail. Seul son hachage SHA-256 est stocké.
+model AuthToken {
+  id        String            @id
+  email     String
+  purpose   AuthTokenPurpose
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime          @default(now())
+
+  @@index([email, purpose])
+}
+
+enum AuthTokenPurpose {
+  LOGIN
+  PASSWORD_RESET
+}
+
+model OAuthAccount {
+  id                String   @id @default(cuid())
+  provider          String
+  providerAccountId String
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+/// Personnes intéressées par une offre ou une langue à venir (site de présentation).
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String
+  interest  String
+  locale    String   @default("fr")
+  createdAt DateTime @default(now())
+
+  @@unique([email, interest])
 }

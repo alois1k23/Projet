@@ -1,6 +1,8 @@
 import type { SupportedMime } from "@/lib/ai/analyzer";
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+/** Taille totale maximale d’un courrier, toutes pages confondues. */
+export const MAX_TOTAL_BYTES = 25 * 1024 * 1024;
 
 /**
  * Détermine le type réel d’un fichier à partir de ses premiers octets.

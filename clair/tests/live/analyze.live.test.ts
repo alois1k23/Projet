@@ -30,7 +30,7 @@ describe.skipIf(!key)("analyse réelle (API Claude)", () => {
       "Referenz: 21 00000 00003 13947 14300 09017",
     ]);
     const analyzer = new AnthropicAnalyzer(new Anthropic({ apiKey: key }), process.env.CLAIR_AI_MODEL ?? "claude-opus-5-5");
-    const result = await analyzer.analyze({ content: pdf, mimeType: "application/pdf", fileName: "facture.pdf", today: new Date("2026-10-28T00:00:00Z") });
+    const result = await analyzer.analyze({ pages: [{ content: pdf, mimeType: "application/pdf" }], fileName: "facture.pdf", today: new Date("2026-10-28T00:00:00Z") });
     expect(result.amount).toBe(1186.45);
     expect(result.dueDate).toBe("2026-11-19");
     expect(result.payment?.iban?.replace(/\s/g, "")).toBe("CH4431999123000889012");

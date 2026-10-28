@@ -6,8 +6,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { storage } from "@/lib/storage";
-import { checkUpload, safeFileName } from "@/lib/files";
-import { AnalysisError, getAnalyzer, type SupportedMime } from "@/lib/ai/analyzer";
+import { checkUpload, MAX_TOTAL_BYTES, safeFileName } from "@/lib/files";
+import { AnalysisError, getAnalyzer, MAX_PAGES, type PageInput, type SupportedMime } from "@/lib/ai/analyzer";
 import { DOCUMENT_TYPES, parseIsoDate } from "@/lib/ai/schema";
 import { analysesThisMonth, applyAnalysis, createSampleDocument, monthlyAllowance } from "@/lib/documents";
 import { analysisLimiter } from "@/lib/rate-limit";
@@ -16,7 +16,7 @@ import type { FormState } from "./types";
 type AnalyzeOutcome = "analyzed" | "manual" | "failed";
 
 /** Lance l’analyse d’un document déjà enregistré et met à jour son statut. */
-async function analyzeDocument(documentId: string, userId: string, content: Buffer, mimeType: SupportedMime, fileName: string): Promise<AnalyzeOutcome> {
+async function analyzeDocument(documentId: string, userId: string, pages: PageInput[], fileName: string): Promise<AnalyzeOutcome> {
   const analyzer = getAnalyzer();
   if (!analyzer) {
     await db.document.update({ where: { id: documentId }, data: { status: "MANUAL" } });
@@ -35,7 +35,7 @@ async function analyzeDocument(documentId: string, userId: string, content: Buff
     return "failed";
   }
   try {
-    const analysis = await analyzer.analyze({ content, mimeType, fileName });
+    const analysis = await analyzer.analyze({ pages, fileName });
     await applyAnalysis(documentId, userId, analysis);
     return "analyzed";
   } catch (error) {
@@ -46,22 +46,38 @@ async function analyzeDocument(documentId: string, userId: string, content: Buff
   }
 }
 
+/** Ajoute un courrier d’une ou plusieurs pages (photos et/ou PDF), puis l’analyse. */
 export async function uploadDocument(_prev: FormState, formData: FormData): Promise<FormState> {
   const user = await requireUser();
-  const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) return { error: "Choisissez une photo ou un PDF de votre courrier." };
+  const files = formData.getAll("file").filter((f): f is File => f instanceof File && f.size > 0);
+  if (files.length === 0) return { error: "Choisissez une photo ou un PDF de votre courrier." };
+  if (files.length > MAX_PAGES) return { error: `Un courrier peut compter ${MAX_PAGES} pages au maximum.` };
 
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const check = checkUpload(bytes);
-  if (!check.ok) return { error: check.error };
+  const pages: (PageInput & { size: number })[] = [];
+  let total = 0;
+  for (const [i, file] of files.entries()) {
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const check = checkUpload(bytes);
+    if (!check.ok) return { error: files.length > 1 ? `Page ${i + 1} : ${check.error}` : check.error };
+    total += bytes.length;
+    pages.push({ content: bytes, mimeType: check.mimeType, size: bytes.length });
+  }
+  if (total > MAX_TOTAL_BYTES) return { error: "Le courrier est trop lourd (25 Mo au maximum). Prenez des photos plutôt que des scans haute résolution." };
 
-  const key = await storage().put(user.id, bytes);
-  const name = safeFileName(file.name || "courrier");
+  const keys = await Promise.all(pages.map((p) => storage().put(user.id, p.content)));
+  const name = safeFileName(files[0]!.name || "courrier");
   const doc = await db.document.create({
-    data: { userId: user.id, originalName: name, mimeType: check.mimeType, sizeBytes: bytes.length, storageKey: key, title: "Nouveau courrier" },
+    data: {
+      userId: user.id,
+      originalName: name,
+      mimeType: pages[0]!.mimeType,
+      sizeBytes: total,
+      title: "Nouveau courrier",
+      files: { create: pages.map((p, i) => ({ position: i + 1, storageKey: keys[i]!, mimeType: p.mimeType, sizeBytes: p.size })) },
+    },
   });
 
-  const outcome = await analyzeDocument(doc.id, user.id, bytes, check.mimeType, name);
+  const outcome = await analyzeDocument(doc.id, user.id, pages, name);
   revalidateAppPages();
   redirect(outcome === "manual" ? `/courriers/${doc.id}?saisie=1` : `/courriers/${doc.id}`);
 }
@@ -69,11 +85,11 @@ export async function uploadDocument(_prev: FormState, formData: FormData): Prom
 export async function retryAnalysis(formData: FormData): Promise<void> {
   const user = await requireUser();
   const id = String(formData.get("documentId") ?? "");
-  const doc = await db.document.findFirst({ where: { id, userId: user.id } });
-  if (!doc || !doc.storageKey) redirect("/courriers");
-  const content = await storage().get(doc.storageKey);
+  const doc = await db.document.findFirst({ where: { id, userId: user.id }, include: { files: { orderBy: { position: "asc" } } } });
+  if (!doc || doc.files.length === 0) redirect("/courriers");
+  const pages = await Promise.all(doc.files.map(async (f) => ({ content: await storage().get(f.storageKey), mimeType: f.mimeType as SupportedMime })));
   await db.document.update({ where: { id: doc.id }, data: { status: "PENDING", errorMessage: null } });
-  await analyzeDocument(doc.id, user.id, content, doc.mimeType as SupportedMime, doc.originalName);
+  await analyzeDocument(doc.id, user.id, pages, doc.originalName);
   revalidateAppPages();
   redirect(`/courriers/${doc.id}`);
 }
@@ -144,10 +160,10 @@ export async function updateDocument(_prev: FormState, formData: FormData): Prom
 
 export async function deleteDocument(formData: FormData): Promise<void> {
   const user = await requireUser();
-  const doc = await db.document.findFirst({ where: { id: String(formData.get("documentId") ?? ""), userId: user.id } });
+  const doc = await db.document.findFirst({ where: { id: String(formData.get("documentId") ?? ""), userId: user.id }, include: { files: true } });
   if (doc) {
     await db.document.delete({ where: { id: doc.id } });
-    if (doc.storageKey) await storage().remove(doc.storageKey);
+    await Promise.all(doc.files.map((f) => storage().remove(f.storageKey)));
   }
   revalidateAppPages();
   redirect("/courriers?supprime=1");

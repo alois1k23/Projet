@@ -7,12 +7,19 @@ import { mockAnalysis } from "./mock";
 
 export type SupportedMime = "application/pdf" | "image/jpeg" | "image/png" | "image/webp" | "image/gif";
 
-export interface AnalyzeInput {
+export interface PageInput {
   content: Buffer;
   mimeType: SupportedMime;
+}
+
+export interface AnalyzeInput {
+  /** Pages du courrier, dans l'ordre (photos et/ou PDF). */
+  pages: PageInput[];
   fileName: string;
   today?: Date;
 }
+
+export const MAX_PAGES = 10;
 
 export interface DocumentAnalyzer {
   readonly name: "anthropic" | "mock";
@@ -37,12 +44,14 @@ export class AnthropicAnalyzer implements DocumentAnalyzer {
     private readonly model: string,
   ) {}
 
-  async analyze({ content, mimeType, today = new Date() }: AnalyzeInput): Promise<NormalizedAnalysis> {
-    const data = content.toString("base64");
-    const fileBlock: Anthropic.Beta.BetaContentBlockParam =
-      mimeType === "application/pdf"
+  async analyze({ pages, today = new Date() }: AnalyzeInput): Promise<NormalizedAnalysis> {
+    if (pages.length === 0) throw new AnalysisError("Aucune page à analyser.", false);
+    const fileBlocks: Anthropic.Beta.BetaContentBlockParam[] = pages.map(({ content, mimeType }) => {
+      const data = content.toString("base64");
+      return mimeType === "application/pdf"
         ? { type: "document", source: { type: "base64", media_type: "application/pdf", data } }
         : { type: "image", source: { type: "base64", media_type: mimeType, data } };
+    });
 
     let response;
     try {
@@ -53,7 +62,7 @@ export class AnthropicAnalyzer implements DocumentAnalyzer {
         fallbacks: "default",
         system: SYSTEM_PROMPT,
         output_config: { effort: "medium", format: betaZodOutputFormat(AnalysisOutputSchema) },
-        messages: [{ role: "user", content: [fileBlock, { type: "text", text: userInstruction(today) }] }],
+        messages: [{ role: "user", content: [...fileBlocks, { type: "text", text: userInstruction(today, pages.length) }] }],
       });
     } catch (error) {
       throw toAnalysisError(error);

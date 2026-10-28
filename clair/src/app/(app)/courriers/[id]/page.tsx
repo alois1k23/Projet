@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Check, ExternalLink, FileText, PenLine, RefreshCw, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, FileText, PenLine, RefreshCw, Trash2 } from "lucide-react";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { storedAnalysis } from "@/lib/documents";
@@ -35,7 +35,7 @@ export default async function DocumentPage({ params, searchParams }: { params: P
   const { saisie } = await searchParams;
   const doc = await db.document.findFirst({
     where: { id, userId: user.id },
-    include: { tasks: { orderBy: [{ status: "asc" }, { dueDate: "asc" }] }, letters: { orderBy: { createdAt: "desc" } } },
+    include: { tasks: { orderBy: [{ status: "asc" }, { dueDate: "asc" }] }, letters: { orderBy: { createdAt: "desc" } }, files: { orderBy: { position: "asc" } } },
   });
   if (!doc) notFound();
 
@@ -74,7 +74,7 @@ export default async function DocumentPage({ params, searchParams }: { params: P
           {doc.status === "FAILED" ? (
             <Notice tone="danger" title="L’analyse n’a pas abouti">
               <p>{doc.errorMessage ?? "Une erreur est survenue."}</p>
-              {doc.storageKey ? (
+              {doc.files.length > 0 ? (
                 <form action={retryAnalysis} className="mt-3">
                   <input type="hidden" name="documentId" value={doc.id} />
                   <SubmitButton variant="secondary" size="sm" pendingLabel="Nouvelle analyse…">
@@ -198,21 +198,28 @@ export default async function DocumentPage({ params, searchParams }: { params: P
             <SectionTitle>Original</SectionTitle>
             {sample ? (
               <pre className="rounded-lg bg-surface-2 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-ink-2">{sample.text(today)}</pre>
-            ) : doc.storageKey ? (
-              <>
-                {doc.mimeType.startsWith("image/") ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- fichier déchiffré servi par une route authentifiée
-                  <img src={`/api/documents/${doc.id}/fichier`} alt={`Courrier original : ${doc.title}`} className="w-full rounded-lg border border-line" />
-                ) : (
-                  <div className="grid place-items-center rounded-lg bg-surface-2 py-8 text-ink-2">
-                    <FileText className="size-8" aria-hidden="true" />
-                    <span className="mt-2 text-sm">Document PDF</span>
-                  </div>
-                )}
-                <a href={`/api/documents/${doc.id}/fichier`} target="_blank" rel="noopener" className={buttonClass("secondary", "sm", "mt-3 w-full")}>
-                  <ExternalLink className="size-4" aria-hidden="true" /> Ouvrir l’original
-                </a>
-              </>
+            ) : doc.files.length > 0 ? (
+              <ol className="space-y-3">
+                {doc.files.map((f) => {
+                  const url = `/api/documents/${doc.id}/fichier?page=${f.position}`;
+                  const label = doc.files.length > 1 ? `Page ${f.position}` : "Courrier original";
+                  return (
+                    <li key={f.id}>
+                      {doc.files.length > 1 ? <p className="mb-1 text-xs font-semibold text-ink-3">Page {f.position}</p> : null}
+                      {f.mimeType.startsWith("image/") ? (
+                        <a href={url} target="_blank" rel="noopener" className="block">
+                          {/* eslint-disable-next-line @next/next/no-img-element -- fichier déchiffré servi par une route authentifiée */}
+                          <img src={url} alt={`${label} : ${doc.title}`} className="w-full rounded-lg border border-line" />
+                        </a>
+                      ) : (
+                        <a href={url} target="_blank" rel="noopener" className={buttonClass("secondary", "sm", "w-full")}>
+                          <FileText className="size-4" aria-hidden="true" /> Ouvrir le PDF
+                        </a>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
             ) : null}
             <p className="mt-3 text-xs text-ink-3">Ajouté le {formatDate(doc.createdAt)}</p>
           </Card>

@@ -1,4 +1,7 @@
 import { randomBytes } from "node:crypto";
+import { readFileSync, existsSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { deflateSync } from "node:zlib";
 import { expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
@@ -69,4 +72,23 @@ export function noisePng(width: number, height: number): Buffer {
     chunk("IDAT", deflateSync(Buffer.concat(rows), { level: 1 })),
     chunk("IEND", Buffer.alloc(0)),
   ]);
+}
+
+const OUTBOX = path.join(os.tmpdir(), "clair-e2e-storage", "outbox.jsonl");
+
+/** Derniers e-mails « envoyés » à une adresse par le serveur de test (transport fichier). */
+export function emailsTo(to: string): { subject: string; text: string; html: string }[] {
+  if (!existsSync(OUTBOX)) return [];
+  return readFileSync(OUTBOX, "utf8")
+    .trim()
+    .split("\n")
+    .filter(Boolean)
+    .map((l) => JSON.parse(l))
+    .filter((m) => m.to === to);
+}
+
+export function linkIn(text: string): string {
+  const match = text.match(/https?:\/\/\S+jeton=[A-Za-z0-9_-]+/);
+  if (!match) throw new Error("Aucun lien dans l’e-mail");
+  return match[0];
 }

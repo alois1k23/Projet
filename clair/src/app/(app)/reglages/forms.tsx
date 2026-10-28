@@ -2,6 +2,8 @@
 
 import { useActionState } from "react";
 import { deleteAccount, updateProfile } from "@/app/actions/account";
+import { changePassword } from "@/app/actions/email-auth";
+import { PasswordInput } from "@/components/password-input";
 import { initialFormState } from "@/app/actions/types";
 import { SubmitButton } from "@/components/client";
 import { FieldError, Input, Label } from "@/components/ui";
@@ -55,6 +57,33 @@ export function DeleteAccountForm({ email }: { email: string }) {
       <SubmitButton variant="danger" pendingLabel="Suppression…">
         Supprimer définitivement mon compte
       </SubmitButton>
+    </form>
+  );
+}
+
+export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
+  const [state, action] = useActionState(changePassword, initialFormState);
+  const e = state.fieldErrors ?? {};
+  return (
+    <form action={action} className="space-y-4" noValidate>
+      {hasPassword ? (
+        <div>
+          <Label htmlFor="currentPassword">Mot de passe actuel</Label>
+          <PasswordInput id="currentPassword" name="currentPassword" autoComplete="current-password" aria-invalid={!!e.currentPassword} aria-describedby="currentPassword-error" />
+          <FieldError id="currentPassword-error" message={e.currentPassword} />
+        </div>
+      ) : null}
+      <div>
+        <Label htmlFor="newPassword">{hasPassword ? "Nouveau mot de passe" : "Mot de passe"}</Label>
+        <PasswordInput id="newPassword" name="newPassword" autoComplete="new-password" aria-invalid={!!e.newPassword} aria-describedby="newPassword-error" />
+        <FieldError id="newPassword-error" message={e.newPassword} />
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <SubmitButton pendingLabel="Enregistrement…">{hasPassword ? "Changer le mot de passe" : "Définir un mot de passe"}</SubmitButton>
+        <p role="status" aria-live="polite" className="text-sm font-semibold text-success">
+          {state.success}
+        </p>
+      </div>
     </form>
   );
 }

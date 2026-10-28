@@ -7,19 +7,19 @@ export async function GET() {
   const user = await getCurrentUser();
   if (!user) return new Response("Non autorisé", { status: 401 });
   const [documents, tasks, letters] = await Promise.all([
-    db.document.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
+    db.document.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" }, include: { files: { orderBy: { position: "asc" } } } }),
     db.task.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
     db.letter.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
   ]);
   const files = await Promise.all(
-    documents.map(async (d) => (d.storageKey ? { documentId: d.id, mimeType: d.mimeType, base64: (await storage().get(d.storageKey)).toString("base64") } : null)),
+    documents.flatMap((d) => d.files.map(async (f) => ({ documentId: d.id, page: f.position, mimeType: f.mimeType, base64: (await storage().get(f.storageKey)).toString("base64") }))),
   );
   const payload = {
     exportedAt: new Date().toISOString(),
     format: "clair-export-v1",
     profile: { email: user.email, name: user.name, addressLine: user.addressLine, postalCode: user.postalCode, city: user.city, plan: user.plan, createdAt: user.createdAt },
-    documents: documents.map(({ storageKey: _key, userId: _user, ...d }) => d),
-    files: files.filter(Boolean),
+    documents: documents.map(({ userId: _user, files: pages, ...d }) => ({ ...d, pageCount: pages.length })),
+    files,
     tasks: tasks.map(({ userId: _user, ...t }) => t),
     letters: letters.map(({ userId: _user, ...l }) => l),
   };

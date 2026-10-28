@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
-import { Camera, FileUp, ImagePlus } from "lucide-react";
+import { Camera, FileText, FileUp, ImagePlus, Plus, X } from "lucide-react";
 import { uploadDocument } from "@/app/actions/documents";
 import { initialFormState } from "@/app/actions/types";
 import { Notice, buttonClass, cx } from "@/components/ui";
@@ -9,8 +9,26 @@ import { prepareImage } from "@/lib/prepare-image";
 
 const ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf";
 const MAX_BYTES = 10 * 1024 * 1024;
+const MAX_PAGES = 10;
 
-function Progress({ aiEnabled, preview, name }: { aiEnabled: boolean; preview: string | null; name: string }) {
+interface Page {
+  file: File;
+  preview: string | null;
+}
+
+function Thumb({ page, size = "md" }: { page: Page; size?: "md" | "lg" }) {
+  const box = size === "lg" ? "h-36 w-26" : "h-24 w-18";
+  return page.preview ? (
+    // eslint-disable-next-line @next/next/no-img-element -- aperçu local (blob:), non optimisable
+    <img src={page.preview} alt="" className={cx(box, "shrink-0 rounded-lg border border-line object-cover")} />
+  ) : (
+    <span className={cx(box, "grid shrink-0 place-items-center rounded-lg bg-surface-2 text-ink-2")}>
+      <FileText className="size-6" aria-hidden="true" />
+    </span>
+  );
+}
+
+function Progress({ aiEnabled, pages }: { aiEnabled: boolean; pages: Page[] }) {
   const [step, setStep] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setStep((s) => Math.min(s + 1, 3)), 4000);
@@ -21,14 +39,9 @@ function Progress({ aiEnabled, preview, name }: { aiEnabled: boolean; preview: s
     : ["Envoi sécurisé du document…"];
   return (
     <div className="flex items-center gap-4 rounded-[var(--radius-card)] border border-line bg-surface p-4" role="status" aria-live="polite">
-      {preview ? (
-        // eslint-disable-next-line @next/next/no-img-element -- aperçu local (blob:), non optimisable
-        <img src={preview} alt="" className="h-24 w-18 shrink-0 rounded-lg border border-line object-cover" />
-      ) : (
-        <span className="grid h-24 w-18 shrink-0 place-items-center rounded-lg bg-surface-2 text-xs font-bold text-ink-2">PDF</span>
-      )}
+      {pages[0] ? <Thumb page={pages[0]} /> : null}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm text-ink-3">{name}</p>
+        <p className="text-sm text-ink-3">{pages.length > 1 ? `${pages.length} pages` : (pages[0]?.file.name ?? "")}</p>
         <p className="mt-1 flex items-center gap-2 font-semibold text-primary">
           <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-current border-r-transparent" aria-hidden="true" />
           {steps[Math.min(step, steps.length - 1)]}
@@ -40,36 +53,51 @@ function Progress({ aiEnabled, preview, name }: { aiEnabled: boolean; preview: s
 }
 
 /**
- * Un seul geste : dès qu'une photo est prise ou qu'un fichier est choisi, l'envoi et l'analyse démarrent.
+ * Choisir des fichiers lance l’analyse tout de suite.
+ * Avec l’appareil photo, on voit les pages prises et on peut en ajouter avant d’analyser.
  */
 export function UploadForm({ aiEnabled }: { aiEnabled: boolean }) {
   const [state, action, pending] = useActionState(uploadDocument, initialFormState);
   const [preparing, startPreparing] = useTransition();
-  const [current, setCurrent] = useState<{ name: string; preview: string | null } | null>(null);
+  const [pages, setPages] = useState<Page[]>([]);
   const [localError, setLocalError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const busy = pending || preparing;
+  const reviewing = pages.length > 0 && !pending;
 
-  useEffect(() => () => {
-    if (current?.preview) URL.revokeObjectURL(current.preview);
-  }, [current]);
+  useEffect(() => () => pages.forEach((p) => p.preview && URL.revokeObjectURL(p.preview)), [pages]);
 
-  function select(original: File | null) {
+  function submit(all: Page[]) {
+    const dt = new DataTransfer();
+    all.forEach((p) => dt.items.add(p.file));
+    if (inputRef.current) inputRef.current.files = dt.files;
+    formRef.current?.requestSubmit();
+  }
+
+  /** Prépare les fichiers ; `autoSubmit` envoie directement s’ils viennent d’un choix de fichiers. */
+  function add(list: FileList | File[] | null, autoSubmit: boolean) {
     setLocalError(null);
-    if (!original) return;
+    const originals = Array.from(list ?? []);
+    if (originals.length === 0) return;
     startPreparing(async () => {
-      const file = await prepareImage(original);
-      if (file.size > MAX_BYTES) {
-        setLocalError("Le fichier dépasse 10 Mo. Prenez une photo plutôt qu’un scan haute résolution, ou réduisez le PDF.");
+      const prepared: Page[] = [];
+      for (const original of originals) {
+        const file = await prepareImage(original);
+        if (file.size > MAX_BYTES) {
+          setLocalError("Un fichier dépasse 10 Mo. Prenez une photo plutôt qu’un scan haute résolution, ou réduisez le PDF.");
+          return;
+        }
+        prepared.push({ file, preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : null });
+      }
+      const all = [...pages, ...prepared];
+      if (all.length > MAX_PAGES) {
+        setLocalError(`Un courrier peut compter ${MAX_PAGES} pages au maximum.`);
         return;
       }
-      setCurrent({ name: original.name, preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : null });
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      if (inputRef.current) inputRef.current.files = dt.files;
-      formRef.current?.requestSubmit();
+      setPages(all);
+      if (autoSubmit && pages.length === 0) submit(all);
     });
   }
 
@@ -78,11 +106,47 @@ export function UploadForm({ aiEnabled }: { aiEnabled: boolean }) {
   return (
     <form ref={formRef} action={action} className="space-y-4">
       {error ? <Notice tone="danger">{error}</Notice> : null}
+      <input ref={inputRef} id="file" name="file" type="file" multiple accept={ACCEPT} className="sr-only" tabIndex={-1} aria-hidden="true" onChange={(e) => add(e.currentTarget.files, true)} />
 
-      <input ref={inputRef} id="file" name="file" type="file" accept={ACCEPT} className="sr-only" tabIndex={-1} aria-hidden="true" onChange={(e) => select(e.currentTarget.files?.[0] ?? null)} />
-
-      {busy && current ? (
-        <Progress aiEnabled={aiEnabled} preview={current.preview} name={current.name} />
+      {pending ? (
+        <Progress aiEnabled={aiEnabled} pages={pages} />
+      ) : reviewing ? (
+        <div className="rounded-[var(--radius-card)] border border-line bg-surface p-4 sm:p-5">
+          <p className="font-bold">
+            {pages.length} page{pages.length > 1 ? "s" : ""} prête{pages.length > 1 ? "s" : ""}
+          </p>
+          <p className="mt-0.5 text-sm text-ink-2">Le courrier a une autre page ? Ajoutez-la avant d’analyser.</p>
+          <ol className="mt-4 flex flex-wrap gap-3" aria-label="Pages du courrier">
+            {pages.map((p, i) => (
+              <li key={p.preview ?? `${p.file.name}-${i}`} className="relative">
+                <Thumb page={p} size="lg" />
+                <span className="absolute bottom-1.5 left-1.5 rounded-md bg-ink/80 px-1.5 py-0.5 text-xs font-bold text-bg">{i + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => setPages(pages.filter((_, j) => j !== i))}
+                  aria-label={`Retirer la page ${i + 1}`}
+                  className="absolute -top-2 -right-2 grid size-7 place-items-center rounded-full border border-line bg-surface text-ink-2 shadow-card hover:text-danger"
+                >
+                  <X className="size-4" aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+            {pages.length < MAX_PAGES ? (
+              <li>
+                <label className="grid h-36 w-26 cursor-pointer place-items-center rounded-lg border-2 border-dashed border-line-strong text-center text-xs font-semibold text-ink-2 hover:border-primary hover:text-primary">
+                  <span>
+                    <Plus className="mx-auto mb-1 size-5" aria-hidden="true" />
+                    Ajouter une page
+                  </span>
+                  <input type="file" accept="image/*" capture="environment" className="sr-only" disabled={busy} onChange={(e) => add(e.currentTarget.files, false)} />
+                </label>
+              </li>
+            ) : null}
+          </ol>
+          <button type="button" disabled={busy} onClick={() => submit(pages)} className={buttonClass("primary", "lg", "mt-5 w-full")}>
+            {aiEnabled ? "Analyser" : "Enregistrer"} {pages.length > 1 ? `les ${pages.length} pages` : "ce courrier"}
+          </button>
+        </div>
       ) : (
         <div
           onDragOver={(e) => {
@@ -93,7 +157,7 @@ export function UploadForm({ aiEnabled }: { aiEnabled: boolean }) {
           onDrop={(e) => {
             e.preventDefault();
             setDragging(false);
-            select(e.dataTransfer.files[0] ?? null);
+            add(e.dataTransfer.files, true);
           }}
           className={cx(
             "flex flex-col items-center rounded-[var(--radius-card)] border-2 border-dashed bg-surface px-6 py-10 text-center transition-colors",
@@ -104,22 +168,23 @@ export function UploadForm({ aiEnabled }: { aiEnabled: boolean }) {
             <Camera className="size-7" />
           </span>
           <p className="text-lg font-bold">Photographiez votre courrier</p>
-          <p className="mt-1 max-w-sm text-sm text-ink-2">Posez la lettre à plat, dans un endroit éclairé, avec toute la page visible. L’analyse démarre toute seule.</p>
+          <p className="mt-1 max-w-sm text-sm text-ink-2">Posez la lettre à plat, dans un endroit éclairé, avec toute la page visible. Plusieurs pages ? Vous pourrez les ajouter.</p>
           <div className="mt-6 flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
             <label className={buttonClass("primary", "lg", "cursor-pointer sm:hidden")}>
               <Camera className="size-5" aria-hidden="true" /> Prendre une photo
-              <input type="file" accept="image/*" capture="environment" className="sr-only" disabled={busy} onChange={(e) => select(e.currentTarget.files?.[0] ?? null)} />
+              <input type="file" accept="image/*" capture="environment" className="sr-only" disabled={busy} onChange={(e) => add(e.currentTarget.files, false)} />
             </label>
             <label className={buttonClass("secondary", "lg", "cursor-pointer sm:hidden")}>
-              <ImagePlus className="size-5" aria-hidden="true" /> Choisir une photo ou un PDF
-              <input type="file" accept={ACCEPT} className="sr-only" disabled={busy} onChange={(e) => select(e.currentTarget.files?.[0] ?? null)} />
+              <ImagePlus className="size-5" aria-hidden="true" /> Choisir des photos ou un PDF
+              <input type="file" multiple accept={ACCEPT} className="sr-only" disabled={busy} onChange={(e) => add(e.currentTarget.files, true)} />
             </label>
             <label className={buttonClass("primary", "lg", "hidden cursor-pointer sm:inline-flex")}>
-              <FileUp className="size-5" aria-hidden="true" /> Choisir un fichier
-              <input data-testid="desktop-file" type="file" accept={ACCEPT} className="sr-only" disabled={busy} onChange={(e) => select(e.currentTarget.files?.[0] ?? null)} />
+              <FileUp className="size-5" aria-hidden="true" /> Choisir des fichiers
+              <input data-testid="desktop-file" type="file" multiple accept={ACCEPT} className="sr-only" disabled={busy} onChange={(e) => add(e.currentTarget.files, true)} />
             </label>
           </div>
-          <p className="mt-4 hidden text-xs text-ink-3 sm:block">ou glissez-déposez le fichier ici · photo ou PDF, 10 Mo au maximum</p>
+          <p className="mt-4 hidden text-xs text-ink-3 sm:block">ou glissez-déposez ici · photos ou PDF, 10 pages au maximum</p>
+          {preparing ? <p className="mt-3 text-sm font-semibold text-primary" role="status">Préparation des photos…</p> : null}
         </div>
       )}
     </form>

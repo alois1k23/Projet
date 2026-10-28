@@ -7,7 +7,7 @@ import { analysesThisMonth, monthlyAllowance } from "@/lib/documents";
 import { logout } from "@/app/actions/auth";
 import { Badge, Card, PageHeader, buttonClass } from "@/components/ui";
 import { ThemeToggle } from "@/components/client";
-import { DeleteAccountForm, ProfileForm } from "./forms";
+import { DeleteAccountForm, PasswordForm, ProfileForm } from "./forms";
 
 export const metadata: Metadata = { title: "Réglages" };
 
@@ -33,6 +33,13 @@ export default async function SettingsPage() {
 
       <Section title="Profil" description="Votre nom et votre adresse apparaissent en en-tête des lettres que Clair prépare.">
         <ProfileForm defaults={{ name: user.name ?? "", addressLine: user.addressLine ?? "", postalCode: user.postalCode ?? "", city: user.city ?? "" }} />
+      </Section>
+
+      <Section
+        title="Connexion"
+        description={user.passwordHash ? "Changez votre mot de passe." : "Vous vous connectez par lien e-mail, Google ou Apple. Vous pouvez aussi définir un mot de passe."}
+      >
+        <PasswordForm hasPassword={Boolean(user.passwordHash)} />
       </Section>
 
       <Section title="Offre">

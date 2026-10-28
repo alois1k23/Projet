@@ -97,7 +97,9 @@ describe("suppression du compte", () => {
   it("supprime en cascade documents, tâches, lettres, sessions et fichiers", async () => {
     const user = await makeUser();
     const key = await storage().put(user.id, Buffer.from("%PDF-1.7 secret"));
-    const doc = await db.document.create({ data: { userId: user.id, originalName: "a.pdf", mimeType: "application/pdf", sizeBytes: 10, title: "x", storageKey: key } });
+    const doc = await db.document.create({
+      data: { userId: user.id, originalName: "a.pdf", mimeType: "application/pdf", sizeBytes: 10, title: "x", files: { create: [{ position: 1, storageKey: key, mimeType: "application/pdf", sizeBytes: 10 }] } },
+    });
     await db.task.create({ data: { userId: user.id, documentId: doc.id, title: "Payer" } });
     await db.letter.create({ data: { userId: user.id, documentId: doc.id, templateId: "delai-paiement", language: "fr", recipient: "x", subject: "y", body: "z" } });
     await db.session.create({ data: { id: "hash", userId: user.id, expiresAt: new Date(Date.now() + 1000) } });
@@ -109,6 +111,7 @@ describe("suppression du compte", () => {
     expect(await db.task.count()).toBe(0);
     expect(await db.letter.count()).toBe(0);
     expect(await db.session.count()).toBe(0);
+    expect(await db.documentFile.count()).toBe(0);
     await expect(storage().get(key)).rejects.toThrow();
   });
 });

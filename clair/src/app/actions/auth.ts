@@ -65,7 +65,7 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
 
   const user = await db.user.findUnique({ where: { email: address } });
   // Même message dans les deux cas pour ne pas révéler l’existence d’un compte.
-  if (!user || !(await verifyPassword(user.passwordHash, password))) {
+  if (!user || !user.passwordHash || !(await verifyPassword(user.passwordHash, password))) {
     return { error: "E-mail ou mot de passe incorrect.", values };
   }
   loginLimiter.reset(key);

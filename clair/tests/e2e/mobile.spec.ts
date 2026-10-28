@@ -13,8 +13,16 @@ test("parcours mobile : navigation du bas, ajout et lecture d'un courrier sans d
 
   await nav.getByRole("link", { name: "Ajouter un courrier" }).click();
   await expect(page.getByText("Prendre une photo")).toBeVisible();
-  await page.getByLabel("Choisir une photo ou un PDF").setInputFiles(path.join(__dirname, "fixtures", "prime-2027.png"));
+  // Appareil photo : on prend deux pages, puis on lance l'analyse.
+  const fixture = path.join(__dirname, "fixtures", "prime-2027.png");
+  await page.getByLabel("Prendre une photo").setInputFiles(fixture);
+  await expect(page.getByText("1 page prête")).toBeVisible();
+  await page.getByLabel("Ajouter une page").setInputFiles(fixture);
+  await expect(page.getByText("2 pages prêtes")).toBeVisible();
+  await page.getByRole("button", { name: "Analyser les 2 pages" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText("assurance-maladie");
+  await expect(page.getByRole("img", { name: /^Page 1 :/ })).toBeVisible();
+  await expect(page.getByRole("img", { name: /^Page 2 :/ })).toBeVisible();
   await expectNoHorizontalScroll(page);
 
   for (const label of ["À faire", "Courriers", "Réglages", "Accueil"]) {

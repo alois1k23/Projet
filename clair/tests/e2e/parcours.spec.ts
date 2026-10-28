@@ -127,6 +127,20 @@ test.describe("courriers", () => {
     await expect(page.getByText("Vérifiez les informations signalées")).toHaveCount(0);
   });
 
+  test("plusieurs fichiers choisis d’un coup forment un seul courrier de plusieurs pages", async ({ page }) => {
+    await signup(page);
+    await page.goto("/courriers/nouveau");
+    await page.getByTestId("desktop-file").setInputFiles([fixture("prime-2027.png"), fixture("prime-2027.png"), fixture("prime-2027.png")]);
+    await expect(page).toHaveURL(/\/courriers\/c[a-z0-9]{20,}$/);
+    for (const n of [1, 2, 3]) await expect(page.getByRole("img", { name: new RegExp(`^Page ${n} :`) })).toBeVisible();
+    const page3 = await page.request.get(page.url().replace("/courriers/", "/api/documents/") + "/fichier?page=3");
+    expect(page3.headers()["content-type"]).toBe("image/png");
+    expect((await page.request.get(page.url().replace("/courriers/", "/api/documents/") + "/fichier?page=4")).status()).toBe(404);
+    const exported = await (await page.request.get("/api/export")).json();
+    expect(exported.documents[0].pageCount).toBe(3);
+    expect(exported.files).toHaveLength(3);
+  });
+
   test("refuse un fichier qui n'est pas une image ni un PDF", async ({ page }) => {
     await signup(page);
     await page.goto("/courriers/nouveau");

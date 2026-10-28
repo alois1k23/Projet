@@ -9,7 +9,7 @@ import { PasswordInput } from "@/components/password-input";
 import { FieldError, Input, Label, Notice } from "@/components/ui";
 import { PASSWORD_MIN_LENGTH } from "@/lib/auth/constants";
 
-export function LoginForm() {
+export function LoginForm({ mail }: { mail: boolean }) {
   const [state, action] = useActionState(login, initialFormState);
   const e = state.fieldErrors ?? {};
   return (
@@ -21,7 +21,14 @@ export function LoginForm() {
         <FieldError id="email-error" message={e.email} />
       </div>
       <div>
-        <Label htmlFor="password">Mot de passe</Label>
+        <div className="flex items-baseline justify-between gap-3">
+          <Label htmlFor="password">Mot de passe</Label>
+          {mail ? (
+            <Link href="/mot-de-passe-oublie" className="text-sm font-semibold text-primary hover:underline">
+              Mot de passe oublié ?
+            </Link>
+          ) : null}
+        </div>
         <PasswordInput id="password" name="password" autoComplete="current-password" required aria-invalid={!!e.password} aria-describedby="password-error" />
         <FieldError id="password-error" message={e.password} />
       </div>

@@ -13,6 +13,7 @@ const serverEnv = {
   ANTHROPIC_API_KEY: "",
   CLAIR_APP_URL: `http://localhost:${PORT}`,
   CLAIR_INSECURE_COOKIES: "1",
+  CLAIR_MAIL_TRANSPORT: "file",
 };
 
 export default defineConfig({

@@ -32,7 +32,8 @@ Limites
 - Tu donnes des informations, pas un conseil juridique ou fiscal. Si l’enjeu est important (poursuite, litige, montant élevé), ajoute un point d’attention recommandant de demander conseil.
 - Si l’image n’est pas un document administratif, mets isAdministrativeDocument à false et explique-le dans le résumé.`;
 
-export function userInstruction(today: Date): string {
+export function userInstruction(today: Date, pageCount = 1): string {
   const iso = today.toISOString().slice(0, 10);
-  return `Nous sommes le ${iso}. Analyse ce courrier.`;
+  const pages = pageCount > 1 ? ` Il compte ${pageCount} pages, fournies dans l’ordre : analyse-les ensemble comme un seul courrier.` : "";
+  return `Nous sommes le ${iso}. Analyse ce courrier.${pages}`;
 }

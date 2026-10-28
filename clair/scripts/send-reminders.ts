@@ -1,14 +1,22 @@
 /**
- * Envoie les rappels d'échéances. À planifier une fois par jour (cron, tâche planifiée).
+ * Envoie les rappels d’échéances et nettoie les jetons expirés. À planifier une fois par jour.
  * Usage : npm run reminders
  */
 import { db } from "../src/lib/db";
-import { logNotifier, sendDueReminders } from "../src/lib/reminders";
+import { getMailer } from "../src/lib/mail";
+import { logNotifier, mailNotifier, sendDueReminders } from "../src/lib/reminders";
+import { purgeExpiredTokens } from "../src/lib/auth/tokens";
 
 const appUrl = process.env.CLAIR_APP_URL ?? "http://localhost:3000";
 
-sendDueReminders(logNotifier, appUrl)
-  .then((count) => console.log(`${count} échéance(s) rappelée(s).`))
+async function main() {
+  const mailer = getMailer();
+  const count = await sendDueReminders(mailer ? mailNotifier(mailer) : logNotifier, appUrl);
+  console.log(`${count} échéance(s) rappelée(s) via ${mailer ? mailer.kind : "le journal"}.`);
+  console.log(`${await purgeExpiredTokens()} jeton(s) expiré(s) supprimé(s).`);
+}
+
+main()
   .catch((error) => {
     console.error(error);
     process.exitCode = 1;

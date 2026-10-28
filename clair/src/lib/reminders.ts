@@ -1,16 +1,24 @@
 import { db } from "@/lib/db";
 import { shouldRemind, todayInZurich } from "@/lib/deadlines";
 import { formatDate, formatMoney, toNumber } from "@/lib/format";
+import type { Mailer } from "@/lib/mail";
+import { reminderEmail } from "@/lib/mail/templates";
 
 export interface ReminderMessage {
   to: string;
   subject: string;
   text: string;
+  html?: string;
 }
 
 /** Canal d'envoi des rappels. Seul le journal est implémenté : un fournisseur d'e-mail reste à brancher. */
 export interface Notifier {
   send(message: ReminderMessage): Promise<void>;
+}
+
+/** Envoi des rappels par e-mail avec le service configuré (SMTP en production). */
+export function mailNotifier(mailer: Mailer): Notifier {
+  return { send: (m) => mailer.send({ to: m.to, subject: m.subject, text: m.text, html: m.html ?? m.text }) };
 }
 
 export const logNotifier: Notifier = {
@@ -34,10 +42,12 @@ export async function sendDueReminders(notifier: Notifier, appUrl: string, now =
   for (const tasks of byUser.values()) {
     const user = tasks[0]!.user;
     const lines = tasks.map((t) => `• ${t.title} – ${formatDate(t.dueDate)}${toNumber(t.amount) !== null ? ` – ${formatMoney(toNumber(t.amount))}` : ""}`);
+    const email = reminderEmail(user.name?.split(" ")[0] ?? null, lines, `${appUrl}/echeances`, tasks.length);
     await notifier.send({
       to: user.email,
       subject: tasks.length === 1 ? `Rappel : ${tasks[0]!.title}` : `Rappel : ${tasks.length} échéances approchent`,
       text: `Bonjour${user.name ? ` ${user.name.split(" ")[0]}` : ""},\n\n${lines.join("\n")}\n\nVoir dans Clair : ${appUrl}/echeances`,
+      html: email.html,
     });
     await db.task.updateMany({ where: { id: { in: tasks.map((t) => t.id) } }, data: { remindedAt: now } });
   }
