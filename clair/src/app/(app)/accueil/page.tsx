@@ -87,7 +87,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           </div>
         </Card>
       ) : (
-        <div className="grid gap-8">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-8">
           {tasks.length === 0 ? (
             <EmptyState icon={<CheckCircle2 className="size-6" />} title={h.allDone}>
               {h.allDoneText}

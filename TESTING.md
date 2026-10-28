@@ -82,7 +82,7 @@ Défauts trouvés par les tests et corrigés : test « mot de passe oublié » q
 | `npm run test:e2e` | ✅ 28 parcours réussis (démo complète en français, démo en allemand, boutons d'ordinateur absents sur mobile) |
 | `docker compose -f docker-compose.demo.yml up --build` | ✅ Image construite, migrations appliquées, démo parcourue de bout en bout (vidéo enregistrée sur ce conteneur). Ici, l'image de base a été tirée d'un miroir et le proxy de l'environnement ajouté dans une copie de test du Dockerfile ; le Dockerfile livré est standard et n'a pas été construit tel quel. |
 
-Défauts trouvés et corrigés : compilation impossible sans base de données (sitemap et robots générés à la compilation) ; boutons réservés à l'ordinateur visibles sur téléphone.
+Défauts trouvés et corrigés : défilement horizontal sur téléphone à l'accueil et dans « À faire » (non détecté jusque-là, car le contrôle mobile comparait la page à une fenêtre que l'émulation élargit ; corrigé, 29 parcours) ; compilation impossible sans base de données (sitemap et robots générés à la compilation) ; boutons réservés à l'ordinateur visibles sur téléphone.
 
 ### Ce qui n'est pas testé
 - L'analyse réelle par Claude : aucun courrier n'a été lu par le vrai modèle. C'est le risque n° 1 (hypothèse H3).

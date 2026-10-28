@@ -8,6 +8,7 @@
 - Vidéo de démonstration (`demo/clair-demo.mp4`, 40 s, enregistrée sur l'image Docker).
 ### Corrigé
 - `sitemap.xml` et `robots.txt` étaient générés à la compilation : la compilation échouait sans base de données et l'adresse du site était figée. Ils sont maintenant calculés à chaque requête.
+- Sur téléphone, l'accueil et « À faire » défilaient horizontalement (jusqu'à 83 px) quand un intitulé était long : les grilles de ces pages s'élargissaient pour loger le texte tronqué. Le test mobile ne voyait rien, car l'émulation élargit la fenêtre quand le contenu déborde ; il compare désormais à la largeur réelle de l'écran et parcourt tous les écrans de la démo.
 - Sur téléphone, des boutons réservés à l'ordinateur s'affichaient (« Choisir des fichiers », « Ajouter » dans Courriers) : leur classe `hidden` était écrasée par le style du bouton.
 
 ## 0.5.0 — 2026-10-28 · Version complète (demande « Tout ! »)

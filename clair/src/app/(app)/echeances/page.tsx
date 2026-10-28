@@ -46,7 +46,7 @@ export default async function DeadlinesPage() {
           {k.emptyText}
         </EmptyState>
       ) : (
-        <div className="grid gap-8">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-8">
           {([
             [t.home.overdue, groups.overdue],
             [k.week, groups.week],

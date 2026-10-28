@@ -34,9 +34,14 @@ export async function expectAccessible(page: Page) {
   expect(serious.map((v) => `${v.id}: ${v.help} (${v.nodes.length} élément(s)) ${v.nodes.slice(0, 2).map((n) => n.target.join(" ")).join(" | ")}`)).toEqual([]);
 }
 
+/**
+ * Compare la largeur du contenu à celle de l'écran configuré. En émulation mobile, un contenu trop large
+ * agrandit la fenêtre de mise en page : comparer à `window.innerWidth` ne détecterait rien.
+ */
 export async function expectNoHorizontalScroll(page: Page) {
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  expect(overflow).toBeLessThanOrEqual(0);
+  const screenWidth = page.viewportSize()!.width;
+  const contentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(contentWidth - screenWidth, `défilement horizontal sur ${page.url()}`).toBeLessThanOrEqual(0);
 }
 
 /** PNG de bruit aléatoire (incompressible), pour simuler une photo lourde. */

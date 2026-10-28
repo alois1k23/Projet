@@ -36,3 +36,16 @@ test("parcours mobile : navigation du bas, ajout et lecture d'un courrier sans d
   await page.goto("/lettres/nouvelle?modele=contestation-facture");
   await expectNoHorizontalScroll(page);
 });
+
+test("démo sur téléphone : aucun écran ne défile horizontalement, même avec de longs intitulés", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("main").getByRole("button", { name: "Essayer la démo, sans inscription" }).first().click();
+  await expect(page).toHaveURL(/\/accueil/);
+  const pages = ["/accueil", "/courriers", "/echeances", "/lettres", "/lettres/nouvelle", "/reglages", "/courriers/nouveau"];
+  await page.goto("/courriers");
+  const docs = await page.$$eval('a[href^="/courriers/c"]', (as) => [...new Set(as.map((a) => a.getAttribute("href")!))]);
+  for (const path of [...pages, ...docs]) {
+    await page.goto(path);
+    await expectNoHorizontalScroll(page);
+  }
+});

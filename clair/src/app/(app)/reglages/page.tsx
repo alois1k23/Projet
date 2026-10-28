@@ -35,7 +35,7 @@ export default async function SettingsPage() {
   const s = t.settings;
 
   return (
-    <div className="grid animate-rise gap-6">
+    <div className="grid animate-rise grid-cols-[minmax(0,1fr)] gap-6">
       <PageHeader title={s.title} />
       {user.demoExpiresAt ? <Notice tone="mark">{t.demo.expiresOn(formatDate(user.demoExpiresAt, locale))}</Notice> : null}
 
