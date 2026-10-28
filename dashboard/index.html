@@ -1,0 +1,542 @@
+<meta charset="utf-8">
+<title>Radar des opportunités</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Étude de marché et analyse multicritère de 15 idées d'applications du quotidien pour la Suisse et la francophonie.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout : colonne éditoriale de 1120px ; synthèse en tête, puis une section par question d'analyse. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --ink: #0f1722;
+  --ink-2: #4a5566;
+  --ink-3: #6b7686;
+  --line: #dde2ea;
+  --accent: #1c5cab;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --muted-mark: #b9c1cc;
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #eef1f5; --ink-2: #b4bcc8; --ink-3: #8b95a3;
+    --line: #2a313c; --accent: #86b6ef; --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --muted-mark: #4a5260;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1116; --surface: #161a21; --surface-2: #1d222b; --ink: #eef1f5; --ink-2: #b4bcc8; --ink-3: #8b95a3;
+  --line: #2a313c; --accent: #86b6ef; --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --muted-mark: #4a5260;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 80px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.lede { font-size: 1.12rem; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.small { font-size: 0.85rem; }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+section { display: grid; gap: 20px; min-width: 0; }
+.section-head { display: grid; gap: 6px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; min-width: 0; }
+.grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.grid-sens { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .grid-2, .grid-sens { grid-template-columns: minmax(0, 1fr); } }
+
+/* En-tête et verdict */
+header { display: grid; gap: 18px; }
+.verdict { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.verdict-main { padding: 24px; display: grid; gap: 12px; border-right: 1px solid var(--line); }
+.verdict-side { padding: 24px; display: grid; gap: 14px; align-content: start; background: var(--surface-2); }
+@media (max-width: 860px) { .verdict { grid-template-columns: minmax(0, 1fr); } .verdict-main { border-right: 0; border-bottom: 1px solid var(--line); } }
+.verdict-name { font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.verdict-name span { font-weight: 500; color: var(--ink-2); font-size: 1.1rem; letter-spacing: 0; display: block; margin-top: 6px; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: baseline; }
+.kv dt { font-family: var(--font-data); font-size: 0.75rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.kv dd { margin: 0; }
+.big { font-family: var(--font-data); font-size: 1.6rem; font-weight: 500; }
+.notice { border-left: 3px solid var(--warning); padding: 10px 14px; background: var(--surface); border-radius: 0 var(--radius) var(--radius) 0; color: var(--ink-2); font-size: 0.92rem; max-width: none; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-data); font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+.pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted-mark); }
+.pill.top .dot { background: var(--series-1); }
+.pill.obs { border-color: var(--good); }
+.pill.obs .dot { background: var(--good); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { text-align: left; font-family: var(--font-data); font-weight: 500; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.r, th.r { text-align: right; }
+@media (max-width: 640px) { .col-cat { display: none; } }
+.delta-up { color: var(--good); }
+.delta-down { color: var(--critical); }
+.rank-row.top td:first-child { box-shadow: inset 3px 0 0 var(--series-1); }
+
+/* Sliders */
+.sliders { display: grid; gap: 14px; }
+.slider { display: grid; gap: 4px; }
+.slider label { display: flex; justify-content: space-between; gap: 8px; font-size: 0.88rem; }
+.slider input { width: 100%; accent-color: var(--series-1); }
+.btn { font: inherit; font-size: 0.85rem; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.seg button { font: inherit; font-size: 0.85rem; padding: 7px 12px; border: 0; background: var(--surface); color: var(--ink-2); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+
+/* Charts */
+.chart { width: 100%; height: 420px; }
+.chart.tall { height: 520px; }
+.radars { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.radar-card { display: grid; gap: 4px; }
+.radar-card .chart { height: 220px; }
+@media (max-width: 960px) { .radars { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .radars { grid-template-columns: minmax(0, 1fr); } }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.85rem; color: var(--ink-2); }
+.legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+
+/* Fiches */
+details.idea { border-bottom: 1px solid var(--line); }
+details.idea summary { cursor: pointer; padding: 12px 0; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; list-style: none; }
+details.idea summary::-webkit-details-marker { display: none; }
+details.idea summary::before { content: "+"; font-family: var(--font-data); color: var(--ink-3); width: 1ch; }
+details.idea[open] summary::before { content: "–"; }
+.idea-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; padding: 0 0 18px 22px; font-size: 0.9rem; }
+.idea-body div { min-width: 0; }
+.idea-body b { display: block; font-family: var(--font-data); font-weight: 500; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); margin-bottom: 2px; }
+@media (max-width: 640px) { .idea-body { grid-template-columns: minmax(0, 1fr); padding-left: 0; } }
+.top3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .top3 { grid-template-columns: minmax(0, 1fr); } }
+.top3 .panel { display: grid; gap: 10px; align-content: start; }
+.top3 .panel.pick { border-color: var(--series-1); box-shadow: 0 0 0 1px var(--series-1); }
+ul.tight { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+footer { color: var(--ink-3); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 20px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Étude de marché · Phases 1 et 2 · 28 octobre 2026 · Suisse et francophonie</div>
+    <h1>Quelle application les Suisses utiliseraient vraiment chaque semaine&nbsp;?</h1>
+    <p class="lede">Quinze problèmes du quotidien, notés sur huit critères pondérés, confrontés aux sources disponibles. Le classement se recalcule en direct quand vous modifiez les pondérations.</p>
+
+    <div class="verdict">
+      <div class="verdict-main">
+        <div class="eyebrow">Recommandation à valider</div>
+        <div class="verdict-name" id="pick-name">Clair<span id="pick-tag"></span></div>
+        <p id="pick-why">Le seul concept qui combine un problème fréquent et sourcé (courriers, primes, factures QR), un avantage spécifiquement suisse difficile à copier par un acteur global, et un usage récurrent qui justifie un abonnement.</p>
+        <p class="muted small">Nom provisoire. Vérification de marque et de domaine en phase 4.</p>
+      </div>
+      <div class="verdict-side">
+        <dl class="kv">
+          <dt>Score</dt><dd><span class="big" id="pick-score">77.5</span><span class="muted"> / 100</span></dd>
+          <dt>Écart</dt><dd class="num" id="pick-gap">+6.0 pts sur le n°2</dd>
+          <dt>Robustesse</dt><dd id="pick-robust">calcul…</dd>
+          <dt>Sources</dt><dd class="num" id="src-count">—</dd>
+        </dl>
+      </div>
+    </div>
+    <p class="notice"><strong>Un score n'est pas une preuve de demande.</strong> Les notes sont des jugements structurés&nbsp;; seules celles marquées <span class="pill obs"><span class="dot"></span>sourcé</span> s'appuient sur une donnée publiée. Aucune idée n'a encore été testée auprès d'utilisateurs&nbsp;: les hypothèses critiques sont listées plus bas avec leur méthode de validation.</p>
+  </header>
+
+  <section id="classement" aria-labelledby="h-rank">
+    <div class="section-head">
+      <div class="eyebrow">01 · Classement et sensibilité</div>
+      <h2 id="h-rank">Classement des 15 idées</h2>
+      <p class="muted">Score = moyenne pondérée des huit notes, ramenée sur 100. Déplacez les curseurs pour tester d'autres priorités&nbsp;: les poids sont renormalisés à 100&nbsp;%.</p>
+    </div>
+    <div class="grid-sens">
+      <div class="panel">
+        <div class="toolbar" style="margin-bottom:14px">
+          <h3>Pondérations</h3>
+          <button class="btn" id="reset" type="button">Rétablir</button>
+        </div>
+        <div class="sliders" id="sliders"></div>
+      </div>
+      <div class="panel">
+        <div id="bar" class="chart tall" role="img" aria-label="Scores des 15 idées en barres horizontales"></div>
+        <p class="small muted">Barres bleues&nbsp;: top 3 avec les pondérations actuelles. Ligne pointillée&nbsp;: score de l'idée avec les pondérations initiales.</p>
+      </div>
+    </div>
+    <div class="panel table-wrap">
+      <table id="rank-table">
+        <thead><tr><th>Rang</th><th>Δ</th><th>Idée</th><th class="col-cat">Catégorie</th><th class="r">Score</th><th class="r">Critères sourcés</th><th class="r" title="Part des 3 000 simulations où l'idée finit 1re quand les notes estimées varient de ±1,5 point">1re si notes incertaines</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-matrix">
+    <div class="section-head">
+      <div class="eyebrow">02 · Opportunité et difficulté</div>
+      <h2 id="h-matrix">Matrice opportunité commerciale / difficulté technique</h2>
+      <p class="muted">Opportunité = moyenne pondérée des critères de valeur (problème, marché, fréquence, faiblesse des concurrents, monétisation, croissance). Difficulté = 10 − (faisabilité × ⅔ + vitesse de lancement × ⅓). Taille des bulles&nbsp;: potentiel de marché. Le quadrant visé est en haut à gauche.</p>
+    </div>
+    <div class="panel"><div id="matrix" class="chart tall" role="img" aria-label="Nuage de points opportunité contre difficulté"></div></div>
+  </section>
+
+  <section aria-labelledby="h-radar">
+    <div class="section-head">
+      <div class="eyebrow">03 · Profils</div>
+      <h2 id="h-radar">Forces et faiblesses des cinq meilleures idées</h2>
+      <div class="legend"><span><i style="background:var(--series-1)"></i>Idée</span><span><i style="background:var(--muted-mark)"></i>Moyenne des 15 idées</span></div>
+    </div>
+    <div class="radars" id="radars"></div>
+  </section>
+
+  <section aria-labelledby="h-top3">
+    <div class="section-head">
+      <div class="eyebrow">04 · Les trois finalistes</div>
+      <h2 id="h-top3">Concurrence et angle d'attaque</h2>
+    </div>
+    <div class="top3" id="top3"></div>
+  </section>
+
+  <section aria-labelledby="h-scen">
+    <div class="section-head">
+      <div class="eyebrow">05 · Potentiel économique</div>
+      <h2 id="h-scen">Revenu mensuel récurrent sur 12 mois, trois scénarios</h2>
+      <p class="muted">Modèle volontairement simple&nbsp;: inscrits cumulés × taux de conversion payant × prix. Les taux de conversion encadrent la médiane freemium publiée par RevenueCat (2,1&nbsp;% à J35). Ce sont des hypothèses de travail, pas des prévisions.</p>
+    </div>
+    <div class="panel">
+      <div class="toolbar" style="margin-bottom:10px">
+        <div class="seg" id="scen-pick" role="group" aria-label="Choisir l'idée"></div>
+        <div class="legend"><span><i style="background:var(--series-2)"></i>Prudent</span><span><i style="background:var(--series-1)"></i>Réaliste</span><span><i style="background:var(--series-3)"></i>Optimiste</span></div>
+      </div>
+      <div id="scen" class="chart" role="img" aria-label="Courbes de revenu mensuel par scénario"></div>
+      <div class="table-wrap"><table id="scen-table"><thead><tr><th>Scénario</th><th class="r">Inscrits M12</th><th class="r">Conversion</th><th class="r">Payants M12</th><th class="r">MRR M12</th><th class="r">ARR implicite</th></tr></thead><tbody></tbody></table></div>
+      <p class="small muted" id="scen-note" style="margin-top:10px"></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-risk">
+    <div class="section-head">
+      <div class="eyebrow">06 · Risques</div>
+      <h2 id="h-risk">Matrice des risques des finalistes</h2>
+      <p class="muted">Probabilité et impact notés de 1 à 5 (jugement). Couleur = criticité (probabilité × impact).</p>
+    </div>
+    <div class="grid-2">
+      <div class="panel"><div id="risk" class="chart" role="img" aria-label="Matrice probabilité impact des risques"></div>
+        <div class="legend small"><span><i style="background:var(--critical)"></i>Critique ≥ 16</span><span><i style="background:var(--serious)"></i>Élevé 12–15</span><span><i style="background:var(--warning)"></i>Modéré 8–11</span><span><i style="background:var(--good)"></i>Faible &lt; 8</span></div>
+      </div>
+      <div class="panel table-wrap"><table id="risk-table"><thead><tr><th>#</th><th>Risque</th><th class="r">P×I</th><th>Parade</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-hyp">
+    <div class="section-head">
+      <div class="eyebrow">07 · Avant d'écrire du code</div>
+      <h2 id="h-hyp">Hypothèses critiques à valider avec de vrais utilisateurs</h2>
+    </div>
+    <div class="panel table-wrap"><table id="hyp-table"><thead><tr><th>#</th><th>Hypothèse</th><th>Méthode</th><th>Seuil de succès</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section aria-labelledby="h-ideas">
+    <div class="section-head">
+      <div class="eyebrow">08 · Fiches</div>
+      <h2 id="h-ideas">Les 15 concepts en détail</h2>
+    </div>
+    <div class="panel" id="ideas"></div>
+  </section>
+
+  <section aria-labelledby="h-src">
+    <div class="section-head">
+      <div class="eyebrow">09 · Sources</div>
+      <h2 id="h-src">Sources consultées le 28 octobre 2026</h2>
+      <p class="muted">Non consultés faute d'accès&nbsp;: Google Trends, extraction systématique des avis App Store / Google Play, Reddit en direct (seulement des miroirs), bases Crunchbase / PitchBook. Méthodes de validation proposées dans RESEARCH.md.</p>
+    </div>
+    <div class="panel table-wrap"><table id="src-table"><thead><tr><th>ID</th><th>Donnée</th><th>Éditeur</th><th>Date</th><th>Fiabilité</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <footer>Données&nbsp;: dashboard/data.js. Vérification&nbsp;: <span class="num">node scripts/verify-scores.mjs</span>. Notes, scénarios et risques sont des hypothèses de travail.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script src="data.js"></script>
+<script>
+(function () {
+  const { CRITERIA, SOURCES, IDEAS, SCENARIOS, RISKS, HYPOTHESES } = window.STUDY;
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fmt = (n, d = 1) => n.toLocaleString("fr-CH", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const chf = (n) => "CHF " + Math.round(n).toLocaleString("fr-CH");
+  const byId = Object.fromEntries(IDEAS.map((i) => [i.id, i]));
+
+  const BASE = Object.fromEntries(CRITERIA.map((c) => [c.key, c.weight]));
+  let weights = { ...BASE };
+  try { const saved = JSON.parse(localStorage.getItem("radar-weights") || "null"); if (saved && CRITERIA.every((c) => typeof saved[c.key] === "number")) weights = saved; } catch (e) {}
+
+  const score = (idea, w) => {
+    const t = CRITERIA.reduce((s, c) => s + w[c.key], 0) || 1;
+    return (CRITERIA.reduce((s, c) => s + idea.scores[c.key] * w[c.key], 0) / t) * 10;
+  };
+  const VALUE_KEYS = ["p", "m", "f", "w", "mon", "g"];
+  const opportunity = (i) => { const t = VALUE_KEYS.reduce((s, k) => s + BASE[k], 0); return VALUE_KEYS.reduce((s, k) => s + i.scores[k] * BASE[k], 0) / t; };
+  const difficulty = (i) => 10 - (i.scores.feas * 2 / 3 + i.scores.l / 3);
+  const baseRank = IDEAS.map((i) => ({ id: i.id, t: score(i, BASE) })).sort((a, b) => b.t - a.t).map((x) => x.id);
+
+  // Simulation déterministe : incertitude sur les notes estimées (±1,5) et sourcées (±0,5).
+  function robustness(w, runs = 3000) {
+    let seed = 7; const rand = () => ((seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296);
+    const wins = Object.fromEntries(IDEAS.map((i) => [i.id, 0]));
+    for (let r = 0; r < runs; r++) {
+      let best = null, bestT = -1;
+      for (const i of IDEAS) {
+        const s = {}; for (const c of CRITERIA) { const a = i.obs.includes(c.key) ? 0.5 : 1.5; s[c.key] = Math.min(10, Math.max(0, i.scores[c.key] + (rand() * 2 - 1) * a)); }
+        const t = score({ scores: s }, w); if (t > bestT) { bestT = t; best = i.id; }
+      }
+      wins[best]++;
+    }
+    return Object.fromEntries(Object.entries(wins).map(([k, v]) => [k, v / runs]));
+  }
+
+  function tokens() {
+    const cs = getComputedStyle(document.documentElement);
+    const g = (n) => cs.getPropertyValue(n).trim();
+    return { ink: g("--ink"), ink2: g("--ink-2"), ink3: g("--ink-3"), line: g("--line"), surface: g("--surface"), s1: g("--series-1"), s2: g("--series-2"), s3: g("--series-3"), muted: g("--muted-mark"), good: g("--good"), warning: g("--warning"), serious: g("--serious"), critical: g("--critical"), data: g("--font-data"), body: g("--font-body") };
+  }
+  const tooltipBase = (T) => ({ backgroundColor: T.surface, borderColor: T.line, textStyle: { color: T.ink, fontFamily: T.body, fontSize: 13 }, extraCssText: "box-shadow:0 6px 24px rgba(0,0,0,.12);border-radius:8px;" });
+  const axisBase = (T) => ({ axisLine: { lineStyle: { color: T.line } }, axisTick: { show: false }, axisLabel: { color: T.ink3, fontFamily: T.data, fontSize: 11 }, splitLine: { lineStyle: { color: T.line, opacity: 0.6 } }, nameTextStyle: { color: T.ink3, fontFamily: T.data, fontSize: 11 } });
+
+  const charts = {};
+  const mk = (el) => { const c = echarts.init(el, null, { renderer: "svg" }); return c; };
+
+  // ---------- Curseurs ----------
+  function renderSliders() {
+    const total = CRITERIA.reduce((s, c) => s + weights[c.key], 0) || 1;
+    $("#sliders").innerHTML = CRITERIA.map((c) => `
+      <div class="slider">
+        <label for="w-${c.key}"><span>${esc(c.label)}</span><span class="num muted">${fmt((weights[c.key] / total) * 100, 0)} %</span></label>
+        <input id="w-${c.key}" type="range" min="0" max="40" step="1" value="${weights[c.key]}" data-k="${c.key}">
+      </div>`).join("");
+    $("#sliders").querySelectorAll("input").forEach((inp) => inp.addEventListener("input", (e) => {
+      weights[e.target.dataset.k] = Number(e.target.value);
+      try { localStorage.setItem("radar-weights", JSON.stringify(weights)); } catch (err) {}
+      const total2 = CRITERIA.reduce((s, c) => s + weights[c.key], 0) || 1;
+      $("#sliders").querySelectorAll(".slider").forEach((row, idx) => { row.querySelector(".num").textContent = fmt((weights[CRITERIA[idx].key] / total2) * 100, 0) + " %"; });
+      scheduleUpdate();
+    }));
+  }
+  $("#reset").addEventListener("click", () => { weights = { ...BASE }; try { localStorage.removeItem("radar-weights"); } catch (e) {} renderSliders(); update(); });
+
+  let pending = null;
+  function scheduleUpdate() { if (pending) cancelAnimationFrame(pending); pending = requestAnimationFrame(update); }
+
+  // ---------- Classement ----------
+  function update() {
+    const T = tokens();
+    const ranked = IDEAS.map((i) => ({ i, t: score(i, weights), b: score(i, BASE) })).sort((a, b) => b.t - a.t);
+    const rob = robustness(weights);
+    const top3 = new Set(ranked.slice(0, 3).map((r) => r.i.id));
+
+    // Verdict
+    const first = ranked[0], second = ranked[1];
+    $("#pick-name").firstChild.nodeValue = first.i.name;
+    $("#pick-tag").textContent = first.i.tagline;
+    $("#pick-score").textContent = fmt(first.t);
+    $("#pick-gap").textContent = "+" + fmt(first.t - second.t) + " pts sur " + second.i.name;
+    $("#pick-robust").textContent = "1re dans " + fmt(rob[first.i.id] * 100, 0) + " % des simulations où les notes varient";
+    const isDefault = CRITERIA.every((c) => weights[c.key] === BASE[c.key]);
+    $("#pick-why").textContent = first.i.id === "courrier"
+      ? "Le seul concept qui combine un problème fréquent et sourcé (courriers, primes, factures QR), un avantage spécifiquement suisse difficile à copier par un acteur global, et un usage récurrent qui justifie un abonnement."
+      : "Avec vos pondérations, " + first.i.name + " passe en tête. " + first.i.advantage;
+    document.querySelector(".verdict-main .eyebrow").textContent = isDefault ? "Recommandation à valider" : "En tête avec vos pondérations";
+
+    // Tableau
+    $("#rank-table tbody").innerHTML = ranked.map((r, n) => {
+      const d = baseRank.indexOf(r.i.id) - n;
+      const delta = d > 0 ? `<span class="delta-up num">▲${d}</span>` : d < 0 ? `<span class="delta-down num">▼${-d}</span>` : `<span class="muted num">=</span>`;
+      return `<tr class="rank-row ${top3.has(r.i.id) ? "top" : ""}"><td class="num">${n + 1}</td><td>${delta}</td><td><strong>${esc(r.i.name)}</strong> <span class="muted">${esc(r.i.tagline)}</span></td><td class="muted col-cat">${esc(r.i.category)}</td><td class="r num"><strong>${fmt(r.t)}</strong></td><td class="r num">${r.i.obs.length} / 8</td><td class="r num">${fmt(rob[r.i.id] * 100, 0)} %</td></tr>`;
+    }).join("");
+
+    if (!charts.bar) return;
+    // Barres
+    const rev = ranked.slice().reverse();
+    charts.bar.setOption({
+      animationDuration: 300,
+      grid: { left: 8, right: 48, top: 8, bottom: 24, containLabel: true },
+      tooltip: { ...tooltipBase(T), trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: T.line, opacity: 0.35 } },
+        formatter: (ps) => { const r = rev[ps[0].dataIndex]; return `<strong>${esc(r.i.name)}</strong> · ${esc(r.i.tagline)}<br>Score actuel <b>${fmt(r.t)}</b><br><span style="color:${T.ink3}">Pondérations initiales ${fmt(r.b)}</span>`; } },
+      xAxis: { type: "value", min: 0, max: 100, ...axisBase(T) },
+      yAxis: { type: "category", data: rev.map((r) => r.i.name), ...axisBase(T), axisLabel: { color: T.ink2, fontFamily: T.body, fontSize: 12 }, splitLine: { show: false } },
+      series: [{
+        type: "bar", barWidth: 14,
+        data: rev.map((r) => ({ value: +r.t.toFixed(1), itemStyle: { color: top3.has(r.i.id) ? T.s1 : T.muted, borderRadius: [0, 4, 4, 0] } })),
+        label: { show: true, position: "right", color: T.ink2, fontFamily: T.data, fontSize: 11, formatter: (p) => fmt(p.value) },
+      }, {
+        type: "scatter", symbol: "rect", symbolSize: [2, 18], silent: true,
+        data: rev.map((r, idx) => [+r.b.toFixed(1), idx]), itemStyle: { color: T.ink3, opacity: isDefault ? 0 : 0.9 },
+      }],
+    }, true);
+  }
+
+  // ---------- Matrice ----------
+  function renderMatrix() {
+    const T = tokens();
+    const baseTop = new Set(baseRank.slice(0, 3));
+    const pts = IDEAS.map((i) => ({ name: i.name, value: [+difficulty(i).toFixed(2), +opportunity(i).toFixed(2), i.scores.m], i }));
+    charts.matrix.setOption({
+      grid: { left: 12, right: 24, top: 24, bottom: 36, containLabel: true },
+      tooltip: { ...tooltipBase(T), formatter: (p) => `<strong>${esc(p.data.i.name)}</strong> · ${esc(p.data.i.tagline)}<br>Opportunité ${fmt(p.value[1])} / 10<br>Difficulté ${fmt(p.value[0])} / 10<br>Marché ${p.value[2]} / 10` },
+      xAxis: { type: "value", name: "Difficulté technique et de lancement →", nameLocation: "middle", nameGap: 26, min: 0, max: 8, ...axisBase(T) },
+      yAxis: { type: "value", name: "Opportunité commerciale", min: 2, max: 10, ...axisBase(T) },
+      series: [{
+        type: "scatter",
+        data: pts.map((p) => ({ ...p, itemStyle: { color: baseTop.has(p.i.id) ? T.s1 : T.muted, borderColor: T.surface, borderWidth: 2, opacity: 0.95 } })),
+        symbolSize: (v) => 10 + v[2] * 3,
+        label: { show: true, formatter: (p) => p.data.i.name, position: "right", color: T.ink2, fontFamily: T.body, fontSize: 12 },
+        labelLayout: { hideOverlap: true },
+        emphasis: { scale: 1.15 },
+        markLine: { silent: true, symbol: "none", lineStyle: { color: T.ink3, type: "dashed", opacity: 0.5 }, label: { show: false },
+          data: [{ xAxis: 4 }, { yAxis: 6 }] },
+        markArea: { silent: true, itemStyle: { color: T.s1, opacity: 0.05 }, label: { show: true, position: "insideTopLeft", color: T.ink3, fontFamily: T.data, fontSize: 11 },
+          data: [[{ name: "Forte valeur, faisable", coord: [0, 10] }, { coord: [4, 6] }]] },
+      }],
+    }, true);
+  }
+
+  // ---------- Radars ----------
+  function renderRadars() {
+    const T = tokens();
+    const top5 = baseRank.slice(0, 5).map((id) => byId[id]);
+    const avg = CRITERIA.map((c) => IDEAS.reduce((s, i) => s + i.scores[c.key], 0) / IDEAS.length);
+    if (!$("#radars").children.length) {
+      $("#radars").innerHTML = top5.map((i, n) => `<div class="panel radar-card"><div class="eyebrow">N°${n + 1} · <span class="num">${fmt(score(i, BASE))}</span></div><h3>${esc(i.name)}</h3><p class="small muted">${esc(i.tagline)}</p><div class="chart" id="radar-${i.id}" role="img" aria-label="Profil radar de ${esc(i.name)}"></div></div>`).join("");
+      top5.forEach((i) => { charts["radar-" + i.id] = mk(document.getElementById("radar-" + i.id)); });
+    }
+    top5.forEach((i) => {
+      charts["radar-" + i.id].setOption({
+        tooltip: { ...tooltipBase(T), confine: true, formatter: (p) => `<strong>${esc(p.name)}</strong><br>` + CRITERIA.map((c, k) => `${esc(c.short)} <b>${p.value[k] % 1 ? fmt(p.value[k]) : p.value[k]}</b>`).join("<br>") },
+        radar: { radius: "42%", center: ["50%", "52%"], splitNumber: 5, axisNameGap: 4, indicator: CRITERIA.map((c) => ({ name: c.abbr, max: 10 })),
+          axisName: { color: T.ink3, fontFamily: T.data, fontSize: 9 }, splitLine: { lineStyle: { color: T.line } }, splitArea: { show: false }, axisLine: { lineStyle: { color: T.line } } },
+        series: [{ type: "radar", symbol: "circle", symbolSize: 4, data: [
+          { name: "Moyenne des 15", value: avg.map((v) => +v.toFixed(1)), lineStyle: { color: T.muted, width: 1.5, type: "dashed" }, itemStyle: { color: T.muted }, areaStyle: { opacity: 0 } },
+          { name: i.name, value: CRITERIA.map((c) => i.scores[c.key]), lineStyle: { color: T.s1, width: 2 }, itemStyle: { color: T.s1, borderColor: T.surface, borderWidth: 1 }, areaStyle: { color: T.s1, opacity: 0.14 } },
+        ] }],
+      }, true);
+    });
+  }
+
+  // ---------- Finalistes ----------
+  function renderTop3() {
+    const top = baseRank.slice(0, 3).map((id) => byId[id]);
+    $("#top3").innerHTML = top.map((i, n) => `
+      <article class="panel ${n === 0 ? "pick" : ""}">
+        <div class="toolbar"><span class="eyebrow">N°${n + 1}${n === 0 ? " · recommandé" : ""}</span><span class="num">${fmt(score(i, BASE))}</span></div>
+        <h3>${esc(i.name)} <span class="muted" style="font-weight:400">· ${esc(i.tagline)}</span></h3>
+        <div><b class="eyebrow">Concurrents</b><p class="small">${esc(i.competitors)}</p></div>
+        <div><b class="eyebrow">Notre angle</b><p class="small">${esc(i.advantage)}</p></div>
+        <div><b class="eyebrow">Point faible</b><p class="small">${esc(i.risks)}</p></div>
+      </article>`).join("");
+  }
+
+  // ---------- Scénarios ----------
+  let scenId = "courrier";
+  function renderScenPick() {
+    $("#scen-pick").innerHTML = Object.keys(SCENARIOS).map((id) => `<button type="button" data-id="${id}" aria-pressed="${id === scenId}">${esc(byId[id].name)}</button>`).join("");
+    $("#scen-pick").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { scenId = b.dataset.id; renderScenPick(); renderScen(); }));
+  }
+  function curve(s, price) {
+    // Croissance convexe des inscrits, conversion qui mûrit de 40 % à 100 % de sa cible.
+    return Array.from({ length: 12 }, (_, k) => { const m = k + 1; const u = s.users * Math.pow(m / 12, 1.5); const c = s.conv * (0.4 + 0.6 * m / 12); return Math.round(u * c * price); });
+  }
+  function renderScen() {
+    const T = tokens();
+    const S = SCENARIOS[scenId];
+    const names = { prudent: "Prudent", realiste: "Réaliste", optimiste: "Optimiste" };
+    const colors = { prudent: T.s2, realiste: T.s1, optimiste: T.s3 };
+    const months = Array.from({ length: 12 }, (_, k) => "M" + (k + 1));
+    charts.scen.setOption({
+      grid: { left: 12, right: 128, top: 28, bottom: 24, containLabel: true },
+      tooltip: { ...tooltipBase(T), trigger: "axis", axisPointer: { type: "line", lineStyle: { color: T.ink3, type: "dashed" } }, valueFormatter: (v) => chf(v) },
+      xAxis: { type: "category", data: months, boundaryGap: false, ...axisBase(T), splitLine: { show: false } },
+      yAxis: { type: "value", name: "MRR (CHF)", ...axisBase(T), axisLabel: { ...axisBase(T).axisLabel, formatter: (v) => v >= 1000 ? (v / 1000) + " k" : v } },
+      series: Object.keys(names).map((k) => ({
+        name: names[k], type: "line", data: curve(S[k], S.price), smooth: 0.2, symbol: "circle", symbolSize: 8, showSymbol: false,
+        lineStyle: { width: 2, color: colors[k] }, itemStyle: { color: colors[k], borderColor: T.surface, borderWidth: 2 },
+        areaStyle: k === "realiste" ? { color: colors[k], opacity: 0.08 } : undefined,
+        endLabel: { show: true, formatter: (p) => names[k] + " " + (p.value >= 1000 ? fmt(p.value / 1000) + " k" : p.value), color: T.ink2, fontFamily: T.data, fontSize: 11 },
+      })),
+    }, true);
+    $("#scen-table tbody").innerHTML = Object.keys(names).map((k) => {
+      const s = S[k]; const payers = Math.round(s.users * s.conv); const mrr = payers * S.price;
+      return `<tr><td><span class="legend"><span><i style="background:${colors[k]}"></i>${names[k]}</span></span></td><td class="r num">${s.users.toLocaleString("fr-CH")}</td><td class="r num">${fmt(s.conv * 100, 0)} %</td><td class="r num">${payers.toLocaleString("fr-CH")}</td><td class="r num">${chf(mrr)}</td><td class="r num">${chf(mrr * 12)}</td></tr>`;
+    }).join("");
+    $("#scen-note").textContent = "Prix hypothétique : CHF " + S.price.toFixed(2) + " " + S.unit.replace(/^CHF/, "") + ". " +
+      (scenId === "logement" ? "Attention : les clients partent dès qu'ils ont trouvé un logement, le MRR doit être reconstitué en permanence par de nouvelles acquisitions." :
+       scenId === "courrier" ? "Usage récurrent : le revenu s'accumule tant que le churn reste maîtrisé. RevenueCat observe ~30 % d'annulations d'abonnements annuels dès le premier mois." :
+       "Le revenu dépend de l'adoption par les deux parents ; non mesurée à ce stade.");
+  }
+
+  // ---------- Risques ----------
+  function sev(r) { const s = r.prob * r.impact; return s >= 16 ? "critical" : s >= 12 ? "serious" : s >= 8 ? "warning" : "good"; }
+  function renderRisks() {
+    const T = tokens();
+    // Décalage pour les risques qui partagent une case.
+    const seen = {};
+    const pts = RISKS.map((r, n) => { const k = r.prob + "-" + r.impact; const o = seen[k] = (seen[k] || 0) + 1; const off = (o - 1) * 0.18; return { value: [r.impact + off - 0.09 * (o > 1), r.prob + off], r, n }; });
+    charts.risk.setOption({
+      grid: { left: 12, right: 20, top: 16, bottom: 36, containLabel: true },
+      tooltip: { ...tooltipBase(T), confine: true, formatter: (p) => `<strong>R${p.data.n + 1} · ${esc(byId[p.data.r.idea].name)}</strong><br>${esc(p.data.r.label)}<br>Probabilité ${p.data.r.prob} · Impact ${p.data.r.impact}` },
+      xAxis: { type: "value", name: "Impact →", nameLocation: "middle", nameGap: 26, min: 0.5, max: 5.5, interval: 1, ...axisBase(T), axisLabel: { ...axisBase(T).axisLabel, formatter: (v) => Number.isInteger(v) ? v : "" } },
+      yAxis: { type: "value", name: "Probabilité", min: 0.5, max: 5.5, interval: 1, ...axisBase(T), axisLabel: { ...axisBase(T).axisLabel, formatter: (v) => Number.isInteger(v) ? v : "" } },
+      series: [{ type: "scatter", symbolSize: 24,
+        data: pts.map((p) => ({ ...p, itemStyle: { color: T[sev(p.r)], borderColor: T.surface, borderWidth: 2 } })),
+        label: { show: true, formatter: (p) => "R" + (p.data.n + 1), color: "#111", fontFamily: T.data, fontSize: 9, fontWeight: 600 } }],
+    }, true);
+    $("#risk-table tbody").innerHTML = RISKS.map((r, n) => `<tr><td class="num">R${n + 1}</td><td><span class="pill"><span class="dot" style="background:var(--${sev(r)})"></span>${esc(byId[r.idea].name)}</span><br>${esc(r.label)}</td><td class="r num">${r.prob * r.impact}</td><td class="small">${esc(r.mitigation)}</td></tr>`).join("");
+  }
+
+  // ---------- Tables statiques ----------
+  function renderStatic() {
+    $("#src-count").textContent = SOURCES.length + " références datées";
+    $("#hyp-table tbody").innerHTML = HYPOTHESES.map((h) => `<tr><td class="num">${h.id}</td><td>${esc(h.text)}</td><td class="small">${esc(h.method)}</td><td class="small">${esc(h.threshold)}</td></tr>`).join("");
+    $("#src-table tbody").innerHTML = SOURCES.map((s) => `<tr><td class="num">${s.id}</td><td><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a></td><td class="small">${esc(s.publisher)}</td><td class="num small">${esc(s.date)}</td><td class="small">${esc(s.reliability)}</td></tr>`).join("");
+    const labels = { problem: "Problème", target: "Public cible", solution: "Solution", coreFeature: "Fonction principale", frequency: "Fréquence", competitors: "Concurrents", advantage: "Avantage potentiel", techDifficulty: "Difficulté technique", devCost: "Coût estimé du MVP", businessModel: "Modèle économique", risks: "Risques majeurs", evidence: "Notes" };
+    $("#ideas").innerHTML = baseRank.map((id, n) => {
+      const i = byId[id];
+      const vals = { ...i, devCost: `${i.devWeeks[0]}–${i.devWeeks[1]} semaines-personne · ${i.cashCost}`, evidence: CRITERIA.map((c) => `${c.short} ${i.scores[c.key]}${i.obs.includes(c.key) ? " (sourcé)" : " (estimé)"}`).join(" · ") + (i.sources.length ? " — sources " + i.sources.join(", ") : " — aucune source spécifique") };
+      return `<details class="idea"><summary><span class="num muted">${String(n + 1).padStart(2, "0")}</span><strong>${esc(i.name)}</strong><span class="muted">${esc(i.tagline)}</span><span class="num" style="margin-left:auto">${fmt(score(i, BASE))}</span></summary>
+        <div class="idea-body">${Object.keys(labels).map((k) => `<div><b>${labels[k]}</b>${esc(vals[k])}</div>`).join("")}</div></details>`;
+    }).join("");
+  }
+
+  function renderAll() { update(); renderMatrix(); renderRadars(); renderScen(); renderRisks(); }
+
+  function boot() {
+    renderSliders(); renderStatic(); renderTop3(); renderScenPick();
+    if (!window.echarts) { document.querySelectorAll(".chart").forEach((el) => { el.innerHTML = '<p class="muted small">Graphique indisponible : la bibliothèque ECharts n\'a pas pu être chargée. Les tableaux restent à jour.</p>'; el.style.height = "auto"; }); update(); return; }
+    charts.bar = mk($("#bar")); charts.matrix = mk($("#matrix")); charts.scen = mk($("#scen")); charts.risk = mk($("#risk"));
+    renderAll();
+    window.addEventListener("resize", () => Object.values(charts).forEach((c) => c.resize()));
+    const rerender = () => requestAnimationFrame(renderAll);
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rerender);
+    new MutationObserver(rerender).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+  boot();
+})();
+</script>

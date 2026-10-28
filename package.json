@@ -1,0 +1,12 @@
+{
+  "name": "projet-startup",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Étude de marché et analyse multicritère : phases 1 à 3",
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/verify-scores.mjs",
+    "ranking": "node scripts/verify-scores.mjs --markdown"
+  },
+  "engines": { "node": ">=18" }
+}
