@@ -32,10 +32,12 @@ Pour un compte qui fait la promotion d'une application, le compte Entreprise est
 ## 4. Profil
 
 **Nom d'utilisateur** (2 à 24 caractères : lettres, chiffres, points, tirets bas). Par ordre de préférence, selon disponibilité :
-1. `@clair.ch`
-2. `@clairapp.ch`
-3. `@clair.suisse`
-4. `@clair_courrier`
+1. `@clair.suisse` (recommandé)
+2. `@clairapp`
+3. `@clair_courrier`
+4. `@clair.suisse.app`
+
+Évitez `@clair.ch` : il ressemble à une adresse de site, et le domaine clair.ch appartient très probablement à quelqu'un d'autre.
 
 Gardez le même nom partout (Instagram, YouTube Shorts) si possible.
 
