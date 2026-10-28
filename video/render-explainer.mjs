@@ -24,6 +24,7 @@ await renderMedia({
   codec: "h264",
   crf: 16,
   outputLocation: silentRaw,
+  concurrency: Number(process.env.CONCURRENCY || 2),
   browserExecutable,
   onProgress: ({ progress }) => {
     if (Math.round(progress * 100) % 20 === 0) process.stdout.write(`\rimage ${Math.round(progress * 100)} %`);
