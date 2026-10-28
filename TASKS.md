@@ -2,6 +2,8 @@
 
 ## En attente du fondateur
 - [ ] Décider si le mode démo restera actif sur le site public (D-022)
+- [ ] Publier la vidéo TikTok (engage à sortir des applications iOS et Android, D-024) ; choisir la musique dans TikTok
+- [ ] Comptes développeur Apple et Google Play (payants) si les applications natives sont confirmées
 - [ ] Fournir une clé API Anthropic (ou autoriser sa création) pour tester l'analyse réelle
 - [ ] Choisir l'hébergement (recommandation : hébergeur suisse avec PostgreSQL managé et stockage objet)
 - [ ] Autoriser le déploiement d'une bêta fermée (non publique)
@@ -15,7 +17,7 @@
 - [ ] Notifications push (PWA)
 - [ ] Revue juridique : conditions, confidentialité, transfert de données vers Anthropic
 - [ ] Vérification du nom « Clair » (IPI, EUIPO) et des domaines, sans achat
-- [ ] Vidéo promotionnelle (phase 8)
+- [ ] Applications iOS et Android (emballage Capacitor de l'application web)
 - [ ] Modèle économique détaillé (phase 9)
 - [ ] Plus de guides (impôts, rappels et frais, résiliation de bail)
 

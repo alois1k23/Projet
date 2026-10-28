@@ -26,6 +26,7 @@ Prochaine étape recommandée : bêta fermée avec une vraie clé API pour mesur
 | Identité et design system | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) |
 | Tests et résultats | [TESTING.md](TESTING.md) |
 | Historique des versions | [CHANGELOG.md](CHANGELOG.md) |
+| Vidéo TikTok (FR, DE, EN) et guide de publication | [video/](video/README.md) |
 | Décisions | [DECISIONS.md](DECISIONS.md) |
 | Feuille de route et tâches | [ROADMAP.md](ROADMAP.md) · [TASKS.md](TASKS.md) |
 

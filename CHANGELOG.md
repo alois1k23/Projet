@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.8.0 — 2026-10-28 · Vidéo TikTok
+### Ajouté
+- Vidéo promotionnelle en motion design (Remotion), format vertical 1080 × 1920, 25 s, en français, allemand et anglais (`video/out/`), terminant par « Bientôt disponible sur iOS et Android ».
+- Guide de publication (`video/README.md`) : légendes et hashtags par langue, choix de la musique, zones sûres.
+
 ## 0.7.0 — 2026-10-28 · Anglais
 ### Ajouté
 - **Interface en anglais** : application, e-mails, explications de l'IA (en anglais simple, avec le terme officiel suisse entre parenthèses quand il aide), exemples, démo (profil « Emma Wilson », Genève), site public, guides et pages légales. Les navigateurs anglophones voient Clair en anglais ; sélecteur FR · DE · EN.

@@ -91,6 +91,9 @@ Les guides ne contiennent que des faits vérifiés sur des sources officielles (
 ## D-021 · Tarifs affichés sans prix (2026-10-28)
 Le prix de Clair Plus n’est pas affiché : il dépend du coût réel des analyses, à mesurer pendant la bêta. La page annonce « Bientôt, prix annoncé avant tout paiement » et propose une liste d’attente. Aucun paiement n’est possible (D-013).
 
+## D-024 · Vidéo TikTok et annonce « Bientôt sur iOS et Android » (2026-10-28)
+Demande du fondateur. La vidéo annonce publiquement des applications iOS et Android ; aujourd’hui, Clair est une application web installable sur l’écran d’accueil, et les applications natives figurent en V2 de la feuille de route. Publier la vidéo engage donc à les livrer : la publier reste votre décision (diffusion publique). Pour tenir la promesse au plus vite, l’option la moins coûteuse est d’emballer l’application web (Capacitor) ; il faudra des comptes développeur Apple (payant, annuel) et Google Play (frais uniques). Pas de badges officiels des boutiques tant que les applications n’y sont pas. Remotion est gratuit pour une équipe de 3 personnes au plus, payant au-delà.
+
 ## D-023 · Anglais pour les nouveaux arrivants, lettres en FR/DE (2026-10-28)
 L’anglais vise les expatriés et nouveaux arrivants, qui reçoivent du courrier dans une langue qu’ils ne lisent pas. L’interface et les explications sont en anglais, mais les lettres générées restent en français ou en allemand : les administrations et caisses suisses répondent dans leur langue officielle. Les termes suisses (LAMal / KVG, opposition / Rechtsvorschlag) restent visibles entre parenthèses pour que l’utilisateur les reconnaisse sur ses courriers.
 
