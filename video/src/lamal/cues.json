@@ -1,0 +1,24 @@
+{
+  "fps": 30,
+  "duration": 930,
+  "chapters": [
+    { "id": "hook", "start": 0, "len": 90 },
+    { "id": "regle", "start": 90, "len": 120 },
+    { "id": "comparer", "start": 210, "len": 90 },
+    { "id": "assurer", "start": 300, "len": 90 },
+    { "id": "resilier", "start": 390, "len": 90 },
+    { "id": "envoyer", "start": 480, "len": 90 },
+    { "id": "clair", "start": 570, "len": 210 },
+    { "id": "fin", "start": 780, "len": 150 }
+  ],
+  "events": {
+    "hook": { "swap": 46 },
+    "regle": { "date": 8, "mark": 34, "sub": 46 },
+    "comparer": { "bars": 10, "best": 48 },
+    "assurer": { "arrow": 18, "confirm": 46 },
+    "resilier": { "f0": 14, "f1": 26, "f2": 38, "f3": 50, "warn": 62 },
+    "envoyer": { "stamp": 30, "receipt": 52 },
+    "clair": { "typeStart": 16, "typeEnd": 70, "mark": 74, "card": 92, "tap": 132, "letter": 142, "pdf": 176 },
+    "fin": { "logo": 16, "soon": 56, "platforms": 66, "follow": 92 }
+  }
+}
