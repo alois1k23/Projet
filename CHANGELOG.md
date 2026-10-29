@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.10.0 — 2026-10-29 · Post TikTok n° 2
+### Ajouté
+- Vidéo « Changer de caisse-maladie avant le 30 novembre » (31 s, français), dans le style de la vidéo explicative (`video/out/clair-lamal.mp4`), avec son original et version muette.
+- Script de rendu générique pour les posts (`video/render-post.mjs`).
+
 ## 0.9.0 — 2026-10-28 · Vidéo explicative
 ### Ajouté
 - Vidéo explicative TikTok en français (63 s) présentant toutes les fonctions en 8 chapitres, avec téléphone réaliste, caméra qui cadre l'interface et barre de progression (`video/out/clair-explicatif.mp4`).

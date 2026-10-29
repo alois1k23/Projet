@@ -1,5 +1,23 @@
 # Vidéos promotionnelles de Clair
 
+## Post n° 2 : changer de caisse-maladie (TikTok, français)
+
+| Fichier | Contenu |
+|---|---|
+| `out/clair-lamal.mp4` | 31 s, 1080 × 1920, avec habillage sonore original (−15,2 LUFS) |
+| `out/clair-lamal-muet.mp4` | La même, sans son |
+
+Accroche « Votre prime augmente en 2027 ? », la règle du 30 novembre (date de **réception**), 4 étapes (comparer sur priminfo.admin.ch, s’inscrire d’abord ailleurs, lettre simple, recommandé), puis Clair qui prépare la lettre. Sources affichées : ch.ch, LAMal art. 7. Primes du comparatif fictives et signalées comme telles. À publier avant fin novembre.
+
+```bash
+node render-post.mjs ClairLamal src/lamal/cues.json sound/lamal.py clair-lamal
+```
+
+Légende proposée :
+> Votre prime augmente en 2027 ? Vous pouvez encore changer de caisse 👇
+> La règle à retenir : votre résiliation doit être REÇUE avant le 30 novembre. Voici les 4 étapes, et comment Clair peut tout préparer pour vous. Enregistrez la vidéo pour ne pas oublier.
+> #lamal #caissemaladie #primes2027 #suisse #suisseromande #assurance #astuce #apprendresurtiktok
+
 ## Vidéo explicative (TikTok, français) — recommandée
 
 | Fichier | Contenu |
